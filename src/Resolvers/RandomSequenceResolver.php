@@ -23,13 +23,13 @@ class RandomSequenceResolver implements SequenceResolver
             $this->used[$timestamp] = [];
         }
 
-        if (\count($this->used[$timestamp]) > $maxSequence) {
+        if (count($this->used[$timestamp]) > $maxSequence) {
             return null;
         }
 
         $retries = ($maxSequence + 1) * 3;
         for ($i = 0; $i < $retries; $i++) {
-            $seq = \random_int(0, $maxSequence);
+            $seq = random_int(0, $maxSequence);
             if (!isset($this->used[$timestamp][$seq])) {
                 $this->used[$timestamp][$seq] = true;
 

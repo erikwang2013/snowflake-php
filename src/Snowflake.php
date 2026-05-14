@@ -171,8 +171,8 @@ class Snowflake
 
         return [
             'timestamp_ms' => $timestampMs,
-            'datetime' => \date('Y-m-d H:i:s.', (int) ($timestampMs / 1000))
-                . \sprintf('%03d', $timestampMs % 1000),
+            'datetime' => date('Y-m-d H:i:s.', (int) ($timestampMs / 1000))
+                . sprintf('%03d', $timestampMs % 1000),
             'worker_id' => $workerId,
             'datacenter_id' => $datacenterId,
             'sequence' => $sequence,
@@ -197,8 +197,8 @@ class Snowflake
 
         return [
             'timestamp_ms' => $timestampMs,
-            'datetime' => \date('Y-m-d H:i:s.', (int) ($timestampMs / 1000))
-                . \sprintf('%03d', $timestampMs % 1000),
+            'datetime' => date('Y-m-d H:i:s.', (int) ($timestampMs / 1000))
+                . sprintf('%03d', $timestampMs % 1000),
             'worker_id' => $workerId,
             'datacenter_id' => $datacenterId,
             'sequence' => $sequence,
@@ -212,7 +212,7 @@ class Snowflake
     {
         $resolverClass = $config['sequence_resolver'] ?? null;
         $resolver = null;
-        if (\is_string($resolverClass) && \class_exists($resolverClass)) {
+        if (is_string($resolverClass) && class_exists($resolverClass)) {
             $resolver = new $resolverClass();
         }
 
@@ -230,14 +230,14 @@ class Snowflake
 
     private function currentTimeMillis(): int
     {
-        return (int) (\microtime(true) * 1000);
+        return (int) (microtime(true) * 1000);
     }
 
     private function waitNextMillis(int $lastTimestamp): int
     {
         $timestamp = $this->currentTimeMillis();
         while ($timestamp <= $lastTimestamp) {
-            \usleep(100);
+            usleep(100);
             $timestamp = $this->currentTimeMillis();
         }
 

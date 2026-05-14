@@ -15,7 +15,7 @@ class TimestampOverflowException extends SnowflakeException
         $this->maxOffset = $maxOffset;
 
         parent::__construct(
-            \sprintf(
+            sprintf(
                 'Timestamp offset %d exceeds maximum %d. The epoch has been exhausted; choose a more recent epoch.',
                 $timestampOffset,
                 $maxOffset

@@ -25,8 +25,8 @@ return [
     'enable' => true,
     'snowflake' => [
         'epoch' => 1704067200000,
-        'worker_id' => \getenv('SNOWFLAKE_WORKER_ID') ?: 0,
-        'datacenter_id' => \getenv('SNOWFLAKE_DATACENTER_ID') ?: 0,
+        'worker_id' => getenv('SNOWFLAKE_WORKER_ID') ?: 0,
+        'datacenter_id' => getenv('SNOWFLAKE_DATACENTER_ID') ?: 0,
         'worker_bits' => 5,
         'datacenter_bits' => 5,
         'sequence_bits' => 12,

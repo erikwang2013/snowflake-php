@@ -15,7 +15,7 @@ class InvalidDatacenterIdException extends SnowflakeException
         $this->maxDatacenterId = $maxDatacenterId;
 
         parent::__construct(
-            \sprintf(
+            sprintf(
                 'Datacenter ID %d exceeds maximum %d (2^bits - 1). Check datacenter_bits configuration.',
                 $datacenterId,
                 $maxDatacenterId

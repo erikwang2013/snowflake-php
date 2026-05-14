@@ -2,6 +2,8 @@
 
 A distributed unique ID generator based on Twitter's Snowflake algorithm, compatible with Laravel, Webman, ThinkPHP, and Hyperf.
 
+> 中文文档请参阅 [README.zh-CN.md](README.zh-CN.md)
+
 ## Requirements
 
 - PHP >= 8.0

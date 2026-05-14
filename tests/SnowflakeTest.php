@@ -36,7 +36,7 @@ class SnowflakeTest extends TestCase
             $ids[] = $snowflake->id();
         }
 
-        $this->assertCount(10000, \array_unique($ids));
+        $this->assertCount(10000, array_unique($ids));
     }
 
     public function testIdsAreMonotonicallyIncreasing(): void

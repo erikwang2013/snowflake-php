@@ -86,7 +86,7 @@ class SequenceResolverTest extends TestCase
             $values[] = $seq;
         }
 
-        $this->assertCount(100, \array_unique($values));
+        $this->assertCount(100, array_unique($values));
     }
 
     public function testRandomResetsOnNewTimestamp(): void

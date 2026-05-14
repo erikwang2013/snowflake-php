@@ -14,14 +14,14 @@ return [
     | Worker ID (0 - 31 with default 5 bits)
     |--------------------------------------------------------------------------
     */
-    'worker_id' => \getenv('SNOWFLAKE_WORKER_ID') ?: 0,
+    'worker_id' => getenv('SNOWFLAKE_WORKER_ID') ?: 0,
 
     /*
     |--------------------------------------------------------------------------
     | Datacenter ID (0 - 31 with default 5 bits)
     |--------------------------------------------------------------------------
     */
-    'datacenter_id' => \getenv('SNOWFLAKE_DATACENTER_ID') ?: 0,
+    'datacenter_id' => getenv('SNOWFLAKE_DATACENTER_ID') ?: 0,
 
     /*
     |--------------------------------------------------------------------------

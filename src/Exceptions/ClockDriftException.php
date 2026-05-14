@@ -17,7 +17,7 @@ class ClockDriftException extends SnowflakeException
         $this->driftMs = $lastTimestamp - $currentTimestamp;
 
         parent::__construct(
-            \sprintf(
+            sprintf(
                 'System clock moved backwards by %d ms (last: %d, current: %d). Tolerance: %d ms.',
                 $this->driftMs,
                 $lastTimestamp,

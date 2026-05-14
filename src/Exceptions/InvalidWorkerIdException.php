@@ -15,7 +15,7 @@ class InvalidWorkerIdException extends SnowflakeException
         $this->maxWorkerId = $maxWorkerId;
 
         parent::__construct(
-            \sprintf(
+            sprintf(
                 'Worker ID %d exceeds maximum %d (2^bits - 1). Check worker_bits configuration.',
                 $workerId,
                 $maxWorkerId
