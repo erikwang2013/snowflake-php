@@ -315,4 +315,4 @@ ID 生成完全在进程内完成，无需外部依赖。主要开销来自 PHP 
 
 ## License
 
-MIT
+MIT — Copyright (c) 2026 erik <erik@erik.xyz> — https://erik.xyz

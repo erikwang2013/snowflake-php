@@ -11,9 +11,15 @@
     ],
     "authors": [
         {
-            "name": "erikwang2013"
+            "name": "erik",
+            "email": "erik@erik.xyz",
+            "homepage": "https://erik.xyz"
         }
     ],
+    "support": {
+        "email": "erik@erik.xyz",
+        "issues": "https://github.com/erikwang2013/snowflake-php/issues"
+    },
     "require": {
         "php": ">=8.0"
     },

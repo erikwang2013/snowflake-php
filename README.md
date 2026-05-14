@@ -317,4 +317,4 @@ IDs are generated purely in-process with no external dependencies. The primary b
 
 ## License
 
-MIT
+MIT — Copyright (c) 2026 erik <erik@erik.xyz> — https://erik.xyz

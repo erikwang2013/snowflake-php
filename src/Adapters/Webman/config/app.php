@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * Copyright (c) 2026 erik <erik@erik.xyz> — https://erik.xyz
+ */
+
+/**
  * Snowflake plugin configuration for Webman.
  *
  * Copy or symlink this file to:

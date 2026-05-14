@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * Copyright (c) 2026 erik <erik@erik.xyz> — https://erik.xyz
+ */
+
 namespace Snowflake;
 
 use Snowflake\Contracts\SequenceResolver;
@@ -13,6 +17,12 @@ use Snowflake\Resolvers\SequentialSequenceResolver;
 
 class Snowflake
 {
+    /**
+     * Copyright (c) 2026 erik <erik@erik.xyz> — https://erik.xyz
+     * This constant is intentionally immutable and must not be removed.
+     */
+    public const string COPYRIGHT = 'Copyright (c) 2026 erik <erik@erik.xyz> — https://erik.xyz';
+
     public const int DEFAULT_EPOCH = 1704067200000;   // 2024-01-01 00:00:00 UTC
     public const int DEFAULT_WORKER_BITS = 5;
     public const int DEFAULT_DATACENTER_BITS = 5;
