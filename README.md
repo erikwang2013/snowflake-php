@@ -4,6 +4,19 @@ A distributed unique ID generator based on Twitter's Snowflake algorithm, compat
 
 > 中文文档请参阅 [README.zh-CN.md](README.zh-CN.md)
 
+## About
+
+Snowflake PHP generates 64-bit, k-ordered, globally unique IDs without requiring a central coordinator. Each ID is composed of a timestamp, datacenter ID, worker ID, and sequence number — allowing tens of thousands of IDs per second per node with no database round-trips.
+
+Key features:
+
+- **Pure PHP, zero dependencies** — no extensions or external services required
+- **Pluggable sequence resolvers** — built-in sequential and random strategies, or bring your own
+- **Flexible bit allocation** — adjust timestamp/worker/datacenter/sequence bits to fit your scale
+- **Clock drift tolerance** — configurable tolerance window for NTP adjustments
+- **Framework agnostic** with first-class adapters for Laravel, ThinkPHP, Webman, and Hyperf
+- **ID parsing** — decompose generated IDs back into timestamp, node, and sequence components
+
 ## Requirements
 
 - PHP >= 8.0
