@@ -129,4 +129,27 @@ class SequenceResolverTest extends TestCase
 
         $this->assertTrue(true); // no memory error = pass
     }
+
+    public function testRandomNearExhaustionFindsAllSlots(): void
+    {
+        $resolver = new RandomSequenceResolver();
+        $maxSequence = 5; // 6 slots: 0-5
+        $timestamp = 1000;
+
+        // Fill all 6 slots — none should return null prematurely
+        $seen = [];
+        for ($i = 0; $i < 6; $i++) {
+            $seq = $resolver->next($timestamp, $maxSequence);
+            $this->assertNotNull($seq, "Slot $i should not be null");
+            $this->assertGreaterThanOrEqual(0, $seq);
+            $this->assertLessThanOrEqual($maxSequence, $seq);
+            $seen[] = $seq;
+        }
+
+        // All 6 values should be unique
+        $this->assertCount(6, array_unique($seen));
+
+        // Now truly exhausted
+        $this->assertNull($resolver->next($timestamp, $maxSequence));
+    }
 }

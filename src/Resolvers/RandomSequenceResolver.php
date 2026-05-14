@@ -27,13 +27,24 @@ class RandomSequenceResolver implements SequenceResolver
             $this->used[$timestamp] = [];
         }
 
-        if (count($this->used[$timestamp]) > $maxSequence) {
+        $slots = $maxSequence + 1;
+        if (count($this->used[$timestamp]) >= $slots) {
             return null;
         }
 
-        $retries = ($maxSequence + 1) * 3;
+        $retries = $slots * 3;
         for ($i = 0; $i < $retries; $i++) {
             $seq = random_int(0, $maxSequence);
+            if (!isset($this->used[$timestamp][$seq])) {
+                $this->used[$timestamp][$seq] = true;
+
+                return $seq;
+            }
+        }
+
+        // Random probes missed — fall back to linear scan to guarantee we find
+        // the remaining slot(s) instead of falsely reporting exhaustion.
+        for ($seq = 0; $seq <= $maxSequence; $seq++) {
             if (!isset($this->used[$timestamp][$seq])) {
                 $this->used[$timestamp][$seq] = true;
 
