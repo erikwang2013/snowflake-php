@@ -328,6 +328,14 @@ Typical throughput on modern hardware: **~500,000 IDs/second** (single process).
 
 IDs are generated purely in-process with no external dependencies. The primary bottleneck is PHP's `microtime()` call and integer bit operations, both of which are O(1).
 
+## 开源不易，欢迎支持
+
+| 微信 | 支付宝 |
+|:---:|:---:|
+| ![微信](./docs/weixinpay.png "微信") | ![支付宝](./docs/alipay.png "支付宝") |
+
+---
+
 ## License
 
 MIT — Copyright (c) 2026 erik <erik@erik.xyz> — https://erik.xyz

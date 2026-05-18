@@ -326,6 +326,14 @@ $snowflake = new Snowflake(
 
 ID 生成完全在进程内完成，无需外部依赖。主要开销来自 PHP 的 `microtime()` 调用和整数位运算，均为 O(1)。
 
+## 开源不易，欢迎支持
+
+| 微信 | 支付宝 |
+|:---:|:---:|
+| ![微信](./docs/weixinpay.png "微信") | ![支付宝](./docs/alipay.png "支付宝") |
+
+---
+
 ## License
 
 MIT — Copyright (c) 2026 erik <erik@erik.xyz> — https://erik.xyz
