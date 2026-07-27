@@ -48,7 +48,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Control how the 63 data bits are distributed across components.
-    | Total must not exceed 63 bits: worker_bits + datacenter_bits + sequence_bits <= 63
+    | Total must be less than 63 bits: worker_bits + datacenter_bits + sequence_bits < 63
     |
     */
     'worker_bits' => 5,
@@ -61,8 +61,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | Fully-qualified class name implementing Snowflake\Contracts\SequenceResolver.
-    | The default RandomSequenceResolver starts a fresh random sequence in each
-    | millisecond for unpredictability.
+    | The default SequentialSequenceResolver increments from 0 each millisecond
+    | for strict monotonic ordering.
     |
     */
     'sequence_resolver' => \Erikwang2013\Snowflake\Resolvers\SequentialSequenceResolver::class,

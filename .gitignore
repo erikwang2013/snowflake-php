@@ -6,3 +6,8 @@ composer.lock
 .idea/
 .vscode/
 *.log
+.claude
+.claude-flow
+.swarm
+.mcp.json
+ruvector.db
