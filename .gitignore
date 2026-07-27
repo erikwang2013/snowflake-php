@@ -5,6 +5,7 @@ composer.lock
 .DS_Store
 .idea/
 .vscode/
+.phpunit.cache
 *.log
 .claude
 .claude-flow
