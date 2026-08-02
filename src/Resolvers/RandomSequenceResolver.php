@@ -57,11 +57,8 @@ class RandomSequenceResolver implements SequenceResolver
 
     private function purge(int $currentTimestamp): void
     {
-        // Remove entries from previous milliseconds to free memory.
-        foreach ($this->used as $ts => $_) {
-            if ($ts !== $currentTimestamp) {
-                unset($this->used[$ts]);
-            }
+        if (!isset($this->used[$currentTimestamp])) {
+            $this->used = [$currentTimestamp => []];
         }
     }
 }

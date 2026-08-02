@@ -31,7 +31,7 @@ composer require erikwang2013/snowflake-php
 ## Quick Start
 
 ```php
-use Snowflake\Snowflake;
+use Erikwang2013\Snowflake\Snowflake;
 
 $snowflake = new Snowflake();
 $id = $snowflake->id();          // e.g. 508047278033704960
@@ -103,7 +103,7 @@ use Snowflake;
 $id = Snowflake::id();
 
 // Dependency injection
-use Snowflake\Snowflake;
+use Erikwang2013\Snowflake\Snowflake;
 
 class OrderController
 {
@@ -128,7 +128,7 @@ cp vendor/erikwang2013/snowflake-php/src/Adapters/Webman/config/app.php \
 
 2. Register a singleton in `process.php` or bootstrap:
 ```php
-use Snowflake\Snowflake;
+use Erikwang2013\Snowflake\Snowflake;
 
 Worker::$container->add(Snowflake::class, function () {
     return Snowflake::fromConfig(
@@ -163,7 +163,7 @@ return [
 $id = app('snowflake')->id();
 
 // Dependency injection
-use Snowflake\Snowflake;
+use Erikwang2013\Snowflake\Snowflake;
 
 class IndexController
 {
@@ -174,7 +174,7 @@ class IndexController
 }
 
 // Facade
-use Snowflake\Adapters\ThinkPHP\Facade;
+use Erikwang2013\Snowflake\Adapters\ThinkPHP\Facade;
 $id = Facade::id();
 ```
 
@@ -187,7 +187,7 @@ php bin/hyperf.php vendor:publish erikwang2013/snowflake-php
 
 2. Register the DI binding in `config/autoload/dependencies.php`:
 ```php
-use Snowflake\Snowflake;
+use Erikwang2013\Snowflake\Snowflake;
 
 return [
     Snowflake::class => function () {
@@ -198,7 +198,7 @@ return [
 
 3. Usage via constructor injection:
 ```php
-use Snowflake\Snowflake;
+use Erikwang2013\Snowflake\Snowflake;
 
 class OrderService
 {
@@ -241,7 +241,7 @@ Two built-in implementations:
 Classic Snowflake behavior. Sequence starts at 0 each millisecond and increments sequentially. Guarantees monotonically increasing IDs within a single node.
 
 ```php
-use Snowflake\Resolvers\SequentialSequenceResolver;
+use Erikwang2013\Snowflake\Resolvers\SequentialSequenceResolver;
 
 $snowflake = new Snowflake(
     sequenceResolver: new SequentialSequenceResolver()
@@ -253,7 +253,7 @@ $snowflake = new Snowflake(
 Starts each millisecond with a random sequence number. Makes IDs less predictable (prevents enumeration) but IDs within the same millisecond are not monotonic.
 
 ```php
-use Snowflake\Resolvers\RandomSequenceResolver;
+use Erikwang2013\Snowflake\Resolvers\RandomSequenceResolver;
 
 $snowflake = new Snowflake(
     sequenceResolver: new RandomSequenceResolver()
@@ -265,7 +265,7 @@ $snowflake = new Snowflake(
 Implement `Snowflake\Contracts\SequenceResolver`:
 
 ```php
-use Snowflake\Contracts\SequenceResolver;
+use Erikwang2013\Snowflake\Contracts\SequenceResolver;
 
 class RedisSequenceResolver implements SequenceResolver
 {
@@ -328,11 +328,13 @@ Typical throughput on modern hardware: **~500,000 IDs/second** (single process).
 
 IDs are generated purely in-process with no external dependencies. The primary bottleneck is PHP's `microtime()` call and integer bit operations, both of which are O(1).
 
-## 开源不易，欢迎支持
+## Support Welcome
 
-| 微信 | 支付宝 |
+| WeChat Pay | Alipay |
 |:---:|:---:|
-| ![微信](./docs/weixinpay.png "微信") | ![支付宝](./docs/alipay.png "支付宝") |
+| <img src="./docs/weixinpay.png" width="130" height="130" alt="WeChat Pay" /> | <img src="./docs/alipay.png" width="130" height="130" alt="Alipay" /> |
+
+> If this project helps you, feel free to show your support~
 
 ---
 

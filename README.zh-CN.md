@@ -29,7 +29,7 @@ composer require erikwang2013/snowflake-php
 ## 快速开始
 
 ```php
-use Snowflake\Snowflake;
+use Erikwang2013\Snowflake\Snowflake;
 
 $snowflake = new Snowflake();
 $id = $snowflake->id();          // 例如 508047278033704960
@@ -101,7 +101,7 @@ use Snowflake;
 $id = Snowflake::id();
 
 // 依赖注入
-use Snowflake\Snowflake;
+use Erikwang2013\Snowflake\Snowflake;
 
 class OrderController
 {
@@ -126,7 +126,7 @@ cp vendor/erikwang2013/snowflake-php/src/Adapters/Webman/config/app.php \
 
 2. 在 `process.php` 或启动文件中注册单例：
 ```php
-use Snowflake\Snowflake;
+use Erikwang2013\Snowflake\Snowflake;
 
 Worker::$container->add(Snowflake::class, function () {
     return Snowflake::fromConfig(
@@ -161,7 +161,7 @@ return [
 $id = app('snowflake')->id();
 
 // 依赖注入
-use Snowflake\Snowflake;
+use Erikwang2013\Snowflake\Snowflake;
 
 class IndexController
 {
@@ -172,7 +172,7 @@ class IndexController
 }
 
 // Facade
-use Snowflake\Adapters\ThinkPHP\Facade;
+use Erikwang2013\Snowflake\Adapters\ThinkPHP\Facade;
 $id = Facade::id();
 ```
 
@@ -185,7 +185,7 @@ php bin/hyperf.php vendor:publish erikwang2013/snowflake-php
 
 2. 在 `config/autoload/dependencies.php` 中注册 DI 绑定：
 ```php
-use Snowflake\Snowflake;
+use Erikwang2013\Snowflake\Snowflake;
 
 return [
     Snowflake::class => function () {
@@ -196,7 +196,7 @@ return [
 
 3. 通过构造函数注入使用：
 ```php
-use Snowflake\Snowflake;
+use Erikwang2013\Snowflake\Snowflake;
 
 class OrderService
 {
@@ -239,7 +239,7 @@ $parsed = Snowflake::parse($id, $epoch);
 经典的 Snowflake 行为。每个毫秒序列号从 0 开始顺序递增，保证单节点内 ID 严格单调递增。
 
 ```php
-use Snowflake\Resolvers\SequentialSequenceResolver;
+use Erikwang2013\Snowflake\Resolvers\SequentialSequenceResolver;
 
 $snowflake = new Snowflake(
     sequenceResolver: new SequentialSequenceResolver()
@@ -251,7 +251,7 @@ $snowflake = new Snowflake(
 每个毫秒从随机位置开始。ID 不易被猜测（防止遍历攻击），但同一毫秒内的 ID 不保证单调递增。
 
 ```php
-use Snowflake\Resolvers\RandomSequenceResolver;
+use Erikwang2013\Snowflake\Resolvers\RandomSequenceResolver;
 
 $snowflake = new Snowflake(
     sequenceResolver: new RandomSequenceResolver()
@@ -263,7 +263,7 @@ $snowflake = new Snowflake(
 实现 `Snowflake\Contracts\SequenceResolver` 接口：
 
 ```php
-use Snowflake\Contracts\SequenceResolver;
+use Erikwang2013\Snowflake\Contracts\SequenceResolver;
 
 class RedisSequenceResolver implements SequenceResolver
 {
@@ -330,7 +330,9 @@ ID 生成完全在进程内完成，无需外部依赖。主要开销来自 PHP 
 
 | 微信 | 支付宝 |
 |:---:|:---:|
-| ![微信](./docs/weixinpay.png "微信") | ![支付宝](./docs/alipay.png "支付宝") |
+| <img src="./docs/weixinpay.png" width="130" height="130" alt="微信" /> | <img src="./docs/alipay.png" width="130" height="130" alt="支付宝" /> |
+
+> 如果这个项目对你有帮助，欢迎扫码支持一下~
 
 ---
 

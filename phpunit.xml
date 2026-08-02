@@ -4,6 +4,11 @@
          bootstrap="vendor/autoload.php"
          colors="true"
          cacheDirectory=".phpunit.cache">
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
     <testsuites>
         <testsuite name="Snowflake Test Suite">
             <directory>tests</directory>

@@ -21,15 +21,8 @@ class SequentialSequenceResolver implements SequenceResolver
 
     public function next(int $timestamp, int $maxSequence): ?int
     {
-        // Purge old timestamps
-        foreach ($this->counters as $ts => $_) {
-            if ($ts !== $timestamp) {
-                unset($this->counters[$ts]);
-            }
-        }
-
         if (!isset($this->counters[$timestamp])) {
-            $this->counters[$timestamp] = 0;
+            $this->counters = [$timestamp => 0];
 
             return 0;
         }
