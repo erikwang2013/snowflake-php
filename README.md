@@ -19,8 +19,9 @@ Key features:
 
 ## Requirements
 
-- PHP >= 8.0
+- PHP >= 8.3
 - 64-bit system (required for native 64-bit integer operations)
+- One instance per process/coroutine — a Snowflake instance keeps its sequence state in memory and must not be shared across processes or coroutines
 
 ## Installation
 
@@ -153,7 +154,7 @@ cp vendor/erikwang2013/snowflake-php/src/Adapters/ThinkPHP/config/snowflake.php 
 2. Register the service in `app/service.php`:
 ```php
 return [
-    \Snowflake\Adapters\ThinkPHP\Service::class,
+    \Erikwang2013\Snowflake\Adapters\ThinkPHP\Service::class,
 ];
 ```
 
@@ -250,7 +251,7 @@ $snowflake = new Snowflake(
 
 ### RandomSequenceResolver
 
-Starts each millisecond with a random sequence number. Makes IDs less predictable (prevents enumeration) but IDs within the same millisecond are not monotonic.
+Starts each millisecond at a random sequence number, then increments. Less predictable than sequential IDs while keeping IDs within a millisecond monotonic.
 
 ```php
 use Erikwang2013\Snowflake\Resolvers\RandomSequenceResolver;
@@ -262,7 +263,7 @@ $snowflake = new Snowflake(
 
 ### Custom Resolver
 
-Implement `Snowflake\Contracts\SequenceResolver`:
+Implement `Erikwang2013\Snowflake\Contracts\SequenceResolver`:
 
 ```php
 use Erikwang2013\Snowflake\Contracts\SequenceResolver;

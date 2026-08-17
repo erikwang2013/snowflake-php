@@ -11,54 +11,35 @@ namespace Erikwang2013\Snowflake\Resolvers;
 use Erikwang2013\Snowflake\Contracts\SequenceResolver;
 
 /**
- * Uses a random starting point each millisecond to avoid predictable IDs.
- * Tracks in-process usage to prevent collisions within the same millisecond.
+ * Starts each millisecond at a random sequence number, then increments.
+ * Less predictable than sequential IDs while keeping IDs within a
+ * millisecond strictly increasing.
  */
 class RandomSequenceResolver implements SequenceResolver
 {
-    /** @var array<int, array<int, bool>> */
-    private array $used = [];
+    /** @var array<int, int> */
+    private array $counters = [];
 
     public function next(int $timestamp, int $maxSequence): ?int
     {
-        $this->purge($timestamp);
+        if (!isset($this->counters[$timestamp])) {
+            try {
+                $start = random_int(0, $maxSequence);
+            } catch (\Random\RandomException) {
+                $start = 0;
+            }
+            $this->counters = [$timestamp => $start];
 
-        if (!isset($this->used[$timestamp])) {
-            $this->used[$timestamp] = [];
+            return $start;
         }
 
-        $slots = $maxSequence + 1;
-        if (count($this->used[$timestamp]) >= $slots) {
+        $next = $this->counters[$timestamp] + 1;
+        if ($next > $maxSequence) {
             return null;
         }
 
-        $retries = $slots * 3;
-        for ($i = 0; $i < $retries; $i++) {
-            $seq = random_int(0, $maxSequence);
-            if (!isset($this->used[$timestamp][$seq])) {
-                $this->used[$timestamp][$seq] = true;
+        $this->counters[$timestamp] = $next;
 
-                return $seq;
-            }
-        }
-
-        // Random probes missed — fall back to linear scan to guarantee we find
-        // the remaining slot(s) instead of falsely reporting exhaustion.
-        for ($seq = 0; $seq <= $maxSequence; $seq++) {
-            if (!isset($this->used[$timestamp][$seq])) {
-                $this->used[$timestamp][$seq] = true;
-
-                return $seq;
-            }
-        }
-
-        return null;
-    }
-
-    private function purge(int $currentTimestamp): void
-    {
-        if (!isset($this->used[$currentTimestamp])) {
-            $this->used = [$currentTimestamp => []];
-        }
+        return $next;
     }
 }

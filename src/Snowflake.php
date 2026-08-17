@@ -12,6 +12,7 @@ use Erikwang2013\Snowflake\Contracts\SequenceResolver;
 use Erikwang2013\Snowflake\Exceptions\ClockDriftException;
 use Erikwang2013\Snowflake\Exceptions\InvalidDatacenterIdException;
 use Erikwang2013\Snowflake\Exceptions\InvalidWorkerIdException;
+use Erikwang2013\Snowflake\Exceptions\SnowflakeException;
 use Erikwang2013\Snowflake\Exceptions\TimestampOverflowException;
 use Erikwang2013\Snowflake\Resolvers\SequentialSequenceResolver;
 
@@ -43,6 +44,9 @@ class Snowflake
     private readonly int $maxTimestampOffset;
     private readonly int $clockToleranceMs;
 
+    /** Precomputed (datacenter << datacenterShift) | (worker << workerShift). */
+    private readonly int $fixedBits;
+
     private int $lastTimestamp = -1;
     private SequenceResolver $sequenceResolver;
 
@@ -56,6 +60,13 @@ class Snowflake
         ?SequenceResolver $sequenceResolver = null,
         int $clockToleranceMs = 0,
     ) {
+        if (PHP_INT_SIZE < 8) {
+            throw new SnowflakeException(
+                'Snowflake requires a 64-bit platform (PHP_INT_SIZE >= 8); '
+                . 'timestamp bits can reach 62 and would overflow to float on 32-bit systems.'
+            );
+        }
+
         if ($workerBits < 1 || $datacenterBits < 1 || $sequenceBits < 1) {
             throw new \InvalidArgumentException('Bit counts must be at least 1.');
         }
@@ -92,6 +103,9 @@ class Snowflake
         $this->datacenterShift = $sequenceBits + $workerBits;
         $this->timestampShift = $sequenceBits + $workerBits + $datacenterBits;
 
+        $this->fixedBits = ($this->datacenterId << $this->datacenterShift)
+            | ($this->workerId << $this->workerShift);
+
         $this->maxTimestampOffset = (1 << $this->timestampBits) - 1;
 
         $this->epoch = $epoch ?? self::DEFAULT_EPOCH;
@@ -119,23 +133,33 @@ class Snowflake
             }
         }
 
-        if ($timestamp === $this->lastTimestamp) {
-            $seq = $this->sequenceResolver->next(
-                $timestamp - $this->epoch,
-                $this->maxSequence
+        $offset = $timestamp - $this->epoch;
+
+        if ($offset < 0) {
+            // Clock before the epoch: misconfiguration or a backward jump.
+            throw new ClockDriftException(
+                $this->epoch,
+                $timestamp,
+                0,
+                sprintf('System clock is before the configured epoch (epoch: %d, current: %d).', $this->epoch, $timestamp)
             );
+        }
+        if ($offset > $this->maxTimestampOffset) {
+            throw new TimestampOverflowException($offset, $this->maxTimestampOffset);
+        }
+
+        if ($timestamp === $this->lastTimestamp) {
+            $seq = $this->sequenceResolver->next($offset, $this->maxSequence);
             if ($seq === null) {
                 $timestamp = $this->waitNextMillis($this->lastTimestamp);
-                $seq = $this->sequenceResolver->next(
-                    $timestamp - $this->epoch,
-                    $this->maxSequence
-                );
+                $offset = $timestamp - $this->epoch;
+                if ($offset > $this->maxTimestampOffset) {
+                    throw new TimestampOverflowException($offset, $this->maxTimestampOffset);
+                }
+                $seq = $this->sequenceResolver->next($offset, $this->maxSequence);
             }
         } else {
-            $seq = $this->sequenceResolver->next(
-                $timestamp - $this->epoch,
-                $this->maxSequence
-            );
+            $seq = $this->sequenceResolver->next($offset, $this->maxSequence);
         }
 
         if ($seq === null) {
@@ -144,18 +168,11 @@ class Snowflake
             );
         }
 
+        // Advance state only after every guard passed, so a failed call
+        // cannot poison the next one.
         $this->lastTimestamp = $timestamp;
 
-        $offset = $timestamp - $this->epoch;
-
-        if ($offset > $this->maxTimestampOffset) {
-            throw new TimestampOverflowException($offset, $this->maxTimestampOffset);
-        }
-
-        return ($offset << $this->timestampShift)
-            | ($this->datacenterId << $this->datacenterShift)
-            | ($this->workerId << $this->workerShift)
-            | $seq;
+        return ($offset << $this->timestampShift) | $this->fixedBits | $seq;
     }
 
     /**
@@ -235,15 +252,55 @@ class Snowflake
         }
 
         return new self(
-            workerId: (int) ($config['worker_id'] ?? 0),
-            datacenterId: (int) ($config['datacenter_id'] ?? 0),
+            workerId: self::intConfig($config['worker_id'] ?? 0, 'worker_id'),
+            datacenterId: self::intConfig($config['datacenter_id'] ?? 0, 'datacenter_id'),
             workerBits: (int) ($config['worker_bits'] ?? self::DEFAULT_WORKER_BITS),
             datacenterBits: (int) ($config['datacenter_bits'] ?? self::DEFAULT_DATACENTER_BITS),
             sequenceBits: (int) ($config['sequence_bits'] ?? self::DEFAULT_SEQUENCE_BITS),
-            epoch: isset($config['epoch']) ? (int) $config['epoch'] : null,
+            epoch: isset($config['epoch'])
+                ? self::intConfig($config['epoch'], 'epoch', positive: true)
+                : null,
             sequenceResolver: $resolver,
             clockToleranceMs: (int) ($config['clock_tolerance_ms'] ?? 0),
         );
+    }
+
+    /**
+     * Validate a numeric config value and return it as an int, rejecting
+     * fractions and out-of-range floats whose (int) truncation is
+     * platform-dependent and could bypass the range checks.
+     *
+     * @throws \InvalidArgumentException
+     */
+    private static function intConfig(mixed $value, string $name, bool $positive = false): int
+    {
+        if (!is_numeric($value)) {
+            throw new \InvalidArgumentException(
+                sprintf('Config "%s" must be a numeric value, got "%s".', $name, get_debug_type($value))
+            );
+        }
+
+        $number = (float) $value;
+        if (floor($number) !== $number) {
+            throw new \InvalidArgumentException(
+                sprintf('Config "%s" must be an integer, got "%s".', $name, (string) $value)
+            );
+        }
+
+        if ($number > PHP_INT_MAX || $number < PHP_INT_MIN) {
+            throw new \InvalidArgumentException(
+                sprintf('Config "%s" is outside the platform integer range.', $name)
+            );
+        }
+
+        $int = (int) $number;
+        if ($positive && $int <= 0) {
+            throw new \InvalidArgumentException(
+                sprintf('Config "%s" must be a positive integer, got %d.', $name, $int)
+            );
+        }
+
+        return $int;
     }
 
     private function currentTimeMillis(): int

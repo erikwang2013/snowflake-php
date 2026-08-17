@@ -62,7 +62,7 @@ return [
     | Sequence Resolver
     |--------------------------------------------------------------------------
     |
-    | Fully-qualified class name implementing Snowflake\Contracts\SequenceResolver.
+    | Fully-qualified class name implementing Erikwang2013\Snowflake\Contracts\SequenceResolver.
     | The default SequentialSequenceResolver increments from 0 each millisecond
     | for strict monotonic ordering.
     |

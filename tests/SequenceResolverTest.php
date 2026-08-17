@@ -83,14 +83,18 @@ class SequenceResolverTest extends TestCase
         $resolver = new RandomSequenceResolver();
         $maxSequence = 4095;
 
-        $values = [];
-        for ($i = 0; $i < 100; $i++) {
-            $seq = $resolver->next(1000, $maxSequence);
-            $this->assertNotNull($seq);
-            $values[] = $seq;
+        // Run length depends on the random start, so drain until null and
+        // assert every step increments by exactly 1.
+        $prev = $resolver->next(1000, $maxSequence);
+        $this->assertNotNull($prev);
+
+        while (($seq = $resolver->next(1000, $maxSequence)) !== null) {
+            $this->assertSame($prev + 1, $seq);
+            $prev = $seq;
         }
 
-        $this->assertCount(100, array_unique($values));
+        // Exhaustion only happens after the counter passes maxSequence.
+        $this->assertSame($maxSequence, $prev);
     }
 
     public function testRandomResetsOnNewTimestamp(): void
@@ -98,14 +102,13 @@ class SequenceResolverTest extends TestCase
         $resolver = new RandomSequenceResolver();
         $maxSequence = 4095;
 
-        // Use many slots on timestamp 1000
-        for ($i = 0; $i < 100; $i++) {
-            $this->assertNotNull($resolver->next(1000, $maxSequence));
+        // Exhaust timestamp 1000 — run length depends on the random start
+        while ($resolver->next(1000, $maxSequence) !== null) {
+            // drain
         }
 
-        // New timestamp should get fresh slots (0 is available)
-        $seq = $resolver->next(1001, $maxSequence);
-        $this->assertNotNull($seq);
+        // New timestamp starts fresh with a random start
+        $this->assertNotNull($resolver->next(1001, $maxSequence));
     }
 
     public function testSequentialPurgesOldTimestamps(): void
@@ -130,26 +133,39 @@ class SequenceResolverTest extends TestCase
         $this->assertTrue(true); // no memory error = pass
     }
 
-    public function testRandomNearExhaustionFindsAllSlots(): void
+    public function testRandomStartsRandomlyThenIncrements(): void
     {
         $resolver = new RandomSequenceResolver();
-        $maxSequence = 5; // 6 slots: 0-5
-        $timestamp = 1000;
+        $maxSequence = 4095;
 
-        // Fill all 6 slots — none should return null prematurely
+        $first = $resolver->next(1000, $maxSequence);
+        $this->assertGreaterThanOrEqual(0, $first);
+        $this->assertLessThanOrEqual($maxSequence, $first);
+
+        // Start lands on maxSequence (1/4096): the run is exhausted after the first ID.
+        if ($first === $maxSequence) {
+            $this->assertNull($resolver->next(1000, $maxSequence));
+            return;
+        }
+
+        $this->assertSame($first + 1, $resolver->next(1000, $maxSequence));
+        $this->assertSame($first + 2, $resolver->next(1000, $maxSequence));
+    }
+
+    public function testRandomExhaustsAfterRandomStart(): void
+    {
+        $resolver = new RandomSequenceResolver();
+        $maxSequence = 3;
+
+        // Sequence starts at a random offset and never wraps, so the run is
+        // shorter than the full slot count but strictly increasing.
         $seen = [];
-        for ($i = 0; $i < 6; $i++) {
-            $seq = $resolver->next($timestamp, $maxSequence);
-            $this->assertNotNull($seq, "Slot $i should not be null");
-            $this->assertGreaterThanOrEqual(0, $seq);
-            $this->assertLessThanOrEqual($maxSequence, $seq);
+        while (($seq = $resolver->next(1000, $maxSequence)) !== null) {
             $seen[] = $seq;
         }
 
-        // All 6 values should be unique
-        $this->assertCount(6, array_unique($seen));
-
-        // Now truly exhausted
-        $this->assertNull($resolver->next($timestamp, $maxSequence));
+        $this->assertNotEmpty($seen);
+        $this->assertCount(count($seen), array_unique($seen));
+        $this->assertLessThanOrEqual($maxSequence + 1, count($seen));
     }
 }

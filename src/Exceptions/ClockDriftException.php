@@ -14,20 +14,22 @@ class ClockDriftException extends SnowflakeException
     public readonly int $currentTimestamp;
     public readonly int $driftMs;
 
-    public function __construct(int $lastTimestamp, int $currentTimestamp, int $toleranceMs)
+    public function __construct(int $lastTimestamp, int $currentTimestamp, int $toleranceMs, string $message = '')
     {
         $this->lastTimestamp = $lastTimestamp;
         $this->currentTimestamp = $currentTimestamp;
         $this->driftMs = $lastTimestamp - $currentTimestamp;
 
         parent::__construct(
-            sprintf(
-                'System clock moved backwards by %d ms (last: %d, current: %d). Tolerance: %d ms.',
-                $this->driftMs,
-                $lastTimestamp,
-                $currentTimestamp,
-                $toleranceMs
-            )
+            $message !== ''
+                ? $message
+                : sprintf(
+                    'System clock moved backwards by %d ms (last: %d, current: %d). Tolerance: %d ms.',
+                    $this->driftMs,
+                    $lastTimestamp,
+                    $currentTimestamp,
+                    $toleranceMs
+                )
         );
     }
 }

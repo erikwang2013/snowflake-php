@@ -17,8 +17,9 @@ Snowflake PHP 无需中心协调节点即可生成 64 位、k-ordered、全局�
 
 ## 环境要求
 
-- PHP >= 8.0
+- PHP >= 8.3
 - 64 位系统（64 位整数运算所必需）
+- 每进程/协程独立实例 — 实例在内存中维护序列状态，不可跨进程或协程共享
 
 ## 安装
 
@@ -151,7 +152,7 @@ cp vendor/erikwang2013/snowflake-php/src/Adapters/ThinkPHP/config/snowflake.php 
 2. 在 `app/service.php` 中注册服务：
 ```php
 return [
-    \Snowflake\Adapters\ThinkPHP\Service::class,
+    \Erikwang2013\Snowflake\Adapters\ThinkPHP\Service::class,
 ];
 ```
 
@@ -248,7 +249,7 @@ $snowflake = new Snowflake(
 
 ### RandomSequenceResolver
 
-每个毫秒从随机位置开始。ID 不易被猜测（防止遍历攻击），但同一毫秒内的 ID 不保证单调递增。
+每个毫秒从随机位置开始，随后自增。比顺序策略更难预测，同时同一毫秒内的 ID 保持单调递增。
 
 ```php
 use Erikwang2013\Snowflake\Resolvers\RandomSequenceResolver;
@@ -260,7 +261,7 @@ $snowflake = new Snowflake(
 
 ### 自定义策略
 
-实现 `Snowflake\Contracts\SequenceResolver` 接口：
+实现 `Erikwang2013\Snowflake\Contracts\SequenceResolver` 接口：
 
 ```php
 use Erikwang2013\Snowflake\Contracts\SequenceResolver;

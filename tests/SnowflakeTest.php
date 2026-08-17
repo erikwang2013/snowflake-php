@@ -11,6 +11,7 @@ namespace Erikwang2013\Snowflake\Tests;
 use PHPUnit\Framework\TestCase;
 use Erikwang2013\Snowflake\Exceptions\ClockDriftException;
 use Erikwang2013\Snowflake\Exceptions\InvalidDatacenterIdException;
+use Erikwang2013\Snowflake\Exceptions\TimestampOverflowException;
 use Erikwang2013\Snowflake\Exceptions\InvalidWorkerIdException;
 use Erikwang2013\Snowflake\Snowflake;
 
@@ -276,5 +277,101 @@ class SnowflakeTest extends TestCase
         }
 
         $this->assertCount(10000, array_unique($ids));
+    }
+
+    public function testTimestampOverflowThrows(): void
+    {
+        // 30+30+2 bits → timestampBits = 1 → maxTimestampOffset = 1,
+        // so any real-world offset necessarily overflows.
+        $snowflake = new Snowflake(workerBits: 30, datacenterBits: 30, sequenceBits: 2, epoch: 0);
+
+        $this->expectException(TimestampOverflowException::class);
+        $snowflake->id();
+    }
+
+    public function testSequenceExhaustionWaitsForNextMillis(): void
+    {
+        // 2 sequence bits → only 4 IDs per millisecond; 100 calls force
+        // waitNextMillis repeatedly. IDs must stay unique and increasing.
+        $snowflake = new Snowflake(workerId: 0, datacenterId: 0, sequenceBits: 2);
+        $prev = $snowflake->id();
+
+        for ($i = 0; $i < 100; $i++) {
+            $next = $snowflake->id();
+            $this->assertGreaterThan($prev, $next);
+            $prev = $next;
+        }
+    }
+
+    public function testFailedCallDoesNotAdvanceLastTimestamp(): void
+    {
+        // A failed call must not poison state: lastTimestamp stays at its
+        // initial -1, otherwise the next call could be misrouted into the
+        // drift/wait paths instead of re-failing at the same guard.
+        $snowflake = new Snowflake(workerBits: 30, datacenterBits: 30, sequenceBits: 2, epoch: 0);
+
+        try {
+            $snowflake->id();
+            $this->fail('Expected TimestampOverflowException');
+        } catch (TimestampOverflowException) {
+            // expected
+        }
+
+        $ref = new \ReflectionProperty(Snowflake::class, 'lastTimestamp');
+        $this->assertSame(-1, $ref->getValue($snowflake));
+    }
+
+    public function testEpochInFutureThrowsClockDriftException(): void
+    {
+        $epoch = (int) (microtime(true) * 1000) + 60_000; // one minute ahead
+        $snowflake = new Snowflake(epoch: $epoch);
+
+        $this->expectException(ClockDriftException::class);
+        $snowflake->id();
+    }
+
+    public function testFromConfigRejectsNonNumericWorkerId(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('worker_id');
+
+        Snowflake::fromConfig(['worker_id' => 'abc']);
+    }
+
+    public function testFromConfigRejectsFractionalWorkerId(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        Snowflake::fromConfig(['worker_id' => 3.7]);
+    }
+
+    public function testFromConfigRejectsHugeFloatWorkerId(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        Snowflake::fromConfig(['worker_id' => 1e30]);
+    }
+
+    public function testFromConfigRejectsNonPositiveEpoch(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('epoch');
+
+        Snowflake::fromConfig(['epoch' => 0]);
+    }
+
+    public function testFromConfigAcceptsNumericStringValues(): void
+    {
+        $snowflake = Snowflake::fromConfig([
+            'worker_id' => '3',
+            'datacenter_id' => '7',
+            'epoch' => '1704067200000',
+        ]);
+
+        $id = $snowflake->id();
+        $parsed = $snowflake->parseId($id);
+
+        $this->assertSame(3, $parsed['worker_id']);
+        $this->assertSame(7, $parsed['datacenter_id']);
     }
 }
