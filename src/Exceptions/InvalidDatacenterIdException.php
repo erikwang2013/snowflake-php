@@ -10,8 +10,8 @@ namespace Erikwang2013\Snowflake\Exceptions;
 
 class InvalidDatacenterIdException extends SnowflakeException
 {
-    public readonly int $datacenterId;
-    public readonly int $maxDatacenterId;
+    public int $datacenterId;
+    public int $maxDatacenterId;
 
     public function __construct(int $datacenterId, int $maxDatacenterId)
     {

@@ -21,31 +21,32 @@ class Snowflake
     /**
      * @internal This constant is intentionally immutable and must not be removed.
      */
-    public const string COPYRIGHT = 'Copyright (c) 2026 erik <erik@erik.xyz> — https://erik.xyz';
+    // Plain consts/props (no types) for PHP 8.0 compatibility: typed class constants are 8.3+, readonly props 8.1+.
+    public const COPYRIGHT = 'Copyright (c) 2026 erik <erik@erik.xyz> — https://erik.xyz';
 
-    public const int DEFAULT_EPOCH = 1704067200000;   // 2024-01-01 00:00:00 UTC
-    public const int DEFAULT_WORKER_BITS = 5;
-    public const int DEFAULT_DATACENTER_BITS = 5;
-    public const int DEFAULT_SEQUENCE_BITS = 12;
+    public const DEFAULT_EPOCH = 1704067200000;   // 2024-01-01 00:00:00 UTC
+    public const DEFAULT_WORKER_BITS = 5;
+    public const DEFAULT_DATACENTER_BITS = 5;
+    public const DEFAULT_SEQUENCE_BITS = 12;
 
-    private readonly int $epoch;
-    private readonly int $workerId;
-    private readonly int $datacenterId;
-    private readonly int $workerBits;
-    private readonly int $datacenterBits;
-    private readonly int $sequenceBits;
-    private readonly int $timestampBits;
-    private readonly int $maxWorkerId;
-    private readonly int $maxDatacenterId;
-    private readonly int $maxSequence;
-    private readonly int $workerShift;
-    private readonly int $datacenterShift;
-    private readonly int $timestampShift;
-    private readonly int $maxTimestampOffset;
-    private readonly int $clockToleranceMs;
+    private int $epoch;
+    private int $workerId;
+    private int $datacenterId;
+    private int $workerBits;
+    private int $datacenterBits;
+    private int $sequenceBits;
+    private int $timestampBits;
+    private int $maxWorkerId;
+    private int $maxDatacenterId;
+    private int $maxSequence;
+    private int $workerShift;
+    private int $datacenterShift;
+    private int $timestampShift;
+    private int $maxTimestampOffset;
+    private int $clockToleranceMs;
 
     /** Precomputed (datacenter << datacenterShift) | (worker << workerShift). */
-    private readonly int $fixedBits;
+    private int $fixedBits;
 
     private int $lastTimestamp = -1;
     private SequenceResolver $sequenceResolver;
@@ -238,13 +239,14 @@ class Snowflake
     {
         $resolverClass = $config['sequence_resolver'] ?? null;
         $resolver = null;
-        if (is_string($resolverClass)) {
-            if (!class_exists($resolverClass) || !is_subclass_of($resolverClass, SequenceResolver::class)) {
+        if ($resolverClass !== null) {
+            if (!is_string($resolverClass) || !class_exists($resolverClass)
+                || !is_subclass_of($resolverClass, SequenceResolver::class)) {
                 throw new \InvalidArgumentException(
                     sprintf(
-                        'Sequence resolver class "%s" must exist and implement %s.',
-                        $resolverClass,
-                        SequenceResolver::class
+                        'Config "sequence_resolver" must exist and implement %s, got "%s".',
+                        SequenceResolver::class,
+                        is_string($resolverClass) ? $resolverClass : get_debug_type($resolverClass)
                     )
                 );
             }
@@ -254,14 +256,14 @@ class Snowflake
         return new self(
             workerId: self::intConfig($config['worker_id'] ?? 0, 'worker_id'),
             datacenterId: self::intConfig($config['datacenter_id'] ?? 0, 'datacenter_id'),
-            workerBits: (int) ($config['worker_bits'] ?? self::DEFAULT_WORKER_BITS),
-            datacenterBits: (int) ($config['datacenter_bits'] ?? self::DEFAULT_DATACENTER_BITS),
-            sequenceBits: (int) ($config['sequence_bits'] ?? self::DEFAULT_SEQUENCE_BITS),
+            workerBits: self::intConfig($config['worker_bits'] ?? self::DEFAULT_WORKER_BITS, 'worker_bits', positive: true),
+            datacenterBits: self::intConfig($config['datacenter_bits'] ?? self::DEFAULT_DATACENTER_BITS, 'datacenter_bits', positive: true),
+            sequenceBits: self::intConfig($config['sequence_bits'] ?? self::DEFAULT_SEQUENCE_BITS, 'sequence_bits', positive: true),
             epoch: isset($config['epoch'])
                 ? self::intConfig($config['epoch'], 'epoch', positive: true)
                 : null,
             sequenceResolver: $resolver,
-            clockToleranceMs: (int) ($config['clock_tolerance_ms'] ?? 0),
+            clockToleranceMs: self::intConfig($config['clock_tolerance_ms'] ?? 0, 'clock_tolerance_ms'),
         );
     }
 

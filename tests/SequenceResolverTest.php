@@ -122,6 +122,23 @@ class SequenceResolverTest extends TestCase
         $this->assertTrue(true); // no memory error = pass
     }
 
+    public function testSequentialWithMaxSequenceZero(): void
+    {
+        $resolver = new SequentialSequenceResolver();
+
+        $this->assertSame(0, $resolver->next(1000, 0));
+        $this->assertNull($resolver->next(1000, 0));
+    }
+
+    public function testRandomWithMaxSequenceZero(): void
+    {
+        $resolver = new RandomSequenceResolver();
+
+        // random_int(0, 0) always returns 0.
+        $this->assertSame(0, $resolver->next(1000, 0));
+        $this->assertNull($resolver->next(1000, 0));
+    }
+
     public function testRandomPurgesOldTimestamps(): void
     {
         $resolver = new RandomSequenceResolver();

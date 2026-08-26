@@ -19,7 +19,7 @@ Key features:
 
 ## Requirements
 
-- PHP >= 8.3
+- PHP >= 8.0 (8.0 – 8.4 verified in CI)
 - 64-bit system (required for native 64-bit integer operations)
 - One instance per process/coroutine — a Snowflake instance keeps its sequence state in memory and must not be shared across processes or coroutines
 

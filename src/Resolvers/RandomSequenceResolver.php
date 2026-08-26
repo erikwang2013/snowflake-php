@@ -25,7 +25,7 @@ class RandomSequenceResolver implements SequenceResolver
         if (!isset($this->counters[$timestamp])) {
             try {
                 $start = random_int(0, $maxSequence);
-            } catch (\Random\RandomException) {
+            } catch (\Throwable) {
                 $start = 0;
             }
             $this->counters = [$timestamp => $start];

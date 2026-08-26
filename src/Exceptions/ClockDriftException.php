@@ -10,9 +10,9 @@ namespace Erikwang2013\Snowflake\Exceptions;
 
 class ClockDriftException extends SnowflakeException
 {
-    public readonly int $lastTimestamp;
-    public readonly int $currentTimestamp;
-    public readonly int $driftMs;
+    public int $lastTimestamp;
+    public int $currentTimestamp;
+    public int $driftMs;
 
     public function __construct(int $lastTimestamp, int $currentTimestamp, int $toleranceMs, string $message = '')
     {

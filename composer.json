@@ -21,10 +21,10 @@
         "issues": "https://github.com/erikwang2013/snowflake-php/issues"
     },
     "require": {
-        "php": ">=8.3"
+        "php": ">=8.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10 || ^11"
+        "phpunit/phpunit": "^9.6 || ^10 || ^11"
     },
     "autoload": {
         "psr-4": {

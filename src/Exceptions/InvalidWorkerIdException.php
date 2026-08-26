@@ -10,8 +10,8 @@ namespace Erikwang2013\Snowflake\Exceptions;
 
 class InvalidWorkerIdException extends SnowflakeException
 {
-    public readonly int $workerId;
-    public readonly int $maxWorkerId;
+    public int $workerId;
+    public int $maxWorkerId;
 
     public function __construct(int $workerId, int $maxWorkerId)
     {

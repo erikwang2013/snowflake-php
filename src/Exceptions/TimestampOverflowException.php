@@ -10,8 +10,8 @@ namespace Erikwang2013\Snowflake\Exceptions;
 
 class TimestampOverflowException extends SnowflakeException
 {
-    public readonly int $timestampOffset;
-    public readonly int $maxOffset;
+    public int $timestampOffset;
+    public int $maxOffset;
 
     public function __construct(int $timestampOffset, int $maxOffset)
     {
