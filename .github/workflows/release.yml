@@ -24,16 +24,18 @@ jobs:
           set -euo pipefail
           latest=$(git tag -l 'v*' --sort=-v:refname | head -1 || true)
           if [ -z "$latest" ]; then
-            echo "next=v0.1.0"
-            echo "changelog<<EOF"
-            git log --pretty=format:'* %s' --no-merges
-            echo ""
-            echo "EOF"
+            echo "next=v0.1.0" >> "$GITHUB_OUTPUT"
+            {
+              echo "changelog<<EOF"
+              git log --pretty=format:'* %s' --no-merges
+              echo ""
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
             exit 0
           fi
           # Skip when HEAD is already tagged (idempotency on re-push)
           if git describe --tags --exact-match HEAD >/dev/null 2>&1; then
-            echo "skip=true"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           IFS='.' read -r major minor patch <<< "${latest#v}"
@@ -45,10 +47,12 @@ jobs:
           else
             patch=$((patch + 1))
           fi
-          echo "next=v${major}.${minor}.${patch}"
-          echo "changelog<<EOF"
-          echo "$commits" | sed 's/^/* /'
-          echo "EOF"
+          echo "next=v${major}.${minor}.${patch}" >> "$GITHUB_OUTPUT"
+          {
+            echo "changelog<<EOF"
+            echo "$commits" | sed 's/^/* /'
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Create tag and release
         if: steps.version.outputs.skip != 'true'
