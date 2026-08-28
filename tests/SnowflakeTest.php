@@ -318,6 +318,7 @@ class SnowflakeTest extends TestCase
         }
 
         $ref = new \ReflectionProperty(Snowflake::class, 'lastTimestamp');
+        $ref->setAccessible(true);
         $this->assertSame(-1, $ref->getValue($snowflake));
     }
 

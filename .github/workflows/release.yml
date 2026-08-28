@@ -58,11 +58,12 @@ jobs:
         if: steps.version.outputs.skip != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          CHANGELOG: ${{ steps.version.outputs.changelog }}
         run: |
           version="${{ steps.version.outputs.next }}"
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git tag -a "$version" -m "Release $version"
           git push origin "$version"
-          gh release create "$version" --title "Release $version" \
-            --notes "${{ steps.version.outputs.changelog }}"
+          printf '%s' "$CHANGELOG" > /tmp/CHANGELOG.md
+          gh release create "$version" --title "Release $version" --notes-file /tmp/CHANGELOG.md
