@@ -149,17 +149,13 @@ class Snowflake
             throw new TimestampOverflowException($offset, $this->maxTimestampOffset);
         }
 
-        if ($timestamp === $this->lastTimestamp) {
-            $seq = $this->sequenceResolver->next($offset, $this->maxSequence);
-            if ($seq === null) {
-                $timestamp = $this->waitNextMillis($this->lastTimestamp);
-                $offset = $timestamp - $this->epoch;
-                if ($offset > $this->maxTimestampOffset) {
-                    throw new TimestampOverflowException($offset, $this->maxTimestampOffset);
-                }
-                $seq = $this->sequenceResolver->next($offset, $this->maxSequence);
+        $seq = $this->sequenceResolver->next($offset, $this->maxSequence);
+        if ($seq === null && $timestamp === $this->lastTimestamp) {
+            $timestamp = $this->waitNextMillis($this->lastTimestamp);
+            $offset = $timestamp - $this->epoch;
+            if ($offset > $this->maxTimestampOffset) {
+                throw new TimestampOverflowException($offset, $this->maxTimestampOffset);
             }
-        } else {
             $seq = $this->sequenceResolver->next($offset, $this->maxSequence);
         }
 
@@ -213,23 +209,7 @@ class Snowflake
      */
     public static function parse(int $id, int $epoch = self::DEFAULT_EPOCH): array
     {
-        $seqMask = (1 << self::DEFAULT_SEQUENCE_BITS) - 1;
-        $workerMask = (1 << self::DEFAULT_WORKER_BITS) - 1;
-        $dcMask = (1 << self::DEFAULT_DATACENTER_BITS) - 1;
-
-        $sequence = $id & $seqMask;
-        $workerId = ($id >> self::DEFAULT_SEQUENCE_BITS) & $workerMask;
-        $datacenterId = ($id >> (self::DEFAULT_SEQUENCE_BITS + self::DEFAULT_WORKER_BITS)) & $dcMask;
-        $timestampMs = ($id >> (self::DEFAULT_SEQUENCE_BITS + self::DEFAULT_WORKER_BITS + self::DEFAULT_DATACENTER_BITS)) + $epoch;
-
-        return [
-            'timestamp_ms' => $timestampMs,
-            'datetime' => date('Y-m-d H:i:s.', (int) ($timestampMs / 1000))
-                . sprintf('%03d', $timestampMs % 1000),
-            'worker_id' => $workerId,
-            'datacenter_id' => $datacenterId,
-            'sequence' => $sequence,
-        ];
+        return (new self(epoch: $epoch))->parseId($id);
     }
 
     /**

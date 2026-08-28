@@ -16,24 +16,26 @@ use Erikwang2013\Snowflake\Contracts\SequenceResolver;
  */
 class SequentialSequenceResolver implements SequenceResolver
 {
-    /** @var array<int, int> */
-    private array $counters = [];
+    private int $lastTs = PHP_INT_MIN;
+    private int $seq = 0;
 
     public function next(int $timestamp, int $maxSequence): ?int
     {
-        if (!isset($this->counters[$timestamp])) {
-            $this->counters = [$timestamp => 0];
+        if ($timestamp !== $this->lastTs) {
+            $this->lastTs = $timestamp;
 
-            return 0;
+            return $this->seq = $this->initialSequence($maxSequence);
         }
 
-        $next = $this->counters[$timestamp] + 1;
-        if ($next > $maxSequence) {
+        if ($this->seq >= $maxSequence) {
             return null;
         }
 
-        $this->counters[$timestamp] = $next;
+        return ++$this->seq;
+    }
 
-        return $next;
+    protected function initialSequence(int $maxSequence): int
+    {
+        return 0;
     }
 }
