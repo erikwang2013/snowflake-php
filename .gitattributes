@@ -1,0 +1,24 @@
+# Keep the Composer dist package to what a consumer actually needs.
+# export-ignore affects `git archive` — which is what Composer uses for dist
+# downloads and what GitHub's "Download ZIP" produces. It does NOT affect the
+# repository, the README rendering on GitHub/Packagist, or the raw.githubusercontent
+# URLs used by the release notes.
+#
+#   shipped: src/ config/ composer.json LICENSE README*.md
+#   excluded below: ~1.1 MB of docs, translations, tests and tooling
+
+/.github        export-ignore
+/docs           export-ignore
+/scripts        export-ignore
+/tests          export-ignore
+/.gitattributes export-ignore
+/.gitignore     export-ignore
+/CLAUDE.md      export-ignore
+/phpunit.xml    export-ignore
+/phpunit-9.xml  export-ignore
+
+# Consistent line endings for the source that is consumed on any platform
+*.php text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.svg text eol=lf
