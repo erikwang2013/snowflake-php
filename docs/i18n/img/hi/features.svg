@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 640" width="980" height="640" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<title>फ़ीचर डिज़ाइन</title>
+<desc>तीन capability domains, नौ core features</desc>
+<defs>
+</defs>
+<rect width="980" height="640" fill="#ffffff"/>
+<text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">फ़ीचर डिज़ाइन</text>
+<text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">तीन capability domains, नौ core features</text>
+<line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
+<rect x="835.9" y="36.0" width="104.1" height="26.0" rx="13" fill="#eef4ff" stroke="#c3d7ff" stroke-width="1.2"/>
+<text x="887.937375" y="53" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">snowflake-php</text>
+<rect x="40.0" y="120.0" width="286.7" height="476.0" rx="14" fill="#f8fbff" stroke="#dbe6f5" stroke-width="1.4"/>
+<rect x="56.0" y="136.0" width="133.3" height="28.0" rx="14.0" fill="#2563eb"/><text x="122.63125" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Core क्षमताएँ</text>
+<rect x="56.0" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="184.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
+<text x="71.0" y="208" font-size="13.0" fill="#0f1e33" font-weight="700">Unique ID जनरेशन</text>
+<rect x="71.0" y="216.0" width="87.4" height="18.0" rx="9" fill="#f8fbff"/>
+<text x="114.721" y="229" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">id() · nextId()</text>
+<text x="71.0" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">64-bit, k-ordered, globally unique;</text>
+<text x="71.0" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">बिना central coordinator और database</text>
+<text x="71.0" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">round-trip के हर process में लगभग</text>
+<text x="71.0" y="301.75" font-size="11.5" fill="#3d4d66" font-weight="400">500k IDs प्रति सेकंड।</text>
+<rect x="56.0" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="322.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
+<text x="71.0" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">लचीला bit allocation</text>
+<rect x="71.0" y="354.0" width="171.6" height="18.0" rx="9" fill="#f8fbff"/>
+<text x="156.781375" y="367" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">worker_bits · datacenter_bits</text>
+<text x="71.0" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">timestamp, datacenter, worker और</text>
+<text x="71.0" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">sequence की चौड़ाई configurable है;</text>
+<text x="71.0" y="422.5" font-size="11.5" fill="#3d4d66" font-weight="400">default 5+5+12 layout 1024 nodes</text>
+<text x="71.0" y="439.75" font-size="11.5" fill="#3d4d66" font-weight="400">support करता है।</text>
+<rect x="56.0" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="460.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
+<text x="71.0" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">ID पार्सिंग</text>
+<rect x="71.0" y="492.0" width="115.4" height="18.0" rx="9" fill="#f8fbff"/>
+<text x="128.72275" y="505" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">parseId() · parse()</text>
+<text x="71.0" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">किसी भी बनी ID को उसके timestamp,</text>
+<text x="71.0" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">datacenter, worker और sequence</text>
+<text x="71.0" y="560.5" font-size="11.5" fill="#3d4d66" font-weight="400">हिस्सों में decompose करें —</text>
+<text x="71.0" y="577.75" font-size="11.5" fill="#3d4d66" font-weight="400">debugging और sharding के लिए</text>
+<text x="71.0" y="595.0" font-size="11.5" fill="#3d4d66" font-weight="400">उपयोगी।</text>
+<rect x="346.7" y="120.0" width="286.7" height="476.0" rx="14" fill="#f6fdfe" stroke="#dbe6f5" stroke-width="1.4"/>
+<rect x="362.7" y="136.0" width="160.8" height="28.0" rx="14.0" fill="#0e7490"/><text x="443.0791666666667" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Extension के बिंदु</text>
+<rect x="362.7" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="184.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
+<text x="377.6666666666667" y="208" font-size="12.5" fill="#0f1e33" font-weight="700">बदलने योग्य sequence strategies</text>
+<rect x="377.7" y="216.0" width="109.2" height="18.0" rx="9" fill="#f6fdfe"/>
+<text x="432.2472916666667" y="229" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">SequenceResolver</text>
+<text x="377.6666666666667" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">sequence resolver एक interface है; दो</text>
+<text x="377.6666666666667" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">implementations built-in हैं, और</text>
+<text x="377.6666666666667" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">Redis-backed shared sequence बस कुछ</text>
+<text x="377.6666666666667" y="301.75" font-size="11.5" fill="#3d4d66" font-weight="400">lines दूर है।</text>
+<rect x="362.7" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="322.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
+<text x="377.6666666666667" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">Clock drift सुरक्षा</text>
+<rect x="377.7" y="354.0" width="117.9" height="18.0" rx="9" fill="#f6fdfe"/>
+<text x="436.6021666666667" y="367" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">clock_tolerance_ms</text>
+<text x="377.6666666666667" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">configurable tolerance window NTP jitter</text>
+<text x="377.6666666666667" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">सोख लेती है; उससे ज़्यादा होने</text>
+<text x="377.6666666666667" y="422.5" font-size="11.5" fill="#3d4d66" font-weight="400">पर duplicate IDs का जोखिम लेने के</text>
+<text x="377.6666666666667" y="439.75" font-size="11.5" fill="#3d4d66" font-weight="400">बजाय exception throw होता है।</text>
+<rect x="362.7" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="460.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
+<text x="377.6666666666667" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">Framework adapters</text>
+<rect x="377.7" y="492.0" width="73.1" height="18.0" rx="9" fill="#f6fdfe"/>
+<text x="414.2214166666667" y="505" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">Adapters/*</text>
+<text x="377.6666666666667" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">Laravel, Webman, ThinkPHP और Hyperf</text>
+<text x="377.6666666666667" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">बिना extra सेटअप के चलते हैं,</text>
+<text x="377.6666666666667" y="560.5" font-size="11.5" fill="#3d4d66" font-weight="400">auto-discovery और container integration</text>
+<text x="377.6666666666667" y="577.75" font-size="11.5" fill="#3d4d66" font-weight="400">के साथ।</text>
+<rect x="653.3" y="120.0" width="286.7" height="476.0" rx="14" fill="#fbf9ff" stroke="#dbe6f5" stroke-width="1.4"/>
+<rect x="669.3" y="136.0" width="123.3" height="28.0" rx="14.0" fill="#6d28d9"/><text x="730.9770833333333" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">इंजीनियरिंग</text>
+<rect x="669.3" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="184.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
+<text x="684.3333333333334" y="208" font-size="13.0" fill="#0f1e33" font-weight="700">सख़्त config validation</text>
+<rect x="684.3" y="216.0" width="79.2" height="18.0" rx="9" fill="#fbf9ff"/>
+<text x="723.9199583333334" y="229" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">fromConfig()</text>
+<text x="684.3333333333334" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">config arrays, config files और</text>
+<text x="684.3333333333334" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">environment variables सब एक ही</text>
+<text x="684.3333333333334" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">validated factory में आते हैं, जो</text>
+<text x="684.3333333333334" y="301.75" font-size="11.5" fill="#3d4d66" font-weight="400">असंभव combinations अस्वीकार करती</text>
+<text x="684.3333333333334" y="319.0" font-size="11.5" fill="#3d4d66" font-weight="400">है।</text>
+<rect x="669.3" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="322.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
+<text x="684.3333333333334" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">Semantic exceptions</text>
+<rect x="684.3" y="354.0" width="82.5" height="18.0" rx="9" fill="#fbf9ff"/>
+<text x="725.5737083333333" y="367" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">Exceptions/*</text>
+<text x="684.3333333333334" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">पाँच exception types, हर एक गड़बड़</text>
+<text x="684.3333333333334" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">value और उसकी limit बताता है, ताकि</text>
+<text x="684.3333333333334" y="422.5" font-size="11.5" fill="#3d4d66" font-weight="400">message सीधे misconfiguration पर</text>
+<text x="684.3333333333334" y="439.75" font-size="11.5" fill="#3d4d66" font-weight="400">इशारा करे।</text>
+<rect x="669.3" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="460.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
+<text x="684.3333333333334" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">Quality और delivery</text>
+<rect x="684.3" y="492.0" width="126.2" height="18.0" rx="9" fill="#fbf9ff"/>
+<text x="747.4583333333334" y="505" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">ci.yml · release.yml</text>
+<text x="684.3333333333334" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">पूरी PHPUnit suite, PHP 8.0–8.4 CI</text>
+<text x="684.3333333333334" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">matrix, और main पर हर push पर</text>
+<text x="684.3333333333334" y="560.5" font-size="11.5" fill="#3d4d66" font-weight="400">automatic versioning।</text>
+<text x="40" y="632" font-size="11.5" fill="#6b7c96" font-weight="400">Runtime: PHP &gt;= 8.0 (CI में 8.0 – 8.4) · 64-bit system · हर process या coroutine के लिए एक instance, sequence state कभी साझा नहीं</text>
+</svg>

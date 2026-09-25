@@ -375,4 +375,16 @@ class SnowflakeTest extends TestCase
         $this->assertSame(3, $parsed['worker_id']);
         $this->assertSame(7, $parsed['datacenter_id']);
     }
+
+    public function testMascotIsPrintable(): void
+    {
+        $art = Snowflake::MASCOT;
+
+        $this->assertStringContainsString('snowflake-php', $art);
+        $this->assertGreaterThan(6, substr_count($art, "\n"), 'Mascot must be the full multi-line banner.');
+
+        // The bootstrap echoes it as-is; trailing blank space would break the
+        // terminal alignment it exists for.
+        $this->assertSame($art, rtrim($art));
+    }
 }

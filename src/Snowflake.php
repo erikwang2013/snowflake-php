@@ -24,6 +24,26 @@ class Snowflake
     // Plain consts/props (no types) for PHP 8.0 compatibility: typed class constants are 8.3+, readonly props 8.1+.
     public const COPYRIGHT = 'Copyright (c) 2026 erik <erik@erik.xyz> — https://erik.xyz';
 
+    /**
+     * The project mascot (see docs/i18n/img/en/pet.svg), as a terminal-friendly banner.
+     *
+     * Printed by the test bootstrap; available to any CLI that wants to greet
+     * its users. Pure ASCII on purpose, so it lines up in every terminal.
+     *
+     * Set SNOWFLAKE_QUIET=1 to keep the test suite silent.
+     */
+    public const MASCOT = <<<'ART'
+                      \       /
+                       \     /
+               *        \   /        *
+                  ------(^_^)------
+               *        /   \        *
+                       /     \
+                      /       \
+                    snowflake-php
+       64-bit distributed unique ID generator
+    ART;
+
     public const DEFAULT_EPOCH = 1704067200000;   // 2024-01-01 00:00:00 UTC
     public const DEFAULT_WORKER_BITS = 5;
     public const DEFAULT_DATACENTER_BITS = 5;

@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 910" width="980" height="910" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<title>ID Lifecycle</title>
+<desc>One id() call: the full path, the state it touches, and the limits it respects</desc>
+<defs>
+<marker id="mk-5b8def" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0.6 L9.5,5 L0,9.4 z" fill="#5b8def"/></marker>
+</defs>
+<rect width="980" height="910" fill="#ffffff"/>
+<text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">ID Lifecycle</text>
+<text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">One id() call: the full path, the state it touches, and the limits it respects</text>
+<line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
+<rect x="835.9" y="36.0" width="104.1" height="26.0" rx="13" fill="#eef4ff" stroke="#c3d7ff" stroke-width="1.2"/>
+<text x="887.937375" y="53" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">snowflake-php</text>
+<rect x="650.0" y="120.0" width="290.0" height="172.0" rx="12" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="650.0" y="120.0" width="4.0" height="172.0" rx="2" fill="#2563eb"/>
+<text x="665" y="144" font-size="13.0" fill="#0f1e33" font-weight="700">ID layout (64 bits by default)</text>
+<rect x="666.0" y="160.0" width="9.0" height="26.0" rx="4" fill="#475569"/>
+<rect x="675.0" y="160.0" width="160.2" height="26.0" rx="0" fill="#2563eb"/>
+<text x="755.078125" y="178" font-size="10.0" fill="#fff" font-weight="600" text-anchor="middle">timestamp 41</text>
+<rect x="835.2" y="160.0" width="19.5" height="26.0" rx="0" fill="#6d28d9"/>
+<rect x="854.7" y="160.0" width="19.5" height="26.0" rx="0" fill="#0e7490"/>
+<rect x="874.2" y="160.0" width="46.9" height="26.0" rx="4" fill="#b45309"/>
+<text x="897.65625" y="178" font-size="7.5" fill="#fff" font-weight="600" text-anchor="middle">sequence 12</text>
+<text x="666" y="208" font-size="10.5" fill="#6b7c96" font-weight="400">Sign bit 1 (always 0); timestamp = milliseconds since the epoch</text>
+<text x="666" y="224" font-size="10.5" fill="#6b7c96" font-weight="400">Datacenter 5 bits × worker 5 bits = 32 × 32 = 1024 nodes</text>
+<text x="666" y="240" font-size="10.5" fill="#6b7c96" font-weight="400">Sequence 12 bits = 4096 IDs per millisecond (default layout)</text>
+<rect x="650.0" y="310.0" width="290.0" height="186.0" rx="12" fill="#fbf9ff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="650.0" y="310.0" width="4.0" height="186.0" rx="2" fill="#6d28d9"/>
+<text x="665" y="334" font-size="13.0" fill="#0f1e33" font-weight="700">Instance state (kept across calls)</text>
+<text x="665" y="356.0" font-size="11.5" fill="#3d4d66" font-weight="400">lastTimestamp — the millisecond of the</text>
+<text x="665" y="373.25" font-size="11.5" fill="#3d4d66" font-weight="400">previous ID, used for drift and exhaustion</text>
+<text x="665" y="390.5" font-size="11.5" fill="#3d4d66" font-weight="400">checks</text>
+<text x="665" y="407.75" font-size="11.5" fill="#3d4d66" font-weight="400">sequenceResolver — the sequence cursor for</text>
+<text x="665" y="425.0" font-size="11.5" fill="#3d4d66" font-weight="400">the current millisecond (seq / lastTs)</text>
+<text x="665" y="442.25" font-size="11.5" fill="#3d4d66" font-weight="400">fixedBits / epoch — node bits and start time,</text>
+<text x="665" y="459.5" font-size="11.5" fill="#3d4d66" font-weight="400">read-only after construction</text>
+<text x="666" y="484" font-size="7.5" fill="#dc2626" font-weight="600">Note: an instance must never be shared across processes or coroutines</text>
+<rect x="650.0" y="514.0" width="290.0" height="162.0" rx="12" fill="#f6fdfe" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="650.0" y="514.0" width="4.0" height="162.0" rx="2" fill="#0e7490"/>
+<text x="665" y="538" font-size="13.0" fill="#0f1e33" font-weight="700">Capacity &amp; throughput</text>
+<text x="665" y="560.0" font-size="11.5" fill="#3d4d66" font-weight="400">At most 2^12 = 4096 IDs per millisecond;</text>
+<text x="665" y="577.25" font-size="11.5" fill="#3d4d66" font-weight="400">beyond that it spins to the next millisecond.</text>
+<text x="665" y="594.5" font-size="11.5" fill="#3d4d66" font-weight="400">Roughly 500k IDs per second in a single</text>
+<text x="665" y="611.75" font-size="11.5" fill="#3d4d66" font-weight="400">process.</text>
+<text x="665" y="629.0" font-size="11.5" fill="#3d4d66" font-weight="400">Nodes claim a unique (datacenter_id,</text>
+<text x="665" y="646.25" font-size="11.5" fill="#3d4d66" font-weight="400">worker_id) pair; the default layout allows 32 ×</text>
+<text x="665" y="663.5" font-size="11.5" fill="#3d4d66" font-weight="400">32 = 1024 nodes.</text>
+<rect x="650.0" y="694.0" width="290.0" height="182.0" rx="12" fill="#fffaf0" stroke="#f7d59b" stroke-width="1.5"/>
+<rect x="650.0" y="694.0" width="4.0" height="182.0" rx="2" fill="#b45309"/>
+<text x="665" y="718" font-size="13.0" fill="#0f1e33" font-weight="700">Lifetime timeline</text>
+<rect x="670.0" y="748.0" width="250.0" height="10.0" rx="5" fill="#dbe3ec"/>
+<rect x="670.0" y="748.0" width="8.8" height="10.0" rx="5" fill="#b45309"/>
+<line x1="678.8" y1="744.0" x2="678.8" y2="763.0" stroke="#b45309" stroke-width="2" stroke-linecap="butt"/>
+<text x="670" y="739" font-size="10.0" fill="#b45309" font-weight="600">epoch 2024-01-01</text>
+<text x="920" y="739" font-size="10.0" fill="#6b7c96" font-weight="600" text-anchor="end">limit 2093</text>
+<text x="670" y="784" font-size="10.5" fill="#3d4d66" font-weight="400">Start: epoch = 2024-01-01 UTC</text>
+<text x="670" y="800" font-size="10.5" fill="#3d4d66" font-weight="400">Limit: 2^41 − 1 ms ≈ 69.7 years</text>
+<text x="670" y="816" font-size="10.5" fill="#3d4d66" font-weight="400">Exhaustion throws TimestampOverflowException</text>
+<text x="670" y="832" font-size="10.5" fill="#3d4d66" font-weight="400">A more recent epoch resets the full lifespan.</text>
+<text x="670" y="860" font-size="10.5" fill="#3d4d66" text-anchor="start"><tspan fill="#6b7c96" font-weight="400">About 3% consumed by 2026</tspan></text>
+<rect x="240.0" y="120.0" width="220.0" height="36.0" rx="18.0" fill="#0f766e"/><text x="350.0" y="142.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Call id() / nextId()</text>
+<path d="M350.0,156.0 L350.0,180.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="180.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="209.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">t = microtime(true) × 1000</text>
+<text x="178" y="249" font-size="10.5" fill="#b45309" font-weight="400">Read the current millisecond; it is the time base for this ID.</text>
+<path d="M350.0,249.0 L350.0,273.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<text x="362" y="265.0" font-size="10.5" fill="#6b7c96" font-weight="600">No</text>
+<polygon points="350,273.0 500.0,307.0 350,341.0 200.0,307.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
+<text x="350" y="312.0" font-size="11.3" fill="#0f1e33" font-weight="600" text-anchor="middle">t &lt; lastTimestamp (clock moved backwards)</text>
+<text x="178" y="360" font-size="10.5" fill="#b45309" font-weight="400">Yes → if the drift is within clock_tolerance_ms, reuse the previous</text>
+<text x="178" y="376" font-size="10.5" fill="#b45309" font-weight="400">millisecond; otherwise throw ClockDriftException and refuse to</text>
+<text x="178" y="392" font-size="10.5" fill="#b45309" font-weight="400">generate.</text>
+<path d="M350.0,392.0 L350.0,416.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="416.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="445.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset = t − epoch</text>
+<text x="178" y="485" font-size="10.5" fill="#b45309" font-weight="400">offset is the distance in milliseconds from the configured epoch.</text>
+<path d="M350.0,485.0 L350.0,509.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<text x="362" y="501.0" font-size="10.5" fill="#6b7c96" font-weight="600">No</text>
+<polygon points="350,509.0 500.0,543.0 350,577.0 200.0,543.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
+<text x="350" y="540.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">Offset out of range?</text>
+<text x="350" y="556.0" font-size="10.5" fill="#6b7c96" font-weight="400" text-anchor="middle">(below 0 or above the limit)</text>
+<text x="178" y="596" font-size="10.5" fill="#b45309" font-weight="400">Yes → a clock before the epoch throws ClockDriftException; an</text>
+<text x="178" y="612" font-size="10.5" fill="#b45309" font-weight="400">exhausted epoch throws TimestampOverflowException.</text>
+<path d="M350.0,612.0 L350.0,636.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="636.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="665.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">seq = resolver.next(offset, maxSequence)</text>
+<text x="178" y="705" font-size="10.5" fill="#b45309" font-weight="400">When the sequence is exhausted (null) it spins to the next</text>
+<text x="178" y="721" font-size="10.5" fill="#b45309" font-weight="400">millisecond and retries once, then fails with a RuntimeException.</text>
+<path d="M350.0,721.0 L350.0,745.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="745.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="774.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">lastTimestamp = t; assemble the ID</text>
+<text x="178" y="814" font-size="10.5" fill="#b45309" font-weight="400">State only advances once every guard has passed, so a failed call</text>
+<text x="178" y="830" font-size="10.5" fill="#b45309" font-weight="400">cannot poison the next one.</text>
+<path d="M350.0,830.0 L350.0,854.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="854.0" width="340.0" height="38.0" rx="19.0" fill="#0f766e"/><text x="350.0" y="877.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Return a 64-bit unique ID</text>
+</svg>

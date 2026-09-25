@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 640" width="980" height="640" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<title>기능 설계</title>
+<desc>세 가지 역량 영역, 아홉 가지 핵심 기능</desc>
+<defs>
+</defs>
+<rect width="980" height="640" fill="#ffffff"/>
+<text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">기능 설계</text>
+<text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">세 가지 역량 영역, 아홉 가지 핵심 기능</text>
+<line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
+<rect x="835.9" y="36.0" width="104.1" height="26.0" rx="13" fill="#eef4ff" stroke="#c3d7ff" stroke-width="1.2"/>
+<text x="887.937375" y="53" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">snowflake-php</text>
+<rect x="40.0" y="120.0" width="286.7" height="476.0" rx="14" fill="#f8fbff" stroke="#dbe6f5" stroke-width="1.4"/>
+<rect x="56.0" y="136.0" width="87.5" height="28.0" rx="14.0" fill="#2563eb"/><text x="99.728125" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">핵심 역량</text>
+<rect x="56.0" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="184.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
+<text x="71.0" y="208" font-size="13.0" fill="#0f1e33" font-weight="700">고유 ID 생성</text>
+<rect x="71.0" y="216.0" width="87.4" height="18.0" rx="9" fill="#f8fbff"/>
+<text x="114.721" y="229" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">id() · nextId()</text>
+<text x="71.0" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">64비트, k-정렬, 전역 고유. 중앙 조정자</text>
+<text x="71.0" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">나 DB 왕복 없이 프로세스당 초당 약 50</text>
+<text x="71.0" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">만 개를 생성합니다.</text>
+<rect x="56.0" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="322.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
+<text x="71.0" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">유연한 비트 할당</text>
+<rect x="71.0" y="354.0" width="171.6" height="18.0" rx="9" fill="#f8fbff"/>
+<text x="156.781375" y="367" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">worker_bits · datacenter_bits</text>
+<text x="71.0" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">타임스탬프, 데이터센터, 워커, 시퀀스 비</text>
+<text x="71.0" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">트 폭을 모두 설정할 수 있으며 기본</text>
+<text x="71.0" y="422.5" font-size="11.5" fill="#3d4d66" font-weight="400">5+5+12 배치는 1024개 노드를 지원합니</text>
+<text x="71.0" y="439.75" font-size="11.5" fill="#3d4d66" font-weight="400">다.</text>
+<rect x="56.0" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="460.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
+<text x="71.0" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">ID 파싱</text>
+<rect x="71.0" y="492.0" width="115.4" height="18.0" rx="9" fill="#f8fbff"/>
+<text x="128.72275" y="505" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">parseId() · parse()</text>
+<text x="71.0" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">생성된 ID를 타임스탬프, 데이터센터, 워</text>
+<text x="71.0" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">커, 시퀀스로 분해합니다. 디버깅과 샤딩</text>
+<text x="71.0" y="560.5" font-size="11.5" fill="#3d4d66" font-weight="400">에 유용합니다.</text>
+<rect x="346.7" y="120.0" width="286.7" height="476.0" rx="14" fill="#f6fdfe" stroke="#dbe6f5" stroke-width="1.4"/>
+<rect x="362.7" y="136.0" width="87.5" height="28.0" rx="14.0" fill="#0e7490"/><text x="406.3947916666667" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">확장 지점</text>
+<rect x="362.7" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="184.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
+<text x="377.6666666666667" y="208" font-size="13.0" fill="#0f1e33" font-weight="700">교체 가능한 시퀀스 전략</text>
+<rect x="377.7" y="216.0" width="109.2" height="18.0" rx="9" fill="#f6fdfe"/>
+<text x="432.2472916666667" y="229" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">SequenceResolver</text>
+<text x="377.6666666666667" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">시퀀스 리졸버는 인터페이스이며 두 가지</text>
+<text x="377.6666666666667" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">구현이 기본 제공됩니다. Redis 기반 공유</text>
+<text x="377.6666666666667" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">시퀀스도 몇 줄이면 됩니다.</text>
+<rect x="362.7" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="322.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
+<text x="377.6666666666667" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">시계 드리프트 방어</text>
+<rect x="377.7" y="354.0" width="117.9" height="18.0" rx="9" fill="#f6fdfe"/>
+<text x="436.6021666666667" y="367" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">clock_tolerance_ms</text>
+<text x="377.6666666666667" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">설정 가능한 허용 범위가 NTP 지터를 흡</text>
+<text x="377.6666666666667" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">수하고, 그를 넘으면 중복 ID를 감수하는</text>
+<text x="377.6666666666667" y="422.5" font-size="11.5" fill="#3d4d66" font-weight="400">대신 예외를 던집니다.</text>
+<rect x="362.7" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="460.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
+<text x="377.6666666666667" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">프레임워크 어댑터</text>
+<rect x="377.7" y="492.0" width="73.1" height="18.0" rx="9" fill="#f6fdfe"/>
+<text x="414.2214166666667" y="505" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">Adapters/*</text>
+<text x="377.6666666666667" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">Laravel, Webman, ThinkPHP, Hyperf를</text>
+<text x="377.6666666666667" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">자동 발견과 컨테이너 통합과 함께 바로</text>
+<text x="377.6666666666667" y="560.5" font-size="11.5" fill="#3d4d66" font-weight="400">사용할 수 있습니다.</text>
+<rect x="653.3" y="120.0" width="286.7" height="476.0" rx="14" fill="#fbf9ff" stroke="#dbe6f5" stroke-width="1.4"/>
+<rect x="669.3" y="136.0" width="93.6" height="28.0" rx="14.0" fill="#6d28d9"/><text x="716.1458333333334" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">엔지니어링</text>
+<rect x="669.3" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="184.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
+<text x="684.3333333333334" y="208" font-size="13.0" fill="#0f1e33" font-weight="700">엄격한 설정 검증</text>
+<rect x="684.3" y="216.0" width="79.2" height="18.0" rx="9" fill="#fbf9ff"/>
+<text x="723.9199583333334" y="229" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">fromConfig()</text>
+<text x="684.3333333333334" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">설정 배열, 설정 파일, 환경 변수가 모두</text>
+<text x="684.3333333333334" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">하나의 검증된 팩토리로 모여 불가능한</text>
+<text x="684.3333333333334" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">조합을 거부합니다.</text>
+<rect x="669.3" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="322.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
+<text x="684.3333333333334" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">의미 있는 예외</text>
+<rect x="684.3" y="354.0" width="82.5" height="18.0" rx="9" fill="#fbf9ff"/>
+<text x="725.5737083333333" y="367" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">Exceptions/*</text>
+<text x="684.3333333333334" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">다섯 가지 예외 유형이 각각 문제 값과</text>
+<text x="684.3333333333334" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">한계를 담아 메시지가 잘못된 설정을 바</text>
+<text x="684.3333333333334" y="422.5" font-size="11.5" fill="#3d4d66" font-weight="400">로 가리킵니다.</text>
+<rect x="669.3" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="460.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
+<text x="684.3333333333334" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">품질과 배포</text>
+<rect x="684.3" y="492.0" width="126.2" height="18.0" rx="9" fill="#fbf9ff"/>
+<text x="747.4583333333334" y="505" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">ci.yml · release.yml</text>
+<text x="684.3333333333334" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">전체 PHPUnit 스위트, PHP 8.0–8.4 CI</text>
+<text x="684.3333333333334" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">매트릭스, main 브랜치 푸시마다 자동 버</text>
+<text x="684.3333333333334" y="560.5" font-size="11.5" fill="#3d4d66" font-weight="400">전 관리.</text>
+<text x="40" y="632" font-size="11.5" fill="#6b7c96" font-weight="400">런타임: PHP &gt;= 8.0 (CI는 8.0 – 8.4 검증) · 64비트 시스템 · 프로세스 또는 코루틴당 인스턴스 하나, 시퀀스 상태는 공유되지 않음</text>
+</svg>

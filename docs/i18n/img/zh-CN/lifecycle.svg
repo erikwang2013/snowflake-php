@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 910" width="980" height="910" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<title>ID 生命周期</title>
+<desc>单次 id() 调用的完整流程、实例状态与容量边界</desc>
+<defs>
+<marker id="mk-5b8def" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0.6 L9.5,5 L0,9.4 z" fill="#5b8def"/></marker>
+</defs>
+<rect width="980" height="910" fill="#ffffff"/>
+<text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">ID 生命周期</text>
+<text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">单次 id() 调用的完整流程、实例状态与容量边界</text>
+<line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
+<rect x="835.9" y="36.0" width="104.1" height="26.0" rx="13" fill="#eef4ff" stroke="#c3d7ff" stroke-width="1.2"/>
+<text x="887.937375" y="53" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">snowflake-php</text>
+<rect x="650.0" y="120.0" width="290.0" height="172.0" rx="12" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="650.0" y="120.0" width="4.0" height="172.0" rx="2" fill="#2563eb"/>
+<text x="665" y="144" font-size="13.0" fill="#0f1e33" font-weight="700">ID 位结构（默认 64 位）</text>
+<rect x="666.0" y="160.0" width="9.0" height="26.0" rx="4" fill="#475569"/>
+<rect x="675.0" y="160.0" width="160.2" height="26.0" rx="0" fill="#2563eb"/>
+<text x="755.078125" y="178" font-size="10.0" fill="#fff" font-weight="600" text-anchor="middle">时间戳 41</text>
+<rect x="835.2" y="160.0" width="19.5" height="26.0" rx="0" fill="#6d28d9"/>
+<rect x="854.7" y="160.0" width="19.5" height="26.0" rx="0" fill="#0e7490"/>
+<rect x="874.2" y="160.0" width="46.9" height="26.0" rx="4" fill="#b45309"/>
+<text x="897.65625" y="178" font-size="10.0" fill="#fff" font-weight="600" text-anchor="middle">序列 12</text>
+<text x="666" y="208" font-size="10.5" fill="#6b7c96" font-weight="400">符号位 1 位恒为 0；时间戳为相对 epoch 的毫秒偏移</text>
+<text x="666" y="224" font-size="10.5" fill="#6b7c96" font-weight="400">数据中心 5 位 × 节点 5 位 = 32 × 32 = 1024 个节点</text>
+<text x="666" y="240" font-size="10.5" fill="#6b7c96" font-weight="400">序列 12 位 = 单毫秒 4096 个 ID（默认布局）</text>
+<rect x="650.0" y="310.0" width="290.0" height="186.0" rx="12" fill="#fbf9ff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="650.0" y="310.0" width="4.0" height="186.0" rx="2" fill="#6d28d9"/>
+<text x="665" y="334" font-size="13.0" fill="#0f1e33" font-weight="700">实例状态（跨调用保持）</text>
+<text x="665" y="356.0" font-size="11.5" fill="#3d4d66" font-weight="400">lastTimestamp — 上一次生成的毫秒，用于回拨与</text>
+<text x="665" y="373.25" font-size="11.5" fill="#3d4d66" font-weight="400">序列耗尽判断</text>
+<text x="665" y="390.5" font-size="11.5" fill="#3d4d66" font-weight="400">sequenceResolver — 当前毫秒的序列游标（seq /</text>
+<text x="665" y="407.75" font-size="11.5" fill="#3d4d66" font-weight="400">lastTs）</text>
+<text x="665" y="425.0" font-size="11.5" fill="#3d4d66" font-weight="400">fixedBits / epoch — 构造后只读的节点位与起始</text>
+<text x="665" y="442.25" font-size="11.5" fill="#3d4d66" font-weight="400">时间</text>
+<text x="666" y="484" font-size="11.0" fill="#dc2626" font-weight="600">注意：实例不可跨进程或协程共享</text>
+<rect x="650.0" y="514.0" width="290.0" height="162.0" rx="12" fill="#f6fdfe" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="650.0" y="514.0" width="4.0" height="162.0" rx="2" fill="#0e7490"/>
+<text x="665" y="538" font-size="13.0" fill="#0f1e33" font-weight="700">容量与吞吐</text>
+<text x="665" y="560.0" font-size="11.5" fill="#3d4d66" font-weight="400">单毫秒最多 2^12 = 4096 个 ID；耗尽则自旋等</text>
+<text x="665" y="577.25" font-size="11.5" fill="#3d4d66" font-weight="400">待下一毫秒。</text>
+<text x="665" y="594.5" font-size="11.5" fill="#3d4d66" font-weight="400">单进程约 50 万 ID/秒。</text>
+<text x="665" y="611.75" font-size="11.5" fill="#3d4d66" font-weight="400">多节点需按 (datacenter_id, worker_id) 唯一分配</text>
+<text x="665" y="629.0" font-size="11.5" fill="#3d4d66" font-weight="400">，默认布局支持 32 × 32 = 1024 个节点。</text>
+<rect x="650.0" y="694.0" width="290.0" height="182.0" rx="12" fill="#fffaf0" stroke="#f7d59b" stroke-width="1.5"/>
+<rect x="650.0" y="694.0" width="4.0" height="182.0" rx="2" fill="#b45309"/>
+<text x="665" y="718" font-size="13.0" fill="#0f1e33" font-weight="700">生命周期时间轴</text>
+<rect x="670.0" y="748.0" width="250.0" height="10.0" rx="5" fill="#dbe3ec"/>
+<rect x="670.0" y="748.0" width="8.8" height="10.0" rx="5" fill="#b45309"/>
+<line x1="678.8" y1="744.0" x2="678.8" y2="763.0" stroke="#b45309" stroke-width="2" stroke-linecap="butt"/>
+<text x="670" y="739" font-size="10.0" fill="#b45309" font-weight="600">epoch 2024-01-01</text>
+<text x="920" y="739" font-size="10.0" fill="#6b7c96" font-weight="600" text-anchor="end">2093 上限</text>
+<text x="670" y="784" font-size="10.5" fill="#3d4d66" font-weight="400">起点：epoch = 2024-01-01 UTC</text>
+<text x="670" y="800" font-size="10.5" fill="#3d4d66" font-weight="400">上限：2^41 − 1 ms ≈ 69.7 年</text>
+<text x="670" y="816" font-size="10.5" fill="#3d4d66" font-weight="400">耗尽抛 TimestampOverflowException</text>
+<text x="670" y="832" font-size="10.5" fill="#3d4d66" font-weight="400">换用更近的 epoch 可重置年限。</text>
+<text x="670" y="860" font-size="10.5" fill="#3d4d66" text-anchor="start"><tspan fill="#6b7c96" font-weight="400">当前（2026）已消耗约 3%</tspan></text>
+<rect x="240.0" y="120.0" width="220.0" height="36.0" rx="18.0" fill="#0f766e"/><text x="350.0" y="142.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">调用 id() / nextId()</text>
+<path d="M350.0,156.0 L350.0,180.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="180.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="209.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">t = microtime(true) × 1000</text>
+<text x="178" y="249" font-size="10.5" fill="#b45309" font-weight="400">取当前毫秒，作为本次生成的时间基准</text>
+<path d="M350.0,249.0 L350.0,273.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<text x="362" y="265.0" font-size="10.5" fill="#6b7c96" font-weight="600">否</text>
+<polygon points="350,273.0 500.0,307.0 350,341.0 200.0,307.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
+<text x="350" y="312.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">t &lt; lastTimestamp（时钟回拨）</text>
+<text x="178" y="360" font-size="10.5" fill="#b45309" font-weight="400">是 → drift ≤ clock_tolerance_ms 时复用上一毫秒（不推进时间），否</text>
+<text x="178" y="376" font-size="10.5" fill="#b45309" font-weight="400">则抛出 ClockDriftException 拒绝生成。</text>
+<path d="M350.0,376.0 L350.0,400.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="400.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="429.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset = t − epoch</text>
+<text x="178" y="469" font-size="10.5" fill="#b45309" font-weight="400">offset 为相对起始时间（epoch）的毫秒偏移量</text>
+<path d="M350.0,469.0 L350.0,493.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<text x="362" y="485.0" font-size="10.5" fill="#6b7c96" font-weight="600">否</text>
+<polygon points="350,493.0 500.0,527.0 350,561.0 200.0,527.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
+<text x="350" y="524.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset 越界？</text>
+<text x="350" y="540.0" font-size="10.5" fill="#6b7c96" font-weight="400" text-anchor="middle">（小于 0 或超过上限）</text>
+<text x="178" y="580" font-size="10.5" fill="#b45309" font-weight="400">是 → 时钟早于 epoch 抛 ClockDriftException；epoch 耗尽抛</text>
+<text x="178" y="596" font-size="10.5" fill="#b45309" font-weight="400">TimestampOverflowException。</text>
+<path d="M350.0,596.0 L350.0,620.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="620.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="649.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">seq = resolver.next(offset, maxSequence)</text>
+<text x="178" y="689" font-size="10.5" fill="#b45309" font-weight="400">序列耗尽（null）时自旋等待下一毫秒并重试一次，仍失败抛</text>
+<text x="178" y="705" font-size="10.5" fill="#b45309" font-weight="400">RuntimeException 提示降低生成速率。</text>
+<path d="M350.0,705.0 L350.0,729.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="729.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="758.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">lastTimestamp = t；位运算组装 ID</text>
+<text x="178" y="798" font-size="10.5" fill="#b45309" font-weight="400">仅在全部校验通过后推进状态，失败调用不会污染下一次生成。</text>
+<path d="M350.0,798.0 L350.0,822.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="822.0" width="340.0" height="38.0" rx="19.0" fill="#0f766e"/><text x="350.0" y="845.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">返回 64 位唯一 ID</text>
+</svg>

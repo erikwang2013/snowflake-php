@@ -1,10 +1,18 @@
 # Snowflake PHP
 
+[English](./README.md) · [简体中文](./README.zh-CN.md) · [한국어](docs/i18n/ko/README.md) · [Русский](docs/i18n/ru/README.md) · [Deutsch](docs/i18n/de/README.md) · [Français](docs/i18n/fr/README.md) · [Español](docs/i18n/es/README.md) · [Português](docs/i18n/pt/README.md) · [हिन्दी](docs/i18n/hi/README.md) · [العربية](docs/i18n/ar/README.md) · [বাংলা](docs/i18n/bn/README.md) · [Bahasa Indonesia](docs/i18n/id/README.md) · [日本語](docs/i18n/ja/README.md)
+
+<p align="center">
+  <img src="./docs/i18n/img/zh-CN/pet.svg" width="180" alt="Snowflake PHP 项目宠物——微笑的雪花精灵" />
+  <br />
+  <sub>宠物也已随代码发布——<code>echo Snowflake::MASCOT;</code> 即可在终端打印它。</sub>
+</p>
+
 基于 Twitter Snowflake 算法的分布式唯一 ID 生成器，兼容 Laravel、Webman、ThinkPHP、Hyperf 框架。
 
 ## 项目说明
 
-Snowflake PHP 无需中心协调节点即可生成 64 位、k-ordered、全局唯一的 ID。每个 ID 由时间戳、数据中心 ID、工作节点 ID 和序列号组合而成——单节点每毫秒可生成数千个 ID，无需数据库往返。
+Snowflake PHP 无需中心协调节点即可生成 64 位、k-ordered、全局唯一的 ID。每个 ID 由时间戳、数据中心 ID、工作节点 ID 和序列号组合而成——单节点每秒可生成数十万个 ID，无需数据库往返。
 
 核心特性：
 
@@ -14,6 +22,75 @@ Snowflake PHP 无需中心协调节点即可生成 64 位、k-ordered、全局�
 - **时钟回拨容忍** — 可配置的 NTP 校时容忍窗口
 - **框架无关**，提供 Laravel、ThinkPHP、Webman、Hyperf 的一流适配器
 - **ID 解析** — 可将生成的 ID 反向分解为时间戳、节点、序列号等成分
+
+## 项目结构
+
+```text
+snowflake-php/
+├── src/
+│   ├── Snowflake.php                       # 核心：配置、位分配、id()、parseId()
+│   ├── Contracts/
+│   │   └── SequenceResolver.php            # 序列号策略契约接口
+│   ├── Resolvers/
+│   │   ├── SequentialSequenceResolver.php  # 默认：每毫秒从 0 顺序递增
+│   │   └── RandomSequenceResolver.php      # 每毫秒随机起点后递增
+│   ├── Exceptions/
+│   │   ├── SnowflakeException.php          # 异常基类
+│   │   ├── ClockDriftException.php
+│   │   ├── TimestampOverflowException.php
+│   │   ├── InvalidWorkerIdException.php
+│   │   └── InvalidDatacenterIdException.php
+│   └── Adapters/                           # 各框架适配器
+│       ├── Laravel/                        # ServiceProvider + Facade + 配置
+│       ├── ThinkPHP/                       # Service + Facade + 配置
+│       ├── Hyperf/                         # ConfigProvider + 配置
+│       └── Webman/                         # config/app.php
+├── config/snowflake.php                    # 带注释的参考配置文件
+├── tests/
+│   ├── bootstrap.php                       # 载入自动加载器并打印项目宠物
+│   └── *Test.php                           # PHPUnit 测试套件
+├── docs/
+│   ├── i18n/                               # 多语言 README 与本地化设计图
+│   │   ├── README.md                       # 语言索引
+│   │   ├── img/<lang>/                     # 生成的 SVG（13 种语言）
+│   │   └── <lang>/README.md                # 各语言翻译文档
+│   └── *.png                               # 赞助码
+├── scripts/
+│   ├── generate-diagrams.py                # 生成 docs/i18n/img/<lang>/*.svg
+│   └── i18n/labels.<lang>.json             # 各语言的图内文案
+└── .github/workflows/                      # ci.yml（PHP 8.0–8.4）、release.yml
+```
+
+## 架构设计
+
+![架构设计](./docs/i18n/img/zh-CN/architecture.svg)
+
+四层结构，依赖方向单向向下：
+
+- **应用层** — 你的 Laravel / Webman / ThinkPHP / Hyperf 应用，只需从容器中获取 `Snowflake` 实例。
+- **适配层** — 每个框架一个适配器，各自向容器注册共享单例，并随包发布可覆盖的配置文件。
+- **核心层** — `Snowflake` 是唯一的有状态类：负责配置校验、位运算预计算、ID 生成与反解。
+- **契约与实现层** — `SequenceResolver` 是扩展点，核心将序列号分配全部委托给它，因此更换策略无需改动生成器。
+- **横切关注点** — 语义化异常体系，以及各个适配器共用的同一份带注释配置文件。
+
+## 功能设计
+
+![功能设计](./docs/i18n/img/zh-CN/features.svg)
+
+功能划分为三个能力域：**核心能力**（ID 生成、弹性位分配、反向解析）、**扩展能力**（可插拔序列策略、时钟回拨保护、多框架适配）、**工程保障**（严格配置校验、语义化异常、测试与发版自动化）。
+
+## 生命周期
+
+![ID 生命周期](./docs/i18n/img/zh-CN/lifecycle.svg)
+
+每次 `id()` 调用都遵循同一条路径：
+
+1. 读取当前毫秒并检查时钟回拨——在 `clock_tolerance_ms` 内可容忍，超出即拒绝生成。
+2. 换算为相对 epoch 的偏移量，并拒绝小于 0 或超出时间戳上限的偏移。
+3. 向序列号策略申请当前毫秒的下一个序列号；4096 个序列全部用尽时自旋等待下一毫秒并重试一次。
+4. 组装 `(offset << timestampShift) | fixedBits | sequence`，推进 `lastTimestamp` 后返回 ID。
+
+实例状态（`lastTimestamp` 与序列游标）保存在内存中，不跨进程或协程共享。
 
 ## 环境要求
 

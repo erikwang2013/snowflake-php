@@ -66,4 +66,10 @@ jobs:
           git tag -a "$version" -m "Release $version"
           git push origin "$version"
           printf '%s' "$CHANGELOG" > /tmp/CHANGELOG.md
-          gh release create "$version" --title "Release $version" --notes-file /tmp/CHANGELOG.md
+          mascot="https://raw.githubusercontent.com/erikwang2013/snowflake-php/${version}/docs/i18n/img/en/pet.svg"
+          {
+            echo "<img src=\"${mascot}\" width=\"120\" align=\"right\" alt=\"snowflake-php mascot\">"
+            echo
+            cat /tmp/CHANGELOG.md
+          } > /tmp/RELEASE.md
+          gh release create "$version" --title "Release $version" --notes-file /tmp/RELEASE.md

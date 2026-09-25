@@ -1,12 +1,18 @@
 # Snowflake PHP
 
+<p align="center">
+  <img src="./docs/i18n/img/en/pet.svg" width="180" alt="Snowflake PHP project mascot — a smiling snowflake" />
+  <br />
+  <sub>The mascot ships with the code too — <code>echo Snowflake::MASCOT;</code> prints it in any terminal.</sub>
+</p>
+
 A distributed unique ID generator based on Twitter's Snowflake algorithm, compatible with Laravel, Webman, ThinkPHP, and Hyperf.
 
-> 中文文档请参阅 [README.zh-CN.md](README.zh-CN.md)
+[English](./README.md) · [简体中文](./README.zh-CN.md) · [한국어](docs/i18n/ko/README.md) · [Русский](docs/i18n/ru/README.md) · [Deutsch](docs/i18n/de/README.md) · [Français](docs/i18n/fr/README.md) · [Español](docs/i18n/es/README.md) · [Português](docs/i18n/pt/README.md) · [हिन्दी](docs/i18n/hi/README.md) · [العربية](docs/i18n/ar/README.md) · [বাংলা](docs/i18n/bn/README.md) · [Bahasa Indonesia](docs/i18n/id/README.md) · [日本語](docs/i18n/ja/README.md)
 
 ## About
 
-Snowflake PHP generates 64-bit, k-ordered, globally unique IDs without requiring a central coordinator. Each ID is composed of a timestamp, datacenter ID, worker ID, and sequence number — allowing tens of thousands of IDs per second per node with no database round-trips.
+Snowflake PHP generates 64-bit, k-ordered, globally unique IDs without requiring a central coordinator. Each ID is composed of a timestamp, datacenter ID, worker ID, and sequence number — allowing hundreds of thousands of IDs per second per node with no database round-trips.
 
 Key features:
 
@@ -16,6 +22,75 @@ Key features:
 - **Clock drift tolerance** — configurable tolerance window for NTP adjustments
 - **Framework agnostic** with first-class adapters for Laravel, ThinkPHP, Webman, and Hyperf
 - **ID parsing** — decompose generated IDs back into timestamp, node, and sequence components
+
+## Project Structure
+
+```text
+snowflake-php/
+├── src/
+│   ├── Snowflake.php                       # Core: config, bit layout, id(), parseId()
+│   ├── Contracts/
+│   │   └── SequenceResolver.php            # Sequence strategy interface
+│   ├── Resolvers/
+│   │   ├── SequentialSequenceResolver.php  # Default: 0..max per millisecond
+│   │   └── RandomSequenceResolver.php      # Random start per millisecond
+│   ├── Exceptions/
+│   │   ├── SnowflakeException.php          # Base exception
+│   │   ├── ClockDriftException.php
+│   │   ├── TimestampOverflowException.php
+│   │   ├── InvalidWorkerIdException.php
+│   │   └── InvalidDatacenterIdException.php
+│   └── Adapters/                           # Framework integrations
+│       ├── Laravel/                        # ServiceProvider + Facade + config
+│       ├── ThinkPHP/                       # Service + Facade + config
+│       ├── Hyperf/                         # ConfigProvider + config
+│       └── Webman/                         # config/app.php
+├── config/snowflake.php                    # Reference configuration with comments
+├── tests/
+│   ├── bootstrap.php                       # Loads the autoloader, prints the mascot
+│   └── *Test.php                           # PHPUnit test suite
+├── docs/
+│   ├── i18n/                               # Translated READMEs + localized diagrams
+│   │   ├── README.md                       # Language index
+│   │   ├── img/<lang>/                     # Generated SVGs (13 languages)
+│   │   └── <lang>/README.md                # One translated README per language
+│   └── *.png                               # Sponsor images
+├── scripts/
+│   ├── generate-diagrams.py                # Builds docs/i18n/img/<lang>/*.svg
+│   └── i18n/labels.<lang>.json             # Diagram strings, one file per language
+└── .github/workflows/                      # ci.yml (PHP 8.0–8.4), release.yml
+```
+
+## Architecture
+
+![Architecture](./docs/i18n/img/en/architecture.svg)
+
+Four layers, with dependencies pointing in one direction only:
+
+- **Application layer** — your Laravel / Webman / ThinkPHP / Hyperf application; it only ever asks the container for a `Snowflake` instance.
+- **Adapter layer** — one adapter per framework. Each registers a single shared instance in the framework container and ships a publishable config file.
+- **Core layer** — `Snowflake` is the only stateful class: it validates the configuration, precomputes the bit shifts and fixed node bits, generates IDs, and parses them back.
+- **Contracts & resolvers** — `SequenceResolver` is the extension point. The core delegates every sequence allocation to it, so sequence strategy can be swapped without touching the generator.
+- **Cross-cutting** — a semantic exception hierarchy plus a single commented configuration file shared by every adapter.
+
+## Feature Design
+
+![Feature design](./docs/i18n/img/en/features.svg)
+
+Features group into three domains: **core** (generation, bit allocation, parsing), **extension** (pluggable resolvers, clock-drift handling, framework adapters), and **engineering** (strict config validation, semantic exceptions, tests and release automation).
+
+## ID Lifecycle
+
+![ID lifecycle](./docs/i18n/img/en/lifecycle.svg)
+
+Every `id()` call walks the same path:
+
+1. Read the clock and check for backward drift — tolerated up to `clock_tolerance_ms`, rejected beyond it.
+2. Convert to an epoch offset and reject offsets that are negative or past the timestamp limit.
+3. Ask the sequence resolver for the next slot in this millisecond; when all 4096 slots are used, spin to the next millisecond and retry once.
+4. Assemble `(offset << timestampShift) | fixedBits | sequence`, advance `lastTimestamp`, and return the ID.
+
+Instance state (`lastTimestamp` plus the resolver cursor) lives in memory and is never shared across processes or coroutines.
 
 ## Requirements
 

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 910" width="980" height="910" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<title>ID 생명주기</title>
+<desc>id() 호출 한 번: 전체 경로, 건드리는 상태, 지키는 한계</desc>
+<defs>
+<marker id="mk-5b8def" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0.6 L9.5,5 L0,9.4 z" fill="#5b8def"/></marker>
+</defs>
+<rect width="980" height="910" fill="#ffffff"/>
+<text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">ID 생명주기</text>
+<text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">id() 호출 한 번: 전체 경로, 건드리는 상태, 지키는 한계</text>
+<line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
+<rect x="835.9" y="36.0" width="104.1" height="26.0" rx="13" fill="#eef4ff" stroke="#c3d7ff" stroke-width="1.2"/>
+<text x="887.937375" y="53" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">snowflake-php</text>
+<rect x="650.0" y="120.0" width="290.0" height="172.0" rx="12" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="650.0" y="120.0" width="4.0" height="172.0" rx="2" fill="#2563eb"/>
+<text x="665" y="144" font-size="13.0" fill="#0f1e33" font-weight="700">ID 배치 (기본 64비트)</text>
+<rect x="666.0" y="160.0" width="9.0" height="26.0" rx="4" fill="#475569"/>
+<rect x="675.0" y="160.0" width="160.2" height="26.0" rx="0" fill="#2563eb"/>
+<text x="755.078125" y="178" font-size="10.0" fill="#fff" font-weight="600" text-anchor="middle">타임스탬프 41</text>
+<rect x="835.2" y="160.0" width="19.5" height="26.0" rx="0" fill="#6d28d9"/>
+<rect x="854.7" y="160.0" width="19.5" height="26.0" rx="0" fill="#0e7490"/>
+<rect x="874.2" y="160.0" width="46.9" height="26.0" rx="4" fill="#b45309"/>
+<text x="897.65625" y="178" font-size="8.6" fill="#fff" font-weight="600" text-anchor="middle">시퀀스 12</text>
+<text x="666" y="208" font-size="10.5" fill="#6b7c96" font-weight="400">부호 비트 1 (항상 0); 타임스탬프 = 에포크 이후 밀리초</text>
+<text x="666" y="224" font-size="10.5" fill="#6b7c96" font-weight="400">데이터센터 5비트 × 워커 5비트 = 32 × 32 = 1024개 노드</text>
+<text x="666" y="240" font-size="10.5" fill="#6b7c96" font-weight="400">시퀀스 12비트 = 밀리초당 4096개 ID (기본 배치)</text>
+<rect x="650.0" y="310.0" width="290.0" height="186.0" rx="12" fill="#fbf9ff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="650.0" y="310.0" width="4.0" height="186.0" rx="2" fill="#6d28d9"/>
+<text x="665" y="334" font-size="13.0" fill="#0f1e33" font-weight="700">인스턴스 상태 (호출 간 유지)</text>
+<text x="665" y="356.0" font-size="11.5" fill="#3d4d66" font-weight="400">lastTimestamp — 직전 ID의 밀리초. 드리프트와</text>
+<text x="665" y="373.25" font-size="11.5" fill="#3d4d66" font-weight="400">소진 검사에 사용</text>
+<text x="665" y="390.5" font-size="11.5" fill="#3d4d66" font-weight="400">sequenceResolver — 현재 밀리초의 시퀀스 커서</text>
+<text x="665" y="407.75" font-size="11.5" fill="#3d4d66" font-weight="400">(seq / lastTs)</text>
+<text x="665" y="425.0" font-size="11.5" fill="#3d4d66" font-weight="400">fixedBits / epoch — 노드 비트와 시작 시각, 생</text>
+<text x="665" y="442.25" font-size="11.5" fill="#3d4d66" font-weight="400">성 후 읽기 전용</text>
+<text x="666" y="484" font-size="7.5" fill="#dc2626" font-weight="600">참고: 인스턴스는 프로세스나 코루틴 간에 절대 공유하면 안 됩니다</text>
+<rect x="650.0" y="514.0" width="290.0" height="162.0" rx="12" fill="#f6fdfe" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="650.0" y="514.0" width="4.0" height="162.0" rx="2" fill="#0e7490"/>
+<text x="665" y="538" font-size="13.0" fill="#0f1e33" font-weight="700">용량과 처리량</text>
+<text x="665" y="560.0" font-size="11.5" fill="#3d4d66" font-weight="400">밀리초당 최대 2^12 = 4096개 ID. 그 이상은</text>
+<text x="665" y="577.25" font-size="11.5" fill="#3d4d66" font-weight="400">다음 밀리초로 회전합니다.</text>
+<text x="665" y="594.5" font-size="11.5" fill="#3d4d66" font-weight="400">단일 프로세스에서 초당 약 50만 개 ID.</text>
+<text x="665" y="611.75" font-size="11.5" fill="#3d4d66" font-weight="400">노드는 고유한 (datacenter_id, worker_id) 쌍을</text>
+<text x="665" y="629.0" font-size="11.5" fill="#3d4d66" font-weight="400">차지하며, 기본 배치는 32 × 32 = 1024개 노드</text>
+<text x="665" y="646.25" font-size="11.5" fill="#3d4d66" font-weight="400">를 허용합니다.</text>
+<rect x="650.0" y="694.0" width="290.0" height="182.0" rx="12" fill="#fffaf0" stroke="#f7d59b" stroke-width="1.5"/>
+<rect x="650.0" y="694.0" width="4.0" height="182.0" rx="2" fill="#b45309"/>
+<text x="665" y="718" font-size="13.0" fill="#0f1e33" font-weight="700">수명 타임라인</text>
+<rect x="670.0" y="748.0" width="250.0" height="10.0" rx="5" fill="#dbe3ec"/>
+<rect x="670.0" y="748.0" width="8.8" height="10.0" rx="5" fill="#b45309"/>
+<line x1="678.8" y1="744.0" x2="678.8" y2="763.0" stroke="#b45309" stroke-width="2" stroke-linecap="butt"/>
+<text x="670" y="739" font-size="10.0" fill="#b45309" font-weight="600">에포크 2024-01-01</text>
+<text x="920" y="739" font-size="10.0" fill="#6b7c96" font-weight="600" text-anchor="end">한계 2093</text>
+<text x="670" y="784" font-size="10.5" fill="#3d4d66" font-weight="400">시작: epoch = 2024-01-01 UTC</text>
+<text x="670" y="800" font-size="10.5" fill="#3d4d66" font-weight="400">한계: 2^41 − 1 ms ≈ 69.7년</text>
+<text x="670" y="816" font-size="10.5" fill="#3d4d66" font-weight="400">소진 시 TimestampOverflowException 발생</text>
+<text x="670" y="832" font-size="10.5" fill="#3d4d66" font-weight="400">더 최근 에포크를 쓰면 전체 수명이 초기화됩니다.</text>
+<text x="670" y="860" font-size="10.5" fill="#3d4d66" text-anchor="start"><tspan fill="#6b7c96" font-weight="400">2026년까지 약 3% 소진</tspan></text>
+<rect x="240.0" y="120.0" width="220.0" height="36.0" rx="18.0" fill="#0f766e"/><text x="350.0" y="142.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">id() / nextId() 호출</text>
+<path d="M350.0,156.0 L350.0,180.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="180.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="209.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">t = microtime(true) × 1000</text>
+<text x="178" y="249" font-size="10.5" fill="#b45309" font-weight="400">현재 밀리초를 읽습니다. 이 ID의 시간 기준입니다.</text>
+<path d="M350.0,249.0 L350.0,273.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<text x="362" y="265.0" font-size="10.5" fill="#6b7c96" font-weight="600">아니오</text>
+<polygon points="350,273.0 500.0,307.0 350,341.0 200.0,307.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
+<text x="350" y="312.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">t &lt; lastTimestamp (시계가 뒤로 감)</text>
+<text x="178" y="360" font-size="10.5" fill="#b45309" font-weight="400">예 → 드리프트가 clock_tolerance_ms 이내면 직전 밀리초를 재사용하</text>
+<text x="178" y="376" font-size="10.5" fill="#b45309" font-weight="400">고, 그렇지 않으면 ClockDriftException을 던지고 생성을 거부합니다.</text>
+<path d="M350.0,376.0 L350.0,400.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="400.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="429.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset = t − epoch</text>
+<text x="178" y="469" font-size="10.5" fill="#b45309" font-weight="400">offset은 설정된 에포크로부터의 밀리초 거리입니다.</text>
+<path d="M350.0,469.0 L350.0,493.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<text x="362" y="485.0" font-size="10.5" fill="#6b7c96" font-weight="600">아니오</text>
+<polygon points="350,493.0 500.0,527.0 350,561.0 200.0,527.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
+<text x="350" y="524.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">오프셋이 범위를 벗어남?</text>
+<text x="350" y="540.0" font-size="10.5" fill="#6b7c96" font-weight="400" text-anchor="middle">(0 미만 또는 한계 초과)</text>
+<text x="178" y="580" font-size="10.5" fill="#b45309" font-weight="400">예 → 에포크보다 이른 시각이면 ClockDriftException, 에포크가 소진되</text>
+<text x="178" y="596" font-size="10.5" fill="#b45309" font-weight="400">었으면 TimestampOverflowException이 발생합니다.</text>
+<path d="M350.0,596.0 L350.0,620.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="620.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="649.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">seq = resolver.next(offset, maxSequence)</text>
+<text x="178" y="689" font-size="10.5" fill="#b45309" font-weight="400">시퀀스가 소진되면(null) 다음 밀리초로 회전해 한 번 재시도하고, 그</text>
+<text x="178" y="705" font-size="10.5" fill="#b45309" font-weight="400">래도 실패하면 RuntimeException을 던집니다.</text>
+<path d="M350.0,705.0 L350.0,729.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="729.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="758.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">lastTimestamp = t; ID 조립</text>
+<text x="178" y="798" font-size="10.5" fill="#b45309" font-weight="400">모든 가드를 통과한 뒤에만 상태가 진행되므로, 실패한 호출이 다음</text>
+<text x="178" y="814" font-size="10.5" fill="#b45309" font-weight="400">호출을 오염시키지 않습니다.</text>
+<path d="M350.0,814.0 L350.0,838.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="838.0" width="340.0" height="38.0" rx="19.0" fill="#0f766e"/><text x="350.0" y="861.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">64비트 고유 ID 반환</text>
+</svg>

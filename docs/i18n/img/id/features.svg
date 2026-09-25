@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 640" width="980" height="640" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<title>Desain Fitur</title>
+<desc>Tiga domain kemampuan, sembilan fitur inti</desc>
+<defs>
+</defs>
+<rect width="980" height="640" fill="#ffffff"/>
+<text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">Desain Fitur</text>
+<text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">Tiga domain kemampuan, sembilan fitur inti</text>
+<line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
+<rect x="835.9" y="36.0" width="104.1" height="26.0" rx="13" fill="#eef4ff" stroke="#c3d7ff" stroke-width="1.2"/>
+<text x="887.937375" y="53" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">snowflake-php</text>
+<rect x="40.0" y="120.0" width="286.7" height="476.0" rx="14" fill="#f8fbff" stroke="#dbe6f5" stroke-width="1.4"/>
+<rect x="56.0" y="136.0" width="127.0" height="28.0" rx="14.0" fill="#2563eb"/><text x="119.48125" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Kemampuan inti</text>
+<rect x="56.0" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="184.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
+<text x="71.0" y="208" font-size="13.0" fill="#0f1e33" font-weight="700">Pembuatan ID unik</text>
+<rect x="71.0" y="216.0" width="87.4" height="18.0" rx="9" fill="#f8fbff"/>
+<text x="114.721" y="229" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">id() · nextId()</text>
+<text x="71.0" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">64-bit, k-ordered, unik secara global;</text>
+<text x="71.0" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">sekitar 500 ribu ID per detik per</text>
+<text x="71.0" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">proses tanpa koordinator pusat dan</text>
+<text x="71.0" y="301.75" font-size="11.5" fill="#3d4d66" font-weight="400">tanpa round-trip database.</text>
+<rect x="56.0" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="322.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
+<text x="71.0" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">Alokasi bit fleksibel</text>
+<rect x="71.0" y="354.0" width="171.6" height="18.0" rx="9" fill="#f8fbff"/>
+<text x="156.781375" y="367" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">worker_bits · datacenter_bits</text>
+<text x="71.0" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">Lebar timestamp, datacenter, worker,</text>
+<text x="71.0" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">dan sequence semuanya dapat</text>
+<text x="71.0" y="422.5" font-size="11.5" fill="#3d4d66" font-weight="400">dikonfigurasi; tata letak default 5+5+12</text>
+<text x="71.0" y="439.75" font-size="11.5" fill="#3d4d66" font-weight="400">mendukung 1024 node.</text>
+<rect x="56.0" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="460.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
+<text x="71.0" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">Parsing ID</text>
+<rect x="71.0" y="492.0" width="115.4" height="18.0" rx="9" fill="#f8fbff"/>
+<text x="128.72275" y="505" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">parseId() · parse()</text>
+<text x="71.0" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">Uraikan ID yang dihasilkan kembali</text>
+<text x="71.0" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">menjadi bagian timestamp, datacenter,</text>
+<text x="71.0" y="560.5" font-size="11.5" fill="#3d4d66" font-weight="400">worker, dan sequence — berguna untuk</text>
+<text x="71.0" y="577.75" font-size="11.5" fill="#3d4d66" font-weight="400">debugging dan sharding.</text>
+<rect x="346.7" y="120.0" width="286.7" height="476.0" rx="14" fill="#f6fdfe" stroke="#dbe6f5" stroke-width="1.4"/>
+<rect x="362.7" y="136.0" width="112.8" height="28.0" rx="14.0" fill="#0e7490"/><text x="419.0604166666667" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Titik ekstensi</text>
+<rect x="362.7" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="184.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
+<text x="377.6666666666667" y="208" font-size="11.5" fill="#0f1e33" font-weight="700">Strategi sequence yang dapat dipasang</text>
+<rect x="377.7" y="216.0" width="109.2" height="18.0" rx="9" fill="#f6fdfe"/>
+<text x="432.2472916666667" y="229" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">SequenceResolver</text>
+<text x="377.6666666666667" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">Sequence resolver adalah sebuah</text>
+<text x="377.6666666666667" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">interface; dua implementasi sudah</text>
+<text x="377.6666666666667" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">tersedia bawaan, dan sequence bersama</text>
+<text x="377.6666666666667" y="301.75" font-size="11.5" fill="#3d4d66" font-weight="400">berbasis Redis hanya berjarak</text>
+<text x="377.6666666666667" y="319.0" font-size="11.5" fill="#3d4d66" font-weight="400">beberapa baris.</text>
+<rect x="362.7" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="322.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
+<text x="377.6666666666667" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">Perlindungan clock drift</text>
+<rect x="377.7" y="354.0" width="117.9" height="18.0" rx="9" fill="#f6fdfe"/>
+<text x="436.6021666666667" y="367" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">clock_tolerance_ms</text>
+<text x="377.6666666666667" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">Jendela toleransi yang dapat</text>
+<text x="377.6666666666667" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">dikonfigurasi menyerap jitter NTP; di</text>
+<text x="377.6666666666667" y="422.5" font-size="11.5" fill="#3d4d66" font-weight="400">luar itu akan melempar exception</text>
+<text x="377.6666666666667" y="439.75" font-size="11.5" fill="#3d4d66" font-weight="400">daripada berisiko menghasilkan ID</text>
+<text x="377.6666666666667" y="457.0" font-size="11.5" fill="#3d4d66" font-weight="400">duplikat.</text>
+<rect x="362.7" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="460.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
+<text x="377.6666666666667" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">Adapter framework</text>
+<rect x="377.7" y="492.0" width="73.1" height="18.0" rx="9" fill="#f6fdfe"/>
+<text x="414.2214166666667" y="505" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">Adapters/*</text>
+<text x="377.6666666666667" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">Laravel, Webman, ThinkPHP, dan</text>
+<text x="377.6666666666667" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">Hyperf langsung berfungsi, lengkap</text>
+<text x="377.6666666666667" y="560.5" font-size="11.5" fill="#3d4d66" font-weight="400">dengan auto-discovery dan integrasi</text>
+<text x="377.6666666666667" y="577.75" font-size="11.5" fill="#3d4d66" font-weight="400">container.</text>
+<rect x="653.3" y="120.0" width="286.7" height="476.0" rx="14" fill="#fbf9ff" stroke="#dbe6f5" stroke-width="1.4"/>
+<rect x="669.3" y="136.0" width="84.8" height="28.0" rx="14.0" fill="#6d28d9"/><text x="711.7489583333333" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Rekayasa</text>
+<rect x="669.3" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="184.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
+<text x="684.3333333333334" y="208" font-size="13.0" fill="#0f1e33" font-weight="700">Validasi config ketat</text>
+<rect x="684.3" y="216.0" width="79.2" height="18.0" rx="9" fill="#fbf9ff"/>
+<text x="723.9199583333334" y="229" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">fromConfig()</text>
+<text x="684.3333333333334" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">Array config, file config, dan variabel</text>
+<text x="684.3333333333334" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">environment semuanya bermuara ke</text>
+<text x="684.3333333333334" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">satu factory tervalidasi yang menolak</text>
+<text x="684.3333333333334" y="301.75" font-size="11.5" fill="#3d4d66" font-weight="400">kombinasi yang tidak mungkin.</text>
+<rect x="669.3" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="322.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
+<text x="684.3333333333334" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">Exception semantik</text>
+<rect x="684.3" y="354.0" width="82.5" height="18.0" rx="9" fill="#fbf9ff"/>
+<text x="725.5737083333333" y="367" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">Exceptions/*</text>
+<text x="684.3333333333334" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">Lima tipe exception, masing-masing</text>
+<text x="684.3333333333334" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">membawa nilai yang bermasalah</text>
+<text x="684.3333333333334" y="422.5" font-size="11.5" fill="#3d4d66" font-weight="400">beserta batasnya, sehingga pesannya</text>
+<text x="684.3333333333334" y="439.75" font-size="11.5" fill="#3d4d66" font-weight="400">langsung menunjuk ke kesalahan</text>
+<text x="684.3333333333334" y="457.0" font-size="11.5" fill="#3d4d66" font-weight="400">konfigurasi.</text>
+<rect x="669.3" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="460.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
+<text x="684.3333333333334" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">Kualitas &amp; rilis</text>
+<rect x="684.3" y="492.0" width="126.2" height="18.0" rx="9" fill="#fbf9ff"/>
+<text x="747.4583333333334" y="505" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">ci.yml · release.yml</text>
+<text x="684.3333333333334" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">Suite PHPUnit lengkap, matriks CI PHP</text>
+<text x="684.3333333333334" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">8.0–8.4, dan versioning otomatis pada</text>
+<text x="684.3333333333334" y="560.5" font-size="11.5" fill="#3d4d66" font-weight="400">setiap push ke main.</text>
+<text x="40" y="632" font-size="11.5" fill="#6b7c96" font-weight="400">Runtime: PHP &gt;= 8.0 (CI mencakup 8.0 – 8.4) · sistem 64-bit · satu instance per proses atau coroutine, state sequence tidak pernah dibagi</text>
+</svg>
