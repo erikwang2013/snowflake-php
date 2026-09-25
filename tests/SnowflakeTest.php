@@ -376,6 +376,23 @@ class SnowflakeTest extends TestCase
         $this->assertSame(7, $parsed['datacenter_id']);
     }
 
+    public function testDistinctNodesNeverCollide(): void
+    {
+        // The guarantee a multi-node deployment (frameworks or plain PHP) rests
+        // on: two instances with different node ids must never hand out the same
+        // ID, even when both generate inside the same millisecond.
+        $nodeA = new Snowflake(workerId: 1, datacenterId: 0);
+        $nodeB = new Snowflake(workerId: 2, datacenterId: 0);
+
+        $ids = [];
+        for ($i = 0; $i < 2000; $i++) {
+            $ids[] = $nodeA->id();
+            $ids[] = $nodeB->id();
+        }
+
+        $this->assertCount(4000, array_unique($ids));
+    }
+
     public function testMascotIsPrintable(): void
     {
         $art = Snowflake::MASCOT;

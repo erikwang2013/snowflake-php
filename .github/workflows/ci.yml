@@ -33,6 +33,12 @@ jobs:
         if: matrix.php != '8.0'
         run: vendor/bin/phpunit
 
+      # The no-framework example is documentation that executes: it fails the
+      # build when an invariant it documents stops holding.
+      - name: Run the plain-PHP example
+        if: matrix.php == '8.3'
+        run: php docs/examples/plain-php.php
+
   diagrams:
     name: Diagrams up to date
     runs-on: ubuntu-latest

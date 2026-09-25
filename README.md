@@ -20,7 +20,7 @@ Key features:
 - **Pluggable sequence resolvers** — built-in sequential and random strategies, or bring your own
 - **Flexible bit allocation** — adjust timestamp/worker/datacenter/sequence bits to fit your scale
 - **Clock drift tolerance** — configurable tolerance window for NTP adjustments
-- **Framework agnostic** with first-class adapters for Laravel, ThinkPHP, Webman, and Hyperf
+- **Framework agnostic** — first-class adapters for Laravel, ThinkPHP, Webman, and Hyperf, or plain PHP with no container at all
 - **ID parsing** — decompose generated IDs back into timestamp, node, and sequence components
 
 ## Project Structure
@@ -54,6 +54,7 @@ snowflake-php/
 │   │   ├── README.md                       # Language index
 │   │   ├── img/<lang>/                     # Generated SVGs (13 languages)
 │   │   └── <lang>/README.md                # One translated README per language
+│   ├── examples/plain-php.php              # Runnable no-framework example
 │   └── *.png                               # Sponsor images
 ├── scripts/
 │   ├── generate-diagrams.py                # Builds docs/i18n/img/<lang>/*.svg
@@ -286,6 +287,49 @@ class OrderService
     }
 }
 ```
+
+## Native PHP (no framework)
+
+Nothing in this package needs a framework — the four adapters above only wire
+`Snowflake` into a container for you. Without one, build it yourself:
+
+```php
+require __DIR__ . '/vendor/autoload.php';
+
+use Erikwang2013\Snowflake\Snowflake;
+
+// Same variable names the Laravel adapter uses, so one .env-style setup
+// works whether or not a framework is present.
+$snowflake = Snowflake::fromConfig([
+    'worker_id'          => (int) (getenv('SNOWFLAKE_WORKER_ID') ?: 0),
+    'datacenter_id'      => (int) (getenv('SNOWFLAKE_DATACENTER_ID') ?: 0),
+    'clock_tolerance_ms' => 5,
+]);
+
+$id = $snowflake->id();
+```
+
+A runnable version of this — including a framework-free lazy singleton and the
+invariants it checks — lives in [`docs/examples/plain-php.php`](docs/examples/plain-php.php):
+
+```bash
+php docs/examples/plain-php.php
+```
+
+### Choosing a lifetime
+
+The instance keeps `lastTimestamp` and the sequence cursor in memory, so how
+long it lives is the one thing to get right:
+
+| Runtime | Build the instance |
+|---------|--------------------|
+| PHP-FPM, mod_php, CLI | Inline, per request or command — nothing is shared between them. |
+| Swoole, ReactPHP, RoadRunner, FrankenPHP | Once per **worker process**, from the worker-start callback, with a unique `(datacenter_id, worker_id)` pair. |
+
+Never share one instance between coroutines or threads: `id()` reads and writes
+its own state, so two concurrent calls can interleave and hand out the same
+sequence number. Create one instance per coroutine, or guard the shared one with
+a mutex.
 
 ## ID Parsing
 

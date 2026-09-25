@@ -20,7 +20,7 @@ Snowflake PHP 无需中心协调节点即可生成 64 位、k-ordered、全局�
 - **可插拔序列号策略** — 内置顺序递增和随机两种策略，支持自定义
 - **灵活的位分配** — 可调整时间戳/节点/数据中心/序列号的位数以适应业务规模
 - **时钟回拨容忍** — 可配置的 NTP 校时容忍窗口
-- **框架无关**，提供 Laravel、ThinkPHP、Webman、Hyperf 的一流适配器
+- **框架无关** — 提供 Laravel、ThinkPHP、Webman、Hyperf 的一流适配器，也可完全不依赖容器直接用原生 PHP
 - **ID 解析** — 可将生成的 ID 反向分解为时间戳、节点、序列号等成分
 
 ## 项目结构
@@ -54,6 +54,7 @@ snowflake-php/
 │   │   ├── README.md                       # 语言索引
 │   │   ├── img/<lang>/                     # 生成的 SVG（13 种语言）
 │   │   └── <lang>/README.md                # 各语言翻译文档
+│   ├── examples/plain-php.php              # 可直接运行的原生 PHP 示例
 │   └── *.png                               # 赞助码
 ├── scripts/
 │   ├── generate-diagrams.py                # 生成 docs/i18n/img/<lang>/*.svg
@@ -286,6 +287,42 @@ class OrderService
     }
 }
 ```
+
+## 原生 PHP（无框架）
+
+包本身不依赖任何框架——上面四个适配器只是帮你把 `Snowflake` 接进各自容器。没有框架时自己装配即可：
+
+```php
+require __DIR__ . '/vendor/autoload.php';
+
+use Erikwang2013\Snowflake\Snowflake;
+
+// 与 Laravel 适配器同名，因此同一套 .env 配置在有无框架时都能用
+$snowflake = Snowflake::fromConfig([
+    'worker_id'          => (int) (getenv('SNOWFLAKE_WORKER_ID') ?: 0),
+    'datacenter_id'      => (int) (getenv('SNOWFLAKE_DATACENTER_ID') ?: 0),
+    'clock_tolerance_ms' => 5,
+]);
+
+$id = $snowflake->id();
+```
+
+可直接运行的完整版本（含无框架单例写法与自检）见 [`docs/examples/plain-php.php`](docs/examples/plain-php.php)：
+
+```bash
+php docs/examples/plain-php.php
+```
+
+### 实例生命周期怎么选
+
+实例在内存中保存 `lastTimestamp` 与序列游标，因此**存活多久**是唯一要拿捏的点：
+
+| 运行环境 | 实例创建时机 |
+|---------|-------------|
+| PHP-FPM、mod_php、CLI | 每次请求/命令内联创建——进程间不共享，无残留。 |
+| Swoole、ReactPHP、RoadRunner、FrankenPHP | 每个 **worker 进程**创建一次（在 worker 启动回调里），并分配唯一的 `(datacenter_id, worker_id)`。 |
+
+**不要**在协程或线程之间共享同一个实例：`id()` 会读写自身状态，两个并发调用交错执行可能发出相同的序列号。请按协程各建一个实例，或对共享实例加锁。
 
 ## ID 解析
 
