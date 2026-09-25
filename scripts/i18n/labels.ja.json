@@ -99,7 +99,6 @@
   "life.subtitle": "1 回の id() 呼び出し：全経路、触れる状態、守る上限",
   "life.bits.title": "ID レイアウト (デフォルト 64 ビット)",
   "life.bits.seg.timestamp": "timestamp 41",
-  "life.bits.seg.sequence": "sequence 12",
   "life.bits.l1": "符号ビット 1 (常に 0)、timestamp = エポックからのミリ秒",
   "life.bits.l2": "データセンター 5 ビット × ワーカー 5 ビット = 32 × 32 = 1024 ノード",
   "life.bits.l3": "シーケンス 12 ビット = 1 ミリ秒あたり 4096 ID (デフォルト構成)",

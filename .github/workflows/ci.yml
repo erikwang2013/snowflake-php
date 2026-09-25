@@ -32,3 +32,20 @@ jobs:
       - name: Run tests
         if: matrix.php != '8.0'
         run: vendor/bin/phpunit
+
+  diagrams:
+    name: Diagrams up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Regenerate every localized diagram
+        run: python3 scripts/generate-diagrams.py
+
+      - name: Fail when the committed SVGs are stale
+        run: |
+          if ! git diff --quiet -- docs/i18n/img; then
+            echo "::error::docs/i18n/img is out of date - run 'python3 scripts/generate-diagrams.py' and commit the result"
+            git diff --stat -- docs/i18n/img
+            exit 1
+          fi

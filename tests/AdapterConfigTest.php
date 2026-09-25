@@ -37,7 +37,7 @@ namespace Erikwang2013\Snowflake\Tests {
     use Erikwang2013\Snowflake\Snowflake;
 
     /**
-     * All six shipped config files are valid arrays with the required
+     * All five shipped config files are valid arrays with the required
      * keys, and every adapter config builds a working Snowflake via
      * Snowflake::fromConfig.
      */
@@ -55,30 +55,39 @@ namespace Erikwang2013\Snowflake\Tests {
         ];
 
         /**
-         * @dataProvider configFileProvider
+         * Every shipped config file is a valid array carrying the required keys.
+         *
+         * The cases are looped over rather than fed by a @dataProvider, because
+         * the PHP 8.0 job runs PHPUnit 9 (no attribute support) while PHPUnit 11
+         * deprecates doc-comment metadata. A loop works on all of them.
          */
-        public function testConfigFileIsArrayWithRequiredKeys(string $file, string $subKey): void
+        public function testConfigFileIsArrayWithRequiredKeys(): void
         {
-            $config = require $file;
-            $this->assertIsArray($config);
+            foreach (self::configFiles() as $name => [$file, $subKey]) {
+                $config = require $file;
+                $this->assertIsArray($config, $name);
 
-            if ($subKey !== '') {
-                $this->assertArrayHasKey($subKey, $config);
-                $this->assertIsArray($config[$subKey]);
-                $config = $config[$subKey];
+                if ($subKey !== '') {
+                    $this->assertArrayHasKey($subKey, $config, $name);
+                    $this->assertIsArray($config[$subKey], $name);
+                    $config = $config[$subKey];
+                }
+
+                foreach (self::CONFIG_KEYS as $key) {
+                    $this->assertArrayHasKey($key, $config, "$name: $key");
+                }
+
+                $this->assertIsInt($config['worker_bits'], $name);
+                $this->assertIsInt($config['datacenter_bits'], $name);
+                $this->assertIsInt($config['sequence_bits'], $name);
+                $this->assertIsInt($config['clock_tolerance_ms'], $name);
             }
-
-            foreach (self::CONFIG_KEYS as $key) {
-                $this->assertArrayHasKey($key, $config);
-            }
-
-            $this->assertIsInt($config['worker_bits']);
-            $this->assertIsInt($config['datacenter_bits']);
-            $this->assertIsInt($config['sequence_bits']);
-            $this->assertIsInt($config['clock_tolerance_ms']);
         }
 
-        public static function configFileProvider(): array
+        /**
+         * @return array<string, array{string, string}> file path and optional sub-key
+         */
+        public static function configFiles(): array
         {
             return [
                 'root' => [dirname(__DIR__) . '/config/snowflake.php', ''],
@@ -89,20 +98,19 @@ namespace Erikwang2013\Snowflake\Tests {
             ];
         }
 
-        /**
-         * @dataProvider configFileProvider
-         */
-        public function testAdapterConfigBuildsWorkingSnowflake(string $file, string $subKey): void
+        public function testAdapterConfigBuildsWorkingSnowflake(): void
         {
-            $config = require $file;
-            if ($subKey !== '') {
-                $config = $config[$subKey];
+            foreach (self::configFiles() as $name => [$file, $subKey]) {
+                $config = require $file;
+                if ($subKey !== '') {
+                    $config = $config[$subKey];
+                }
+
+                $snowflake = Snowflake::fromConfig($config);
+                $parsed = $snowflake->parseId($snowflake->id());
+
+                $this->assertGreaterThanOrEqual($config['epoch'], $parsed['timestamp_ms'], $name);
             }
-
-            $snowflake = Snowflake::fromConfig($config);
-            $parsed = $snowflake->parseId($snowflake->id());
-
-            $this->assertGreaterThanOrEqual($config['epoch'], $parsed['timestamp_ms']);
         }
 
         public function testHyperfConfigProviderPublishesConfig(): void

@@ -99,7 +99,6 @@
   "life.subtitle": "单次 id() 调用的完整流程、实例状态与容量边界",
   "life.bits.title": "ID 位结构（默认 64 位）",
   "life.bits.seg.timestamp": "时间戳 41",
-  "life.bits.seg.sequence": "序列 12",
   "life.bits.l1": "符号位 1 位恒为 0；时间戳为相对 epoch 的毫秒偏移",
   "life.bits.l2": "数据中心 5 位 × 节点 5 位 = 32 × 32 = 1024 个节点",
   "life.bits.l3": "序列 12 位 = 单毫秒 4096 个 ID（默认布局）",

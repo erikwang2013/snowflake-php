@@ -99,7 +99,6 @@
   "life.subtitle": "Ein id()-Aufruf: der komplette Weg, der berührte Zustand und die beachteten Limits",
   "life.bits.title": "ID-Layout (standardmäßig 64 Bit)",
   "life.bits.seg.timestamp": "Zeitstempel 41",
-  "life.bits.seg.sequence": "Sequenz 12",
   "life.bits.l1": "Vorzeichenbit 1 (immer 0); Zeitstempel = Millisekunden seit der Epoche",
   "life.bits.l2": "Datacenter 5 Bit × Worker 5 Bit = 32 × 32 = 1024 Knoten",
   "life.bits.l3": "Sequenz 12 Bit = 4096 IDs je Millisekunde (Standard-Layout)",

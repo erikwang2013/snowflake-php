@@ -99,7 +99,6 @@
   "life.subtitle": "id() 호출 한 번: 전체 경로, 건드리는 상태, 지키는 한계",
   "life.bits.title": "ID 배치 (기본 64비트)",
   "life.bits.seg.timestamp": "타임스탬프 41",
-  "life.bits.seg.sequence": "시퀀스 12",
   "life.bits.l1": "부호 비트 1 (항상 0); 타임스탬프 = 에포크 이후 밀리초",
   "life.bits.l2": "데이터센터 5비트 × 워커 5비트 = 32 × 32 = 1024개 노드",
   "life.bits.l3": "시퀀스 12비트 = 밀리초당 4096개 ID (기본 배치)",

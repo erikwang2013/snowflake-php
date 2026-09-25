@@ -99,7 +99,6 @@
   "life.subtitle": "One id() call: the full path, the state it touches, and the limits it respects",
   "life.bits.title": "ID layout (64 bits by default)",
   "life.bits.seg.timestamp": "timestamp 41",
-  "life.bits.seg.sequence": "sequence 12",
   "life.bits.l1": "Sign bit 1 (always 0); timestamp = milliseconds since the epoch",
   "life.bits.l2": "Datacenter 5 bits × worker 5 bits = 32 × 32 = 1024 nodes",
   "life.bits.l3": "Sequence 12 bits = 4096 IDs per millisecond (default layout)",

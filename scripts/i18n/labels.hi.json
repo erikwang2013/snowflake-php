@@ -99,7 +99,6 @@
   "life.subtitle": "एक id() call: पूरा रास्ता, छुई जाने वाली state, और मानी जाने वाली limits",
   "life.bits.title": "ID layout (default 64 bits)",
   "life.bits.seg.timestamp": "timestamp 41",
-  "life.bits.seg.sequence": "sequence 12",
   "life.bits.l1": "Sign bit 1 (हमेशा 0); timestamp = epoch से milliseconds",
   "life.bits.l2": "Datacenter 5 bits × worker 5 bits = 32 × 32 = 1024 nodes",
   "life.bits.l3": "Sequence 12 bits = 4096 IDs प्रति millisecond (default layout)",

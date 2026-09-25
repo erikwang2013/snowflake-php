@@ -99,7 +99,6 @@
   "life.subtitle": "Uma chamada id(): o caminho completo, o estado que ela toca e os limites que respeita",
   "life.bits.title": "Layout do ID (64 bits por padrão)",
   "life.bits.seg.timestamp": "timestamp 41",
-  "life.bits.seg.sequence": "sequência 12",
   "life.bits.l1": "Bit de sinal 1 (sempre 0); timestamp = milissegundos desde o epoch",
   "life.bits.l2": "Datacenter 5 bits × worker 5 bits = 32 × 32 = 1024 nós",
   "life.bits.l3": "Sequência 12 bits = 4096 IDs por milissegundo (layout padrão)",

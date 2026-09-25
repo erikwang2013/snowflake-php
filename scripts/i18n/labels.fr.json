@@ -99,7 +99,6 @@
   "life.subtitle": "Un appel id() : le chemin complet, l'état touché et les limites respectées",
   "life.bits.title": "Disposition de l'ID (64 bits par défaut)",
   "life.bits.seg.timestamp": "timestamp 41",
-  "life.bits.seg.sequence": "séquence 12",
   "life.bits.l1": "Bit de signe 1 (toujours 0) ; timestamp = millisecondes depuis l'epoch",
   "life.bits.l2": "Datacenter 5 bits × worker 5 bits = 32 × 32 = 1024 nœuds",
   "life.bits.l3": "Séquence 12 bits = 4096 ID par milliseconde (disposition par défaut)",

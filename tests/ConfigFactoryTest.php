@@ -107,17 +107,26 @@ class ConfigFactoryTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidNumericConfigProvider
+     * Looped rather than fed by a @dataProvider: the PHP 8.0 job runs PHPUnit 9
+     * (no attribute support) while PHPUnit 11 deprecates doc-comment metadata.
      */
-    public function testFromConfigRejectsInvalidNumericValues(array $config, string $messagePart): void
+    public function testFromConfigRejectsInvalidNumericValues(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage($messagePart);
-
-        Snowflake::fromConfig($config);
+        foreach (self::invalidNumericConfigs() as $name => [$config, $messagePart]) {
+            try {
+                Snowflake::fromConfig($config);
+                $this->fail("$name: expected InvalidArgumentException");
+            } catch (\InvalidArgumentException $e) {
+                $this->assertStringContainsString($messagePart, $e->getMessage(), $name);
+            }
+        }
     }
 
-    public static function invalidNumericConfigProvider(): array
+    /**
+     * @return array<string, array{array<string, mixed>, string}> config and the
+     *                                                             expected fragment of the message
+     */
+    public static function invalidNumericConfigs(): array
     {
         return [
             'string worker_id' => [['worker_id' => 'abc'], 'worker_id'],

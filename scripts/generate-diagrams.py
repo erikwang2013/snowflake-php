@@ -411,13 +411,13 @@ def features(L):
 # ------------------------------------------------------------------ lifecycle
 
 def lifecycle(L):
-    W, H = 980, 924
+    W, H = 980, 942
     CX, RX, RW = 350, 650, 290
     body = [header(W, L("life.title"), L("life.subtitle"))]
 
     body.append(card(RX, 120, RW, 186, L("life.bits.title"), None, BLUE, "#fff", BLUE_B))
     segs = [(1, SLATE, ""), (41, BLUE, L("life.bits.seg.timestamp")), (5, VIOLET, ""),
-            (5, CYAN, ""), (12, AMBER, L("life.bits.seg.sequence"))]
+            (5, CYAN, ""), (12, AMBER, "")]
     bx, by, bh = RX + 16, 160, 26
     avail = RW - 40
     for i, (bits, c, lab) in enumerate(segs):
@@ -432,18 +432,19 @@ def lifecycle(L):
         bits.extend(wrap(L(k), 10.5, 258))
     body.append(block(RX + 16, 208, bits, 10.5 if len(bits) <= 5 else 9.5, MUTED, lh=15))
 
-    body.append(card(RX, 324, RW, 186, L("life.state.title"),
+    body.append(card(RX, 324, RW, 204, L("life.state.title"),
                      [L("life.state.l1"), L("life.state.l2"), L("life.state.l3")],
                      VIOLET, "#fbf9ff", VIOLET_B))
-    body.append(text(RX + 16, 498, L("life.state.note"),
-                     fit(L("life.state.note"), 11, RW - 46, "600"), RED, "600"))
+    note = wrap(L("life.state.note"), 10.5, RW - 40)
+    body.append(block(RX + 16, 486, note, 10.5 if len(note) <= 3 else 9.5, RED, "600",
+                      lh=(10.5 if len(note) <= 3 else 9.5) * 1.35))
 
-    body.append(card(RX, 528, RW, 162, L("life.cap.title"),
+    body.append(card(RX, 546, RW, 162, L("life.cap.title"),
                      [L("life.cap.l1"), L("life.cap.l2"), L("life.cap.l3")],
                      CYAN, "#f6fdfe", CYAN_B))
 
-    body.append(card(RX, 708, RW, 182, L("life.time.title"), None, AMBER, "#fffaf0", AMBER_B))
-    tx, ty, twd = RX + 20, 762, RW - 40
+    body.append(card(RX, 726, RW, 182, L("life.time.title"), None, AMBER, "#fffaf0", AMBER_B))
+    tx, ty, twd = RX + 20, 780, RW - 40
     body.append(rect(tx, ty, twd, 10, SLATE_B, None, 5))
     body.append(rect(tx, ty, twd * 0.035, 10, AMBER, None, 5))
     body.append(line(tx + twd * 0.035, ty - 4, tx + twd * 0.035, ty + 15, AMBER, 2, cap="butt"))

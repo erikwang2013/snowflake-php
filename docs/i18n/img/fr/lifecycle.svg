@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 924" width="980" height="924" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 942" width="980" height="942" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
 <title>Cycle de vie d&#x27;un ID</title>
 <desc>Un appel id() : le chemin complet, l&#x27;état touché et les limites respectées</desc>
 <defs>
 <marker id="mk-5b8def" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0.6 L9.5,5 L0,9.4 z" fill="#5b8def"/></marker>
 </defs>
-<rect width="980" height="924" fill="#ffffff"/>
+<rect width="980" height="942" fill="#ffffff"/>
 <text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">Cycle de vie d&#x27;un ID</text>
 <text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">Un appel id() : le chemin complet, l&#x27;état touché et les limites respectées</text>
 <line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
@@ -19,15 +19,14 @@
 <rect x="835.2" y="160.0" width="19.5" height="26.0" rx="0" fill="#6d28d9"/>
 <rect x="854.7" y="160.0" width="19.5" height="26.0" rx="0" fill="#0e7490"/>
 <rect x="874.2" y="160.0" width="46.9" height="26.0" rx="4" fill="#b45309"/>
-<text x="897.65625" y="178" font-size="7.5" fill="#fff" font-weight="600" text-anchor="middle">séquence 12</text>
 <text x="666" y="208" font-size="9.5" fill="#6b7c96" font-weight="400">Bit de signe 1 (toujours 0) ; timestamp =</text>
 <text x="666" y="223" font-size="9.5" fill="#6b7c96" font-weight="400">millisecondes depuis l&#x27;epoch</text>
 <text x="666" y="238" font-size="9.5" fill="#6b7c96" font-weight="400">Datacenter 5 bits × worker 5 bits = 32 × 32 =</text>
 <text x="666" y="253" font-size="9.5" fill="#6b7c96" font-weight="400">1024 nœuds</text>
 <text x="666" y="268" font-size="9.5" fill="#6b7c96" font-weight="400">Séquence 12 bits = 4096 ID par milliseconde</text>
 <text x="666" y="283" font-size="9.5" fill="#6b7c96" font-weight="400">(disposition par défaut)</text>
-<rect x="650.0" y="324.0" width="290.0" height="186.0" rx="12" fill="#fbf9ff" stroke="#d5c6fa" stroke-width="1.5"/>
-<rect x="650.0" y="324.0" width="4.0" height="186.0" rx="2" fill="#6d28d9"/>
+<rect x="650.0" y="324.0" width="290.0" height="204.0" rx="12" fill="#fbf9ff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="650.0" y="324.0" width="4.0" height="204.0" rx="2" fill="#6d28d9"/>
 <text x="665" y="348" font-size="11.2" fill="#0f1e33" font-weight="700">État de l&#x27;instance (conservé entre les appels)</text>
 <text x="665" y="370.0" font-size="11.5" fill="#3d4d66" font-weight="400">lastTimestamp — milliseconde de l&#x27;ID</text>
 <text x="665" y="387.25" font-size="11.5" fill="#3d4d66" font-weight="400">précédent, pour les contrôles de dérive et</text>
@@ -36,31 +35,32 @@
 <text x="665" y="439.0" font-size="11.5" fill="#3d4d66" font-weight="400">la milliseconde courante (seq / lastTs)</text>
 <text x="665" y="456.25" font-size="11.5" fill="#3d4d66" font-weight="400">fixedBits / epoch — bits de nœud et date de</text>
 <text x="665" y="473.5" font-size="11.5" fill="#3d4d66" font-weight="400">départ, en lecture seule après construction</text>
-<text x="666" y="498" font-size="7.5" fill="#dc2626" font-weight="600">Note : une instance ne doit jamais être partagée entre processus ou coroutines</text>
-<rect x="650.0" y="528.0" width="290.0" height="162.0" rx="12" fill="#f6fdfe" stroke="#a9dcea" stroke-width="1.5"/>
-<rect x="650.0" y="528.0" width="4.0" height="162.0" rx="2" fill="#0e7490"/>
-<text x="665" y="552" font-size="13.0" fill="#0f1e33" font-weight="700">Capacité &amp; débit</text>
-<text x="665" y="574.0" font-size="11.5" fill="#3d4d66" font-weight="400">Au plus 2^12 = 4096 ID par milliseconde ;</text>
-<text x="665" y="591.25" font-size="11.5" fill="#3d4d66" font-weight="400">au-delà, attente de la milliseconde suivante.</text>
-<text x="665" y="608.5" font-size="11.5" fill="#3d4d66" font-weight="400">Environ 500 k ID par seconde dans un</text>
-<text x="665" y="625.75" font-size="11.5" fill="#3d4d66" font-weight="400">processus unique.</text>
-<text x="665" y="643.0" font-size="11.5" fill="#3d4d66" font-weight="400">Chaque nœud revendique un couple</text>
-<text x="665" y="660.25" font-size="11.5" fill="#3d4d66" font-weight="400">(datacenter_id, worker_id) unique ; 32 × 32 =</text>
-<text x="665" y="677.5" font-size="11.5" fill="#3d4d66" font-weight="400">1024 nœuds avec la disposition par défaut.</text>
-<rect x="650.0" y="708.0" width="290.0" height="182.0" rx="12" fill="#fffaf0" stroke="#f7d59b" stroke-width="1.5"/>
-<rect x="650.0" y="708.0" width="4.0" height="182.0" rx="2" fill="#b45309"/>
-<text x="665" y="732" font-size="13.0" fill="#0f1e33" font-weight="700">Chronologie de la durée de vie</text>
-<rect x="670.0" y="762.0" width="250.0" height="10.0" rx="5" fill="#dbe3ec"/>
-<rect x="670.0" y="762.0" width="8.8" height="10.0" rx="5" fill="#b45309"/>
-<line x1="678.8" y1="758.0" x2="678.8" y2="777.0" stroke="#b45309" stroke-width="2" stroke-linecap="butt"/>
-<text x="670" y="753" font-size="10.0" fill="#b45309" font-weight="600">epoch 2024-01-01</text>
-<text x="920" y="753" font-size="10.0" fill="#6b7c96" font-weight="600" text-anchor="end">limite 2093</text>
-<text x="670" y="798" font-size="10.5" fill="#3d4d66" font-weight="400">Départ : epoch = 2024-01-01 UTC</text>
-<text x="670" y="814" font-size="10.5" fill="#3d4d66" font-weight="400">Limite : 2^41 − 1 ms ≈ 69,7 ans</text>
-<text x="670" y="830" font-size="10.5" fill="#3d4d66" font-weight="400">L&#x27;épuisement lève TimestampOverflowException</text>
-<text x="670" y="846" font-size="10.5" fill="#3d4d66" font-weight="400">Un epoch plus récent réinitialise toute la durée</text>
-<text x="670" y="862" font-size="10.5" fill="#3d4d66" font-weight="400">de vie.</text>
-<text x="670" y="890" font-size="10.5" fill="#3d4d66" text-anchor="start"><tspan fill="#6b7c96" font-weight="400">Environ 3 % consommés en 2026</tspan></text>
+<text x="666" y="486.0" font-size="10.5" fill="#dc2626" font-weight="600">Note : une instance ne doit jamais être partagée</text>
+<text x="666" y="500.175" font-size="10.5" fill="#dc2626" font-weight="600">entre processus ou coroutines</text>
+<rect x="650.0" y="546.0" width="290.0" height="162.0" rx="12" fill="#f6fdfe" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="650.0" y="546.0" width="4.0" height="162.0" rx="2" fill="#0e7490"/>
+<text x="665" y="570" font-size="13.0" fill="#0f1e33" font-weight="700">Capacité &amp; débit</text>
+<text x="665" y="592.0" font-size="11.5" fill="#3d4d66" font-weight="400">Au plus 2^12 = 4096 ID par milliseconde ;</text>
+<text x="665" y="609.25" font-size="11.5" fill="#3d4d66" font-weight="400">au-delà, attente de la milliseconde suivante.</text>
+<text x="665" y="626.5" font-size="11.5" fill="#3d4d66" font-weight="400">Environ 500 k ID par seconde dans un</text>
+<text x="665" y="643.75" font-size="11.5" fill="#3d4d66" font-weight="400">processus unique.</text>
+<text x="665" y="661.0" font-size="11.5" fill="#3d4d66" font-weight="400">Chaque nœud revendique un couple</text>
+<text x="665" y="678.25" font-size="11.5" fill="#3d4d66" font-weight="400">(datacenter_id, worker_id) unique ; 32 × 32 =</text>
+<text x="665" y="695.5" font-size="11.5" fill="#3d4d66" font-weight="400">1024 nœuds avec la disposition par défaut.</text>
+<rect x="650.0" y="726.0" width="290.0" height="182.0" rx="12" fill="#fffaf0" stroke="#f7d59b" stroke-width="1.5"/>
+<rect x="650.0" y="726.0" width="4.0" height="182.0" rx="2" fill="#b45309"/>
+<text x="665" y="750" font-size="13.0" fill="#0f1e33" font-weight="700">Chronologie de la durée de vie</text>
+<rect x="670.0" y="780.0" width="250.0" height="10.0" rx="5" fill="#dbe3ec"/>
+<rect x="670.0" y="780.0" width="8.8" height="10.0" rx="5" fill="#b45309"/>
+<line x1="678.8" y1="776.0" x2="678.8" y2="795.0" stroke="#b45309" stroke-width="2" stroke-linecap="butt"/>
+<text x="670" y="771" font-size="10.0" fill="#b45309" font-weight="600">epoch 2024-01-01</text>
+<text x="920" y="771" font-size="10.0" fill="#6b7c96" font-weight="600" text-anchor="end">limite 2093</text>
+<text x="670" y="816" font-size="10.5" fill="#3d4d66" font-weight="400">Départ : epoch = 2024-01-01 UTC</text>
+<text x="670" y="832" font-size="10.5" fill="#3d4d66" font-weight="400">Limite : 2^41 − 1 ms ≈ 69,7 ans</text>
+<text x="670" y="848" font-size="10.5" fill="#3d4d66" font-weight="400">L&#x27;épuisement lève TimestampOverflowException</text>
+<text x="670" y="864" font-size="10.5" fill="#3d4d66" font-weight="400">Un epoch plus récent réinitialise toute la durée</text>
+<text x="670" y="880" font-size="10.5" fill="#3d4d66" font-weight="400">de vie.</text>
+<text x="670" y="908" font-size="10.5" fill="#3d4d66" text-anchor="start"><tspan fill="#6b7c96" font-weight="400">Environ 3 % consommés en 2026</tspan></text>
 <rect x="240.0" y="120.0" width="220.0" height="36.0" rx="18.0" fill="#0f766e"/><text x="350.0" y="142.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Appel id() / nextId()</text>
 <path d="M350.0,156.0 L350.0,180.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
 <rect x="180.0" y="180.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>

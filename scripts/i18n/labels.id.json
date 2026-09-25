@@ -99,7 +99,6 @@
   "life.subtitle": "Satu panggilan id(): jalur lengkapnya, state yang disentuh, dan batas yang dipatuhi",
   "life.bits.title": "Tata letak ID (default 64 bit)",
   "life.bits.seg.timestamp": "timestamp 41",
-  "life.bits.seg.sequence": "sequence 12",
   "life.bits.l1": "Bit tanda 1 (selalu 0); timestamp = milidetik sejak epoch",
   "life.bits.l2": "Datacenter 5 bit × worker 5 bit = 32 × 32 = 1024 node",
   "life.bits.l3": "Sequence 12 bit = 4096 ID per milidetik (tata letak default)",

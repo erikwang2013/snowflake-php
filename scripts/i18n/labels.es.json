@@ -99,7 +99,6 @@
   "life.subtitle": "Una llamada a id(): el recorrido completo, el estado que toca y los límites que respeta",
   "life.bits.title": "Distribución del ID (64 bits por defecto)",
   "life.bits.seg.timestamp": "timestamp 41",
-  "life.bits.seg.sequence": "secuencia 12",
   "life.bits.l1": "Bit de signo 1 (siempre 0); timestamp = milisegundos desde la época",
   "life.bits.l2": "Datacenter 5 bits × worker 5 bits = 32 × 32 = 1024 nodos",
   "life.bits.l3": "Secuencia 12 bits = 4096 ID por milisegundo (distribución por defecto)",
