@@ -294,7 +294,7 @@ def pet(L):
 # --------------------------------------------------------------- architecture
 
 def architecture(L):
-    W, H = 980, 930
+    W, H = 980, 958
     body = [header(W, L("arch.title"), L("arch.subtitle"))]
 
     def band(y, h, key, color, tint):
@@ -359,7 +359,7 @@ def architecture(L):
         body.append(tline(414, y + 21, [(name, CYAN, "700"), (sub, MUTED, "400")], size))
     body.append(text(356, 668, L("arch.implements"), 10, FAINT, "600", "end"))
 
-    body.append(band(768, 122, "arch.band.cross", SLATE, "#fbfcfe"))
+    body.append(band(768, 150, "arch.band.cross", SLATE, "#fbfcfe"))
     body.append(text(64, 800, L("arch.exc.title"), 12, INK, "700"))
     exs = [("SnowflakeException " + L("arch.exc.base"), SLATE, SLATE_T),
            ("ClockDriftException", RED, RED_T),
@@ -374,10 +374,12 @@ def architecture(L):
         body.append(rect(px, py, w, 22, t, None, 11))
         body.append(text(px + w / 2, py + 15, name, 10.5, c, "600", "middle"))
         px += w + 8
-    body.append(line(608, 792, 608, 872, LINE, 1.5, cap="butt"))
+    body.append(line(608, 792, 608, 898, LINE, 1.5, cap="butt"))
     body.append(text(632, 800, L("arch.cfg.title"), 12, INK, "700"))
-    body.append(block(632, 822, [L("arch.cfg1"), L("arch.cfg2"), L("arch.cfg3")],
-                      11, BODY, lh=17))
+    cfg = []
+    for k in ("arch.cfg1", "arch.cfg2", "arch.cfg3"):
+        cfg.extend(wrap(L(k), 11, 288))
+    body.append(block(632, 822, cfg, 11 if len(cfg) <= 4 else 10, BODY, lh=15))
     return svg(W, H, "\n".join(body), L("arch.title"), L("arch.subtitle"))
 
 
@@ -409,11 +411,11 @@ def features(L):
 # ------------------------------------------------------------------ lifecycle
 
 def lifecycle(L):
-    W, H = 980, 910
+    W, H = 980, 924
     CX, RX, RW = 350, 650, 290
     body = [header(W, L("life.title"), L("life.subtitle"))]
 
-    body.append(card(RX, 120, RW, 172, L("life.bits.title"), None, BLUE, "#fff", BLUE_B))
+    body.append(card(RX, 120, RW, 186, L("life.bits.title"), None, BLUE, "#fff", BLUE_B))
     segs = [(1, SLATE, ""), (41, BLUE, L("life.bits.seg.timestamp")), (5, VIOLET, ""),
             (5, CYAN, ""), (12, AMBER, L("life.bits.seg.sequence"))]
     bx, by, bh = RX + 16, 160, 26
@@ -425,21 +427,23 @@ def lifecycle(L):
             body.append(text(bx + w / 2, by + 18, lab, fit(lab, 10, w - 4, "600"),
                              "#fff", "600", "middle"))
         bx += w
-    body.append(block(RX + 16, 208, [L("life.bits.l1"), L("life.bits.l2"), L("life.bits.l3")],
-                      10.5, MUTED, lh=16))
+    bits = []
+    for k in ("life.bits.l1", "life.bits.l2", "life.bits.l3"):
+        bits.extend(wrap(L(k), 10.5, 258))
+    body.append(block(RX + 16, 208, bits, 10.5 if len(bits) <= 5 else 9.5, MUTED, lh=15))
 
-    body.append(card(RX, 310, RW, 186, L("life.state.title"),
+    body.append(card(RX, 324, RW, 186, L("life.state.title"),
                      [L("life.state.l1"), L("life.state.l2"), L("life.state.l3")],
                      VIOLET, "#fbf9ff", VIOLET_B))
-    body.append(text(RX + 16, 484, L("life.state.note"),
+    body.append(text(RX + 16, 498, L("life.state.note"),
                      fit(L("life.state.note"), 11, RW - 46, "600"), RED, "600"))
 
-    body.append(card(RX, 514, RW, 162, L("life.cap.title"),
+    body.append(card(RX, 528, RW, 162, L("life.cap.title"),
                      [L("life.cap.l1"), L("life.cap.l2"), L("life.cap.l3")],
                      CYAN, "#f6fdfe", CYAN_B))
 
-    body.append(card(RX, 694, RW, 182, L("life.time.title"), None, AMBER, "#fffaf0", AMBER_B))
-    tx, ty, twd = RX + 20, 748, RW - 40
+    body.append(card(RX, 708, RW, 182, L("life.time.title"), None, AMBER, "#fffaf0", AMBER_B))
+    tx, ty, twd = RX + 20, 762, RW - 40
     body.append(rect(tx, ty, twd, 10, SLATE_B, None, 5))
     body.append(rect(tx, ty, twd * 0.035, 10, AMBER, None, 5))
     body.append(line(tx + twd * 0.035, ty - 4, tx + twd * 0.035, ty + 15, AMBER, 2, cap="butt"))

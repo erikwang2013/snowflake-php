@@ -13,3 +13,4 @@ composer.lock
 .swarm
 .mcp.json
 ruvector.db
+__pycache__/

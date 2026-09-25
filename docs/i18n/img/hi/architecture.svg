@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 930" width="980" height="930" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 958" width="980" height="958" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
 <title>समग्र आर्किटेक्चर</title>
 <desc>लेयर्ड dependencies: application → adapters → core → contracts</desc>
 <defs>
 <marker id="mk-0e7490" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0.6 L9.5,5 L0,9.4 z" fill="#0e7490"/></marker>
 <marker id="mk-5b8def" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0.6 L9.5,5 L0,9.4 z" fill="#5b8def"/></marker>
 </defs>
-<rect width="980" height="930" fill="#ffffff"/>
+<rect width="980" height="958" fill="#ffffff"/>
 <text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">समग्र आर्किटेक्चर</text>
 <text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">लेयर्ड dependencies: application → adapters → core → contracts</text>
 <line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
@@ -87,7 +87,7 @@
 <path d="M400.0,708.0 L368.0,708.0" fill="none" stroke="#0e7490" stroke-width="1.8" stroke-linecap="round" marker-end="url(#mk-0e7490)"/>
 <text x="414" y="713" font-size="11.5" fill="#3d4d66" text-anchor="start"><tspan fill="#0e7490" font-weight="700">अपना implementation (जैसे Redis)</tspan><tspan fill="#6b7c96" font-weight="400"> · processes के बीच shared sequence</tspan></text>
 <text x="356" y="668" font-size="10.0" fill="#93a3b8" font-weight="600" text-anchor="end">implements</text>
-<rect x="40.0" y="768.0" width="900.0" height="122.0" rx="14" fill="#fbfcfe" stroke="#dbe6f5" stroke-width="1.4"/>
+<rect x="40.0" y="768.0" width="900.0" height="150.0" rx="14" fill="#fbfcfe" stroke="#dbe6f5" stroke-width="1.4"/>
 <rect x="58.0" y="755.0" width="110.0" height="26.0" rx="13.0" fill="#475569"/><text x="113.005" y="772.32" font-size="12.0" fill="#fff" font-weight="600" text-anchor="middle">Cross-cutting</text>
 <text x="64" y="800" font-size="12.0" fill="#0f1e33" font-weight="700">Exceptions</text>
 <rect x="64.0" y="812.0" width="188.9" height="22.0" rx="11" fill="#f4f7fb"/>
@@ -100,9 +100,10 @@
 <text x="318.77475" y="853" font-size="10.5" fill="#b45309" font-weight="600" text-anchor="middle">InvalidWorkerIdException</text>
 <rect x="64.0" y="864.0" width="169.1" height="22.0" rx="11" fill="#fff6e6"/>
 <text x="148.53674999999998" y="879" font-size="10.5" fill="#b45309" font-weight="600" text-anchor="middle">InvalidDatacenterIdException</text>
-<line x1="608.0" y1="792.0" x2="608.0" y2="872.0" stroke="#dbe6f5" stroke-width="1.5" stroke-linecap="butt"/>
+<line x1="608.0" y1="792.0" x2="608.0" y2="898.0" stroke="#dbe6f5" stroke-width="1.5" stroke-linecap="butt"/>
 <text x="632" y="800" font-size="12.0" fill="#0f1e33" font-weight="700">कॉन्फ़िगरेशन</text>
 <text x="632" y="822" font-size="11.0" fill="#3d4d66" font-weight="400">config/snowflake.php — हर option documented</text>
-<text x="632" y="839" font-size="11.0" fill="#3d4d66" font-weight="400">हर adapter वही file देता है, आप override करें</text>
-<text x="632" y="856" font-size="11.0" fill="#3d4d66" font-weight="400">fromConfig() boot पर validate करता है, गड़बड़ी जल्दी पकड़ में</text>
+<text x="632" y="837" font-size="11.0" fill="#3d4d66" font-weight="400">हर adapter वही file देता है, आप override करें</text>
+<text x="632" y="852" font-size="11.0" fill="#3d4d66" font-weight="400">fromConfig() boot पर validate करता है, गड़बड़ी</text>
+<text x="632" y="867" font-size="11.0" fill="#3d4d66" font-weight="400">जल्दी पकड़ में</text>
 </svg>
