@@ -52,4 +52,18 @@ return [
     */
     'clock_tolerance_ms' => 0,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Clock Drift Strategy ('throw' = fail fast, 'wait' = block until caught up)
+    |--------------------------------------------------------------------------
+    */
+    'clock_drift_strategy' => getenv('SNOWFLAKE_CLOCK_DRIFT_STRATEGY') ?: 'throw',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Clock Drift Wait Budget (ms) — upper bound for the 'wait' strategy
+    |--------------------------------------------------------------------------
+    */
+    'clock_drift_wait_ms' => getenv('SNOWFLAKE_CLOCK_DRIFT_WAIT_MS') ?: 1000,
+
 ];

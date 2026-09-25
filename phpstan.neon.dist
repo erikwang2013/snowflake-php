@@ -1,0 +1,16 @@
+# PHPStan configuration — run with: vendor/bin/phpstan analyse
+parameters:
+	level: 8
+	phpVersion: 80000   # The library supports PHP >= 8.0; keep the floor honest.
+	paths:
+		- src
+
+	# Laravel / ThinkPHP / Hyperf are optional dependencies (see composer.json
+	# "suggest") and are not installed here, so the framework symbols the
+	# adapters touch are stubbed instead of ignored. scanFiles registers the
+	# stubbed classes, functions and constants as symbols to analyse against;
+	# the files are never autoloaded, so the stubs cannot leak into a runtime.
+	scanFiles:
+		- scripts/phpstan/stubs/illuminate.php
+		- scripts/phpstan/stubs/thinkphp.php
+		- scripts/phpstan/stubs/hyperf.php

@@ -17,7 +17,7 @@ Snowflake PHP 无需中心协调节点即可生成 64 位、k-ordered、全局�
 核心特性：
 
 - **纯 PHP，零依赖** — 无需扩展或外部服务
-- **可插拔序列号策略** — 内置顺序递增和随机两种策略，支持自定义
+- **可插拔序列号策略** — 内置顺序递增、随机与 Redis 三种策略，支持自定义
 - **灵活的位分配** — 可调整时间戳/节点/数据中心/序列号的位数以适应业务规模
 - **时钟回拨容忍** — 可配置的 NTP 校时容忍窗口
 - **框架无关** — 提供 Laravel、ThinkPHP、Webman、Hyperf 的一流适配器，也可完全不依赖容器直接用原生 PHP
@@ -33,7 +33,8 @@ snowflake-php/
 │   │   └── SequenceResolver.php            # 序列号策略契约接口
 │   ├── Resolvers/
 │   │   ├── SequentialSequenceResolver.php  # 默认：每毫秒从 0 顺序递增
-│   │   └── RandomSequenceResolver.php      # 每毫秒随机起点后递增
+│   │   ├── RandomSequenceResolver.php      # 每毫秒随机起点后递增
+│   │   └── RedisSequenceResolver.php       # 多进程共用节点时的共享计数器
 │   ├── Exceptions/
 │   │   ├── SnowflakeException.php          # 异常基类
 │   │   ├── ClockDriftException.php
@@ -44,7 +45,8 @@ snowflake-php/
 │       ├── Laravel/                        # ServiceProvider + Facade + 配置
 │       ├── ThinkPHP/                       # Service + Facade + 配置
 │       ├── Hyperf/                         # ConfigProvider + 配置
-│       └── Webman/                         # config/app.php
+│       ├── Webman/                         # config/app.php
+│       └── Psr11/SnowflakeFactory.php      # 任意 PSR-11 容器，不依赖容器接口
 ├── config/snowflake.php                    # 带注释的参考配置文件
 ├── tests/
 │   ├── bootstrap.php                       # 载入自动加载器并打印项目宠物
@@ -58,8 +60,11 @@ snowflake-php/
 │   └── *.png                               # 赞助码
 ├── scripts/
 │   ├── generate-diagrams.py                # 生成 docs/i18n/img/<lang>/*.svg
+│   ├── benchmark.php                       # 可复现的吞吐基准
+│   ├── phpstan/stubs/                      # 静态分析用的框架桩
 │   └── i18n/labels.<lang>.json             # 各语言的图内文案
-└── .github/workflows/                      # ci.yml（PHP 8.0–8.4）、release.yml
+├── phpstan.neon.dist                       # Level 8 静态分析配置
+└── .github/workflows/                      # ci.yml（PHP 8.0–8.5）、release.yml
 ```
 
 ## 架构设计
@@ -95,7 +100,7 @@ snowflake-php/
 
 ## 环境要求
 
-- PHP >= 8.0（CI 已验证 8.0 – 8.4）
+- PHP >= 8.0（CI 已验证 8.0 – 8.5，并对 `src/` 执行 PHPStan level 8 静态分析）
 - 64 位系统（64 位整数运算所必需）
 - 每进程/协程独立实例 — 实例在内存中维护序列状态，不可跨进程或协程共享
 
@@ -134,6 +139,8 @@ $id = $snowflake->id();
 | `sequence_bits` | int | `12` | 序列号占用的位数 |
 | `sequence_resolver` | string | `SequentialSequenceResolver` | 序列号策略的完整类名 |
 | `clock_tolerance_ms` | int | `0` | 允许的时钟回拨最大值（毫秒），0 为严格模式 |
+| `clock_drift_strategy` | string | `'throw'` | 时钟回拨超出容忍值时的处理策略：`'throw'` 直接拒绝生成；`'wait'` 自旋等待墙钟追平，超过 `clock_drift_wait_ms` 仍未追平则抛出 `ClockDriftException` |
+| `clock_drift_wait_ms` | int | `1000` | `'wait'` 策略放弃前的最长等待时间（毫秒） |
 
 ### 位分配
 
@@ -144,6 +151,24 @@ $id = $snowflake->id();
 ```
 
 默认起始时间下的最大可用年限：约 69 年（至 2093 年）。
+
+工作节点位和序列号位都是从时间戳里借来的，序列号位开得越宽，生成器的寿命就越短：
+
+| 工作节点 + 数据中心 + 序列号位数 | 时间戳位数 | 可用年限 |
+|---|---|---|
+| 5 + 5 + 12（默认） | 41 | 约 69.7 年 |
+| 7 + 7 + 10 | 39 | 约 17.4 年 |
+| 5 + 5 + 16 | 37 | 约 4.4 年 |
+| 5 + 5 + 20 | 33 | 约 99 天 |
+
+任意布局的上限都可以直接算出来：
+
+```php
+Snowflake::lifespanMs();                                                     // 默认布局，约 69.7 年（毫秒）
+Snowflake::lifespanMs(workerBits: 7, datacenterBits: 7, sequenceBits: 10);   // 约 17.4 年（毫秒）
+```
+
+`Snowflake::lifespanMs(int $workerBits = 5, int $datacenterBits = 5, int $sequenceBits = 12): int` 返回该布局下时间戳偏移量的最大值（毫秒），参数默认即为默认布局。偏移量一旦达到上限，epoch 即告耗尽——如果 epoch 已经过期、窗口早已走完，那么第一次调用 `id()` 就会抛出 `TimestampOverflowException`。
 
 ### 通过配置数组创建
 
@@ -288,6 +313,26 @@ class OrderService
 }
 ```
 
+### PSR-11 容器
+
+Symfony、Slim、Laminas 等任何容器，注册这个工厂即可。它不依赖任何东西——这里用不到 `psr/container`，所以什么容器都能接：
+
+```php
+use Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory;
+
+$container->set(\Erikwang2013\Snowflake\Snowflake::class, new SnowflakeFactory($config));
+// 也可以直接从环境变量构建配置：
+$container->set(\Erikwang2013\Snowflake\Snowflake::class, SnowflakeFactory::fromEnvironment());
+```
+
+`SnowflakeFactory::fromEnvironment()` 读取的 `SNOWFLAKE_*` 变量与 Laravel 适配器完全一致。PSR-11 容器会直接调用工厂对象本身，因此 Symfony 的服务定义只需一行：
+
+```yaml
+services:
+  Erikwang2013\Snowflake\Snowflake:
+    factory: ['@Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory', '__invoke']
+```
+
 ## 原生 PHP（无框架）
 
 包本身不依赖任何框架——上面四个适配器只是帮你把 `Snowflake` 接进各自容器。没有框架时自己装配即可：
@@ -345,9 +390,11 @@ $parsed = $snowflake->parseId($id);
 $parsed = Snowflake::parse($id, $epoch);
 ```
 
+`datetime` 成员是用 PHP 的 `date()` 按**服务器默认时区**格式化出来的，因此不同时区的两台机器解析同一个 ID 会得到不同的字符串；`timestamp_ms` 是与时区无关的绝对毫秒值，跨机器对账时请以它为准。
+
 ## 序列号策略
 
-内置两种实现：
+内置三种实现：
 
 ### SequentialSequenceResolver（默认）
 
@@ -380,7 +427,7 @@ $snowflake = new Snowflake(
 ```php
 use Erikwang2013\Snowflake\Contracts\SequenceResolver;
 
-class RedisSequenceResolver implements SequenceResolver
+class SharedCounterSequenceResolver implements SequenceResolver
 {
     public function next(int $timestamp, int $maxSequence): ?int
     {
@@ -396,6 +443,20 @@ class RedisSequenceResolver implements SequenceResolver
     }
 }
 ```
+
+### RedisSequenceResolver
+
+顺序与随机两种策略把序列号保存在进程内存里，多个进程共用同一个节点 ID 时可能发出相同的序列号。`RedisSequenceResolver` 把计数器放进 Redis——当多个进程共用同一组 `(datacenter_id, worker_id)` 时就用它：
+
+```php
+use Erikwang2013\Snowflake\Resolvers\RedisSequenceResolver;
+
+// 任意提供 incr(string $key): int 与 expire(string $key, int $seconds): bool 的客户端
+$resolver = new RedisSequenceResolver($redis, 'snowflake:seq:', 1);
+$snowflake = new Snowflake(sequenceResolver: $resolver);
+```
+
+`__construct(object $client, string $keyPrefix = 'snowflake:seq:', int $ttlSeconds = 1)` —— 客户端由外部注入，既不依赖 `redis` 扩展，也不需要 Predis。TTL 设长一点是安全的：计数器会在同一毫秒内持续增长，于是正确地返回 `null`，直到下一毫秒开始。
 
 ## 异常处理
 
@@ -437,9 +498,26 @@ $snowflake = new Snowflake(
 
 ## 性能
 
-现代硬件典型吞吐量：**~50 万 ID/秒**（单进程）。
+ID 生成完全在进程内完成，无需外部依赖，因此吞吐上限由 PHP 自身的 `microtime()` 调用加上若干整数运算决定。
 
-ID 生成完全在进程内完成，无需外部依赖。主要开销来自 PHP 的 `microtime()` 调用和整数位运算，均为 O(1)。
+在开发机单核实测（PHP 8.3.7，**已关闭 Xdebug**，30 万次迭代，取 5 次最优）：
+
+| 操作 | 吞吐量 | 单次耗时 |
+|------|-------:|---------:|
+| 仅 `microtime(true)` —— 下限 | 1030 万/秒 | 97 ns |
+| `id()` —— 默认 5+5+12 布局 | **160 万/秒** | 633 ns |
+| `id()` + `parseId()` | 28.2 万/秒 | 3.5 µs |
+| `Snowflake::fromConfig()` | 16.7 万/秒 | 6.0 µs |
+
+生成一次的代价约为裸时钟调用的 6 倍；单节点序列上限（4096 个/毫秒 = 410 万/秒）远高于单个 PHP 进程的消费能力。解析与构造属于诊断操作，不在热路径上——实例每进程构造一次即可，`parseId()` 不要放进紧凑循环。
+
+可在你自己的机器上复现：
+
+```bash
+php scripts/benchmark.php
+```
+
+输出以裸 `microtime()` 为基准的 ops/sec 与 ns/op，取 N 次最优并同时给出波动范围。绝对数字是否有意义取决于两件事：**Xdebug**（可能带来一个数量级的开销，脚本会在表头提示是否加载）与繁忙或虚拟化的宿主机（其时钟调用本身就会主导测量）。请对照基准列看比例，而不要把任何单次数字当作承诺。
 
 ## 开源不易，欢迎支持
 

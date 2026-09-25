@@ -38,5 +38,9 @@ return [
         'sequence_bits' => 12,
         'sequence_resolver' => \Erikwang2013\Snowflake\Resolvers\SequentialSequenceResolver::class,
         'clock_tolerance_ms' => 0,
+        // 'throw' = fail fast on clock drift, 'wait' = block until the clock
+        // catches up, giving up after clock_drift_wait_ms.
+        'clock_drift_strategy' => getenv('SNOWFLAKE_CLOCK_DRIFT_STRATEGY') ?: 'throw',
+        'clock_drift_wait_ms' => getenv('SNOWFLAKE_CLOCK_DRIFT_WAIT_MS') ?: 1000,
     ],
 ];

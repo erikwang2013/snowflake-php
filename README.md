@@ -17,7 +17,7 @@ Snowflake PHP generates 64-bit, k-ordered, globally unique IDs without requiring
 Key features:
 
 - **Pure PHP, zero dependencies** — no extensions or external services required
-- **Pluggable sequence resolvers** — built-in sequential and random strategies, or bring your own
+- **Pluggable sequence resolvers** — sequential, random and Redis-backed strategies ship built in, or bring your own
 - **Flexible bit allocation** — adjust timestamp/worker/datacenter/sequence bits to fit your scale
 - **Clock drift tolerance** — configurable tolerance window for NTP adjustments
 - **Framework agnostic** — first-class adapters for Laravel, ThinkPHP, Webman, and Hyperf, or plain PHP with no container at all
@@ -33,7 +33,8 @@ snowflake-php/
 │   │   └── SequenceResolver.php            # Sequence strategy interface
 │   ├── Resolvers/
 │   │   ├── SequentialSequenceResolver.php  # Default: 0..max per millisecond
-│   │   └── RandomSequenceResolver.php      # Random start per millisecond
+│   │   ├── RandomSequenceResolver.php      # Random start per millisecond
+│   │   └── RedisSequenceResolver.php       # Shared counter for multi-process nodes
 │   ├── Exceptions/
 │   │   ├── SnowflakeException.php          # Base exception
 │   │   ├── ClockDriftException.php
@@ -44,7 +45,8 @@ snowflake-php/
 │       ├── Laravel/                        # ServiceProvider + Facade + config
 │       ├── ThinkPHP/                       # Service + Facade + config
 │       ├── Hyperf/                         # ConfigProvider + config
-│       └── Webman/                         # config/app.php
+│       ├── Webman/                         # config/app.php
+│       └── Psr11/SnowflakeFactory.php      # Any PSR-11 container, no interface dependency
 ├── config/snowflake.php                    # Reference configuration with comments
 ├── tests/
 │   ├── bootstrap.php                       # Loads the autoloader, prints the mascot
@@ -58,8 +60,11 @@ snowflake-php/
 │   └── *.png                               # Sponsor images
 ├── scripts/
 │   ├── generate-diagrams.py                # Builds docs/i18n/img/<lang>/*.svg
+│   ├── benchmark.php                       # Reproducible throughput benchmark
+│   ├── phpstan/stubs/                      # Framework stubs for static analysis
 │   └── i18n/labels.<lang>.json             # Diagram strings, one file per language
-└── .github/workflows/                      # ci.yml (PHP 8.0–8.4), release.yml
+├── phpstan.neon.dist                       # Level 8 static analysis config
+└── .github/workflows/                      # ci.yml (PHP 8.0–8.5), release.yml
 ```
 
 ## Architecture
@@ -95,7 +100,7 @@ Instance state (`lastTimestamp` plus the resolver cursor) lives in memory and is
 
 ## Requirements
 
-- PHP >= 8.0 (8.0 – 8.4 verified in CI)
+- PHP >= 8.0 (8.0 – 8.5 tested in CI, alongside PHPStan level 8 on `src/`)
 - 64-bit system (required for native 64-bit integer operations)
 - One instance per process/coroutine — a Snowflake instance keeps its sequence state in memory and must not be shared across processes or coroutines
 
@@ -134,6 +139,8 @@ $id = $snowflake->id();
 | `sequence_bits` | int | `12` | Bits for sequence number |
 | `sequence_resolver` | string | `SequentialSequenceResolver` | FQCN of SequenceResolver |
 | `clock_tolerance_ms` | int | `0` | Max backward clock drift (0 = strict) |
+| `clock_drift_strategy` | string | `'throw'` | `'throw'` refuses to generate when the clock moves backwards beyond the tolerance; `'wait'` spins until the wall clock catches up, giving up after `clock_drift_wait_ms` and then throwing `ClockDriftException` |
+| `clock_drift_wait_ms` | int | `1000` | How long the `'wait'` strategy waits before giving up |
 
 ### Bit Layout
 
@@ -144,6 +151,24 @@ Default layout (63 data bits + 1 sign bit = 64 bits total):
 ```
 
 Maximum lifespan with default epoch: ~69 years (until ~2093).
+
+Every bit handed to the node id or the sequence is taken from the timestamp, so a wide sequence silently shortens the generator's life:
+
+| worker + datacenter + sequence bits | timestamp bits | usable lifespan |
+|---|---|---|
+| 5 + 5 + 12 (default) | 41 | ~69.7 years |
+| 7 + 7 + 10 | 39 | ~17.4 years |
+| 5 + 5 + 16 | 37 | ~4.4 years |
+| 5 + 5 + 20 | 33 | ~99 days |
+
+Ask for the limit of any layout:
+
+```php
+Snowflake::lifespanMs();                                                     // default layout, ~69.7 years in ms
+Snowflake::lifespanMs(workerBits: 7, datacenterBits: 7, sequenceBits: 10);   // ~17.4 years in ms
+```
+
+`Snowflake::lifespanMs(int $workerBits = 5, int $datacenterBits = 5, int $sequenceBits = 12): int` returns the maximum timestamp offset in milliseconds for a layout; the arguments default to the default layout. Once the offset reaches that limit the epoch is exhausted — a stale epoch whose window has already closed makes the very first `id()` call throw `TimestampOverflowException`.
 
 ### Using Configuration Array
 
@@ -288,6 +313,26 @@ class OrderService
 }
 ```
 
+### PSR-11 containers
+
+Symfony, Slim, Laminas and any other container: register the factory. It depends on nothing, so any container works — `psr/container` is not required:
+
+```php
+use Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory;
+
+$container->set(\Erikwang2013\Snowflake\Snowflake::class, new SnowflakeFactory($config));
+// or build the config from the environment:
+$container->set(\Erikwang2013\Snowflake\Snowflake::class, SnowflakeFactory::fromEnvironment());
+```
+
+`SnowflakeFactory::fromEnvironment()` reads the same `SNOWFLAKE_*` variables the Laravel adapter uses. A PSR-11 container calls the factory object itself, so a Symfony service definition is one line:
+
+```yaml
+services:
+  Erikwang2013\Snowflake\Snowflake:
+    factory: ['@Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory', '__invoke']
+```
+
 ## Native PHP (no framework)
 
 Nothing in this package needs a framework — the four adapters above only wire
@@ -352,9 +397,11 @@ $parsed = $snowflake->parseId($id);
 $parsed = Snowflake::parse($id, $epoch);
 ```
 
+The `datetime` member is formatted with PHP's `date()` in the **server's default timezone**, so two hosts in different timezones render the same ID differently. `timestamp_ms` is the timezone-independent absolute value — compare that one when reconciling IDs across machines.
+
 ## Sequence Resolvers
 
-Two built-in implementations:
+Three built-in implementations:
 
 ### SequentialSequenceResolver (default)
 
@@ -387,7 +434,7 @@ Implement `Erikwang2013\Snowflake\Contracts\SequenceResolver`:
 ```php
 use Erikwang2013\Snowflake\Contracts\SequenceResolver;
 
-class RedisSequenceResolver implements SequenceResolver
+class SharedCounterSequenceResolver implements SequenceResolver
 {
     public function next(int $timestamp, int $maxSequence): ?int
     {
@@ -403,6 +450,20 @@ class RedisSequenceResolver implements SequenceResolver
     }
 }
 ```
+
+### RedisSequenceResolver
+
+The in-process resolvers keep the sequence in memory, so processes sharing a node id can hand out the same sequence number. `RedisSequenceResolver` keeps the counter in Redis instead — the one to use when several processes share a `(datacenter_id, worker_id)` pair:
+
+```php
+use Erikwang2013\Snowflake\Resolvers\RedisSequenceResolver;
+
+// Any client exposing incr(string $key): int and expire(string $key, int $seconds): bool
+$resolver = new RedisSequenceResolver($redis, 'snowflake:seq:', 1);
+$snowflake = new Snowflake(sequenceResolver: $resolver);
+```
+
+`__construct(object $client, string $keyPrefix = 'snowflake:seq:', int $ttlSeconds = 1)` — the client is injected, so neither the `redis` extension nor Predis is required. A long TTL is safe: the counter then keeps growing inside the same millisecond, which correctly yields `null` until the next millisecond begins.
 
 ## Exception Handling
 
@@ -444,9 +505,26 @@ $snowflake = new Snowflake(
 
 ## Performance
 
-Typical throughput on modern hardware: **~500,000 IDs/second** (single process).
+IDs are generated entirely in-process with no external dependencies, so throughput is bounded by PHP's own `microtime()` call plus a handful of integer operations.
 
-IDs are generated purely in-process with no external dependencies. The primary bottleneck is PHP's `microtime()` call and integer bit operations, both of which are O(1).
+Measured on one core of a developer machine (PHP 8.3.7, **Xdebug disabled**, 300k iterations, best of 5):
+
+| Operation | Throughput | Per call |
+|-----------|-----------:|---------:|
+| `microtime(true)` alone — the floor | 10.3M/s | 97 ns |
+| `id()` — default 5+5+12 layout | **1.6M/s** | 633 ns |
+| `id()` + `parseId()` | 282k/s | 3.5 µs |
+| `Snowflake::fromConfig()` | 167k/s | 6.0 µs |
+
+Generation costs about six times a bare clock call, and a node's sequence ceiling (4096 IDs/ms = 4.1M/s) stays well above what one PHP process can consume. Parsing and construction are diagnostic operations, not hot paths — build the instance once per process and keep `parseId()` out of tight loops.
+
+Reproduce it on your own machine:
+
+```bash
+php scripts/benchmark.php
+```
+
+It prints ops/sec and ns/op against a bare `microtime()` baseline, best-of-N with the spread. Two things decide whether the absolute numbers mean anything: **Xdebug** (it can cost an order of magnitude — the header reports when it is loaded) and a busy or virtualised host, whose own clock call can dominate the measurement. Compare against the baseline rather than reading any single number as a promise.
 
 ## Support Welcome
 

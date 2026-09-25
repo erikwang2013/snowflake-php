@@ -404,4 +404,121 @@ class SnowflakeTest extends TestCase
         // terminal alignment it exists for.
         $this->assertSame($art, rtrim($art));
     }
+
+    public function testLifespanMsUsesDefaultTimestampBits(): void
+    {
+        // 63 - (5 + 5 + 12) = 41 timestamp bits.
+        $this->assertSame((1 << 41) - 1, Snowflake::lifespanMs());
+    }
+
+    public function testLifespanMsShrinksWithWiderSequenceField(): void
+    {
+        // 63 - (5 + 5 + 20) = 33 timestamp bits.
+        $this->assertSame((1 << 33) - 1, Snowflake::lifespanMs(5, 5, 20));
+    }
+
+    public function testLifespanMsRejectsZeroBitCount(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        Snowflake::lifespanMs(0, 5, 12);
+    }
+
+    public function testLifespanMsRejectsBitTotalOfSixtyThreeOrMore(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        Snowflake::lifespanMs(32, 32, 2); // total = 66 > 63
+    }
+
+    public function testSpendingBitsOnWorkerOrSequenceShortensLifespan(): void
+    {
+        // The documented trade-off: wider ids cost usable years.
+        $this->assertGreaterThan(
+            Snowflake::lifespanMs(7, 7, 10),
+            Snowflake::lifespanMs(5, 5, 12)
+        );
+        $this->assertGreaterThan(
+            Snowflake::lifespanMs(5, 5, 16),
+            Snowflake::lifespanMs(7, 7, 10)
+        );
+    }
+
+    public function testWaitStrategyRidesOutClockDrift(): void
+    {
+        $snowflake = new Snowflake(clockDriftStrategy: 'wait', clockDriftWaitMs: 500);
+
+        $future = (int) (microtime(true) * 1000) + 5; // 5 ms ahead
+        $ref = new \ReflectionProperty(Snowflake::class, 'lastTimestamp');
+        $ref->setAccessible(true);
+        $ref->setValue($snowflake, $future);
+
+        $id = $snowflake->id();
+
+        // Succeeded, and the ID is stamped at or after the drifted-ahead time,
+        // proving the call waited instead of snapping back to a lower value.
+        $this->assertGreaterThan(0, $id);
+        $this->assertGreaterThanOrEqual($future, $snowflake->parseId($id)['timestamp_ms']);
+    }
+
+    public function testWaitStrategyGivesUpWhenBudgetIsTooSmall(): void
+    {
+        $snowflake = new Snowflake(clockDriftStrategy: 'wait', clockDriftWaitMs: 20);
+
+        $ref = new \ReflectionProperty(Snowflake::class, 'lastTimestamp');
+        $ref->setAccessible(true);
+        $ref->setValue($snowflake, (int) (microtime(true) * 1000) + 300); // 300 ms ahead
+
+        $this->expectException(ClockDriftException::class);
+        $snowflake->id();
+    }
+
+    public function testUnknownClockDriftStrategyThrows(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('backoff');
+
+        new Snowflake(clockDriftStrategy: 'backoff');
+    }
+
+    public function testNonPositiveClockDriftWaitThrows(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Clock drift wait');
+
+        new Snowflake(clockDriftWaitMs: 0);
+    }
+
+    public function testFromConfigAcceptsClockDriftOptions(): void
+    {
+        $snowflake = Snowflake::fromConfig([
+            'clock_drift_strategy' => 'wait',
+            'clock_drift_wait_ms' => '500',
+        ]);
+
+        $ref = new \ReflectionProperty(Snowflake::class, 'clockDriftStrategy');
+        $ref->setAccessible(true);
+        $this->assertSame('wait', $ref->getValue($snowflake));
+    }
+
+    public function testFromConfigDefaultsToThrowStrategy(): void
+    {
+        $ref = new \ReflectionProperty(Snowflake::class, 'clockDriftStrategy');
+        $ref->setAccessible(true);
+        $this->assertSame('throw', $ref->getValue(Snowflake::fromConfig([])));
+    }
+
+    public function testFromConfigRejectsNonStringClockDriftStrategy(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('clock_drift_strategy');
+
+        Snowflake::fromConfig(['clock_drift_strategy' => 42]);
+    }
+
+    public function testFromConfigRejectsNonPositiveClockDriftWait(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('clock_drift_wait_ms');
+
+        Snowflake::fromConfig(['clock_drift_wait_ms' => 0]);
+    }
 }

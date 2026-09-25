@@ -13,8 +13,10 @@ use think\Facade as BaseFacade;
 /**
  * @method static int id()
  * @method static int nextId()
- * @method static array parseId(int $id)
- * @method static array parse(int $id, int $epoch = \Erikwang2013\Snowflake\Snowflake::DEFAULT_EPOCH)
+ * @method static ParsedId parseId(int $id)
+ * @method static ParsedId parse(int $id, int $epoch = \Erikwang2013\Snowflake\Snowflake::DEFAULT_EPOCH)
+ *
+ * @phpstan-import-type ParsedId from \Erikwang2013\Snowflake\Snowflake
  *
  * @see \Erikwang2013\Snowflake\Snowflake
  */

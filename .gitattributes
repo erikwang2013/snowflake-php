@@ -16,6 +16,7 @@
 /CLAUDE.md      export-ignore
 /phpunit.xml    export-ignore
 /phpunit-9.xml  export-ignore
+/phpstan.neon.dist export-ignore
 
 # Consistent line endings for the source that is consumed on any platform
 *.php text eol=lf

@@ -10,6 +10,9 @@ namespace Erikwang2013\Snowflake\Adapters\Hyperf;
 
 class ConfigProvider
 {
+    /**
+     * @return array<string, mixed> Hyperf config provider payload (publish list).
+     */
     public function __invoke(): array
     {
         return [

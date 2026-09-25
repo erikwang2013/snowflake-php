@@ -81,4 +81,28 @@ return [
     */
     'clock_tolerance_ms' => 0,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Clock Drift Strategy
+    |--------------------------------------------------------------------------
+    |
+    | What to do when the backward jump exceeds clock_tolerance_ms.
+    | 'throw' (default) = fail fast with ClockDriftException.
+    | 'wait' = block until the wall clock catches up, then keep generating.
+    |          Useful when an occasional NTP step must not fail a request.
+    |
+    */
+    'clock_drift_strategy' => 'throw',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Clock Drift Wait Budget (milliseconds)
+    |--------------------------------------------------------------------------
+    |
+    | Upper bound on how long the 'wait' strategy blocks before giving up and
+    | throwing ClockDriftException. Must be greater than 0; ignored by 'throw'.
+    |
+    */
+    'clock_drift_wait_ms' => 1000,
+
 ];

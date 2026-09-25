@@ -73,4 +73,26 @@ return [
     */
     'clock_tolerance_ms' => env('SNOWFLAKE_CLOCK_TOLERANCE_MS', 0),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Clock Drift Strategy
+    |--------------------------------------------------------------------------
+    |
+    | Behavior when the backward jump exceeds clock_tolerance_ms:
+    | 'throw' (default) = fail fast; 'wait' = block until the clock catches up.
+    |
+    */
+    'clock_drift_strategy' => env('SNOWFLAKE_CLOCK_DRIFT_STRATEGY', 'throw'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Clock Drift Wait Budget (ms)
+    |--------------------------------------------------------------------------
+    |
+    | How long the 'wait' strategy blocks before giving up and throwing.
+    | Must be greater than 0; ignored by 'throw'.
+    |
+    */
+    'clock_drift_wait_ms' => env('SNOWFLAKE_CLOCK_DRIFT_WAIT_MS', 1000),
+
 ];
