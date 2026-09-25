@@ -12,15 +12,15 @@ Generator ID unik terdistribusi berdasarkan algoritma Snowflake milik Twitter, k
 
 ## Tentang
 
-Snowflake PHP menghasilkan ID 64-bit yang k-ordered dan unik secara global tanpa memerlukan koordinator pusat. Setiap ID tersusun dari timestamp, ID datacenter, ID worker, dan nomor sequence — memungkinkan ratusan ribu ID per detik per node tanpa round-trip ke database.
+Snowflake PHP menghasilkan ID 64-bit yang k-ordered dan unik secara global tanpa memerlukan koordinator pusat. Setiap ID tersusun dari timestamp, ID datacenter, ID worker, dan nomor sequence — memungkinkan jauh lebih dari satu juta ID per detik per node tanpa round-trip ke database.
 
 Fitur utama:
 
 - **PHP murni, tanpa dependensi** — tidak memerlukan ekstensi atau layanan eksternal
-- **Sequence resolver yang dapat dipasang** — strategi sekuensial dan acak sudah tersedia bawaan, atau pakai milik Anda sendiri
+- **Sequence resolver yang dapat dipasang** — strategi sekuensial, acak, dan berbasis Redis sudah tersedia bawaan, atau pakai milik Anda sendiri
 - **Alokasi bit fleksibel** — sesuaikan bit timestamp/worker/datacenter/sequence dengan skala Anda
 - **Toleransi clock drift** — jendela toleransi yang dapat dikonfigurasi untuk penyesuaian NTP
-- **Agnostik framework** dengan adapter kelas satu untuk Laravel, ThinkPHP, Webman, dan Hyperf
+- **Agnostik framework** — adapter kelas satu untuk Laravel, ThinkPHP, Webman, dan Hyperf, atau PHP murni tanpa container sama sekali
 - **Parsing ID** — uraikan ID yang dihasilkan kembali menjadi komponen timestamp, node, dan sequence
 
 ## Struktur Proyek
@@ -33,7 +33,8 @@ snowflake-php/
 │   │   └── SequenceResolver.php            # Sequence strategy interface
 │   ├── Resolvers/
 │   │   ├── SequentialSequenceResolver.php  # Default: 0..max per millisecond
-│   │   └── RandomSequenceResolver.php      # Random start per millisecond
+│   │   ├── RandomSequenceResolver.php      # Random start per millisecond
+│   │   └── RedisSequenceResolver.php       # Shared counter for multi-process nodes
 │   ├── Exceptions/
 │   │   ├── SnowflakeException.php          # Base exception
 │   │   ├── ClockDriftException.php
@@ -44,13 +45,26 @@ snowflake-php/
 │       ├── Laravel/                        # ServiceProvider + Facade + config
 │       ├── ThinkPHP/                       # Service + Facade + config
 │       ├── Hyperf/                         # ConfigProvider + config
-│       └── Webman/                         # config/app.php
+│       ├── Webman/                         # config/app.php
+│       └── Psr11/SnowflakeFactory.php      # Any PSR-11 container, no interface dependency
 ├── config/snowflake.php                    # Reference configuration with comments
 ├── tests/
 │   ├── bootstrap.php                       # Loads the autoloader, prints the mascot
 │   └── *Test.php                           # PHPUnit test suite
-├── docs/                                   # Design diagrams and sponsor images
-└── .github/workflows/                      # ci.yml (PHP 8.0–8.4), release.yml
+├── docs/
+│   ├── i18n/                               # Translated READMEs + localized diagrams
+│   │   ├── README.md                       # Language index
+│   │   ├── img/<lang>/                     # Generated SVGs (13 languages)
+│   │   └── <lang>/README.md                # One translated README per language
+│   ├── examples/plain-php.php              # Runnable no-framework example
+│   └── *.png                               # Sponsor images
+├── scripts/
+│   ├── generate-diagrams.py                # Builds docs/i18n/img/<lang>/*.svg
+│   ├── benchmark.php                       # Reproducible throughput benchmark
+│   ├── phpstan/stubs/                      # Framework stubs for static analysis
+│   └── i18n/labels.<lang>.json             # Diagram strings, one file per language
+├── phpstan.neon.dist                       # Level 8 static analysis config
+└── .github/workflows/                      # ci.yml (PHP 8.0–8.5), release.yml
 ```
 
 ## Arsitektur
@@ -59,8 +73,8 @@ snowflake-php/
 
 Empat lapisan, dengan dependensi yang hanya mengarah ke satu arah:
 
-- **Lapisan aplikasi** — aplikasi Laravel / Webman / ThinkPHP / Hyperf Anda; lapisan ini hanya meminta instance `Snowflake` ke container.
-- **Lapisan adapter** — satu adapter untuk setiap framework. Masing-masing mendaftarkan satu instance bersama ke container framework dan menyertakan file config yang dapat dipublikasikan.
+- **Lapisan aplikasi** — aplikasi Laravel / Webman / ThinkPHP / Hyperf Anda, container PSR-11 apa pun, atau PHP murni; lapisan ini hanya meminta instance `Snowflake`.
+- **Lapisan adapter** — satu adapter untuk setiap framework, plus factory PSR-11 yang agnostik container. Masing-masing mendaftarkan satu instance bersama dan menyertakan file config yang dapat dipublikasikan.
 - **Lapisan inti** — `Snowflake` adalah satu-satunya kelas stateful: ia memvalidasi konfigurasi, menghitung bit shift dan bit node tetap di awal, membuat ID, lalu mengurainya kembali.
 - **Kontrak & resolver** — `SequenceResolver` adalah titik ekstensinya. Inti mendelegasikan setiap alokasi sequence kepadanya, sehingga strategi sequence bisa ditukar tanpa menyentuh generator.
 - **Lintas aspek** — hierarki exception yang semantik plus satu file konfigurasi berkomentar yang dipakai bersama oleh semua adapter.
@@ -77,7 +91,7 @@ Fitur terbagi ke dalam tiga domain: **inti** (pembuatan ID, alokasi bit, parsing
 
 Setiap panggilan `id()` menempuh jalur yang sama:
 
-1. Baca clock dan cek drift ke belakang — ditoleransi sampai `clock_tolerance_ms`, ditolak di luar itu.
+1. Baca clock dan cek drift ke belakang — ditoleransi sampai `clock_tolerance_ms`; di luar itu `clock_drift_strategy` menentukan apakah menunggu clock menyusul (`'wait'`) atau menolak membuat ID (`'throw'`).
 2. Konversi ke offset epoch dan tolak offset yang negatif atau melewati batas timestamp.
 3. Minta slot berikutnya di milidetik ini ke sequence resolver; saat seluruh 4096 slot terpakai, berputar ke milidetik berikutnya dan coba sekali lagi.
 4. Rakit `(offset << timestampShift) | fixedBits | sequence`, majukan `lastTimestamp`, lalu kembalikan ID-nya.
@@ -86,7 +100,7 @@ State instance (`lastTimestamp` plus kursor resolver) hidup di memori dan tidak 
 
 ## Persyaratan
 
-- PHP >= 8.0 (8.0 – 8.4 terverifikasi di CI)
+- PHP >= 8.0 (8.0 – 8.5 terverifikasi di CI, bersama PHPStan level 8 pada `src/`)
 - Sistem 64-bit (wajib untuk operasi integer 64-bit native)
 - Satu instance per proses/coroutine — instance Snowflake menyimpan state sequence-nya di memori dan tidak boleh dibagi antar proses atau coroutine
 
@@ -125,6 +139,8 @@ $id = $snowflake->id();
 | `sequence_bits` | int | `12` | Jumlah bit untuk nomor sequence |
 | `sequence_resolver` | string | `SequentialSequenceResolver` | FQCN dari SequenceResolver |
 | `clock_tolerance_ms` | int | `0` | Drift clock ke belakang maksimum (0 = ketat) |
+| `clock_drift_strategy` | string | `'throw'` | `'throw'` menolak membuat ID saat clock mundur melewati toleransi; `'wait'` berputar sampai wall clock menyusul, menyerah setelah `clock_drift_wait_ms` lalu melempar `ClockDriftException` |
+| `clock_drift_wait_ms` | int | `1000` | Berapa lama strategi `'wait'` menunggu sebelum menyerah |
 
 ### Tata Letak Bit
 
@@ -135,6 +151,24 @@ Tata letak default (63 bit data + 1 bit tanda = total 64 bit):
 ```
 
 Masa pakai maksimum dengan epoch default: ~69 tahun (sampai ~2093).
+
+Setiap bit yang diberikan ke node id atau sequence diambil dari timestamp, jadi sequence yang lebar diam-diam memperpendek umur generator:
+
+| bit worker + datacenter + sequence | bit timestamp | masa pakai terpakai |
+|---|---|---|
+| 5 + 5 + 12 (default) | 41 | ~69,7 tahun |
+| 7 + 7 + 10 | 39 | ~17,4 tahun |
+| 5 + 5 + 16 | 37 | ~4,4 tahun |
+| 5 + 5 + 20 | 33 | ~99 hari |
+
+Minta batas dari tata letak mana pun:
+
+```php
+Snowflake::lifespanMs();                                                     // default layout, ~69.7 years in ms
+Snowflake::lifespanMs(workerBits: 7, datacenterBits: 7, sequenceBits: 10);   // ~17.4 years in ms
+```
+
+`Snowflake::lifespanMs(int $workerBits = 5, int $datacenterBits = 5, int $sequenceBits = 12): int` mengembalikan offset timestamp maksimum dalam milidetik untuk suatu tata letak; argumennya mengikuti tata letak default. Begitu offset mencapai batas itu, epoch sudah habis — epoch usang yang jendelanya sudah tertutup membuat panggilan `id()` pertama melempar `TimestampOverflowException`.
 
 ### Menggunakan Array Konfigurasi
 
@@ -279,6 +313,63 @@ class OrderService
 }
 ```
 
+### Container PSR-11
+
+Symfony, Slim, Laminas dan container lainnya: daftarkan factory-nya. Ia tidak bergantung pada apa pun, jadi container apa pun bisa dipakai — `psr/container` tidak diperlukan:
+
+```php
+use Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory;
+
+$container->set(\Erikwang2013\Snowflake\Snowflake::class, new SnowflakeFactory($config));
+// or build the config from the environment:
+$container->set(\Erikwang2013\Snowflake\Snowflake::class, SnowflakeFactory::fromEnvironment());
+```
+
+`SnowflakeFactory::fromEnvironment()` membaca variabel `SNOWFLAKE_*` yang sama dengan yang dipakai adapter Laravel. Container PSR-11 memanggil objek factory-nya sendiri, jadi definisi service Symfony cukup satu baris:
+
+```yaml
+services:
+  Erikwang2013\Snowflake\Snowflake:
+    factory: ['@Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory', '__invoke']
+```
+
+## PHP Murni (tanpa framework)
+
+Tidak ada bagian di paket ini yang membutuhkan framework — empat adapter di atas hanya menyambungkan `Snowflake` ke container untuk Anda. Tanpa container, bangun sendiri:
+
+```php
+require __DIR__ . '/vendor/autoload.php';
+
+use Erikwang2013\Snowflake\Snowflake;
+
+// Same variable names the Laravel adapter uses, so one .env-style setup
+// works whether or not a framework is present.
+$snowflake = Snowflake::fromConfig([
+    'worker_id'          => (int) (getenv('SNOWFLAKE_WORKER_ID') ?: 0),
+    'datacenter_id'      => (int) (getenv('SNOWFLAKE_DATACENTER_ID') ?: 0),
+    'clock_tolerance_ms' => 5,
+]);
+
+$id = $snowflake->id();
+```
+
+Versi yang bisa dijalankan — termasuk singleton lazy tanpa framework dan invariant yang diperiksanya — ada di [`docs/examples/plain-php.php`](../../examples/plain-php.php):
+
+```bash
+php docs/examples/plain-php.php
+```
+
+### Memilih masa hidup
+
+Instance menyimpan `lastTimestamp` dan kursor sequence di memori, jadi berapa lama ia hidup adalah satu hal yang harus benar:
+
+| Runtime | Bangun instance-nya |
+|---------|--------------------|
+| PHP-FPM, mod_php, CLI | Inline, per request atau command — tidak ada yang dibagi di antaranya. |
+| Swoole, ReactPHP, RoadRunner, FrankenPHP | Sekali per **proses worker**, dari callback worker-start, dengan pasangan `(datacenter_id, worker_id)` yang unik. |
+
+Jangan pernah berbagi satu instance antar coroutine atau thread: `id()` membaca dan menulis state-nya sendiri, sehingga dua panggilan bersamaan bisa saling menyisip dan membagikan nomor sequence yang sama. Buat satu instance per coroutine, atau lindungi instance bersama itu dengan mutex.
+
 ## Parsing ID
 
 Uraikan ID Snowflake menjadi komponen-komponennya:
@@ -300,9 +391,11 @@ $parsed = $snowflake->parseId($id);
 $parsed = Snowflake::parse($id, $epoch);
 ```
 
+Anggota `datetime` diformat dengan `date()` milik PHP dalam **timezone default server**, jadi dua host di timezone berbeda menampilkan ID yang sama dengan hasil berbeda. `timestamp_ms` adalah nilai absolut yang tidak bergantung timezone — bandingkan yang itu saat merekonsiliasi ID antar mesin.
+
 ## Sequence Resolver
 
-Dua implementasi bawaan:
+Tiga implementasi bawaan:
 
 ### SequentialSequenceResolver (default)
 
@@ -335,7 +428,7 @@ Implementasikan `Erikwang2013\Snowflake\Contracts\SequenceResolver`:
 ```php
 use Erikwang2013\Snowflake\Contracts\SequenceResolver;
 
-class RedisSequenceResolver implements SequenceResolver
+class SharedCounterSequenceResolver implements SequenceResolver
 {
     public function next(int $timestamp, int $maxSequence): ?int
     {
@@ -351,6 +444,20 @@ class RedisSequenceResolver implements SequenceResolver
     }
 }
 ```
+
+### RedisSequenceResolver
+
+Resolver di dalam proses menyimpan sequence di memori, sehingga proses yang berbagi node id bisa membagikan nomor sequence yang sama. `RedisSequenceResolver` menyimpan counter-nya di Redis — pilihan yang tepat saat beberapa proses berbagi pasangan `(datacenter_id, worker_id)`:
+
+```php
+use Erikwang2013\Snowflake\Resolvers\RedisSequenceResolver;
+
+// Any client exposing incr(string $key): int and expire(string $key, int $seconds): bool
+$resolver = new RedisSequenceResolver($redis, 'snowflake:seq:', 1);
+$snowflake = new Snowflake(sequenceResolver: $resolver);
+```
+
+`__construct(object $client, string $keyPrefix = 'snowflake:seq:', int $ttlSeconds = 1)` — client-nya disuntikkan, jadi ekstensi `redis` maupun Predis tidak diperlukan. TTL yang panjang aman: counter-nya lalu terus bertambah di dalam milidetik yang sama, yang dengan benar menghasilkan `null` sampai milidetik berikutnya dimulai.
 
 ## Penanganan Exception
 
@@ -392,9 +499,26 @@ $snowflake = new Snowflake(
 
 ## Performa
 
-Throughput tipikal pada perangkat keras modern: **~500.000 ID/detik** (satu proses).
+ID dibuat sepenuhnya di dalam proses tanpa dependensi eksternal, sehingga throughput-nya dibatasi oleh panggilan `microtime()` milik PHP sendiri plus segelintir operasi integer.
 
-ID dibuat sepenuhnya di dalam proses tanpa dependensi eksternal. Hambatan utamanya adalah pemanggilan `microtime()` milik PHP dan operasi bit integer, yang keduanya O(1).
+Diukur pada satu core mesin pengembang (PHP 8.3.7, **Xdebug dimatikan**, 300 ribu iterasi, terbaik dari 5):
+
+| Operasi | Throughput | Per panggilan |
+|-----------|-----------:|---------:|
+| `microtime(true)` saja — batas bawah | 10,3 juta/detik | 97 ns |
+| `id()` — tata letak default 5+5+12 | **1,6 juta/detik** | 633 ns |
+| `id()` + `parseId()` | 282 ribu/detik | 3,5 µs |
+| `Snowflake::fromConfig()` | 167 ribu/detik | 6,0 µs |
+
+Pembuatan ID memakan sekitar enam kali panggilan clock murni, dan plafon sequence satu node (4096 ID/ms = 4,1 juta/detik) masih jauh di atas yang bisa dikonsumsi satu proses PHP. Parsing dan konstruksi adalah operasi diagnostik, bukan jalur panas — bangun instance sekali per proses dan jauhkan `parseId()` dari loop yang ketat.
+
+Reproduksi di mesin Anda sendiri:
+
+```bash
+php scripts/benchmark.php
+```
+
+Perintah itu mencetak ops/detik dan ns/op terhadap baseline `microtime()` murni, terbaik-dari-N beserta sebarannya. Dua hal menentukan apakah angka absolutnya berarti: **Xdebug** (bisa memakan satu orde magnitudo — header-nya melaporkan ketika ekstensi itu dimuat) dan host yang sibuk atau tervirtualisasi, yang panggilan clock-nya sendiri bisa mendominasi pengukuran. Bandingkan dengan baseline-nya daripada membaca angka mana pun sebagai janji.
 
 ## Dukungan
 

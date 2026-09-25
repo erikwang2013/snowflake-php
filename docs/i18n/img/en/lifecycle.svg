@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 942" width="980" height="942" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 950" width="980" height="950" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
 <title>ID Lifecycle</title>
 <desc>One id() call: the full path, the state it touches, and the limits it respects</desc>
 <defs>
 <marker id="mk-5b8def" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0.6 L9.5,5 L0,9.4 z" fill="#5b8def"/></marker>
 </defs>
-<rect width="980" height="942" fill="#ffffff"/>
+<rect width="980" height="950" fill="#ffffff"/>
 <text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">ID Lifecycle</text>
 <text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">One id() call: the full path, the state it touches, and the limits it respects</text>
 <line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
@@ -42,8 +42,8 @@
 <text x="665" y="570" font-size="13.0" fill="#0f1e33" font-weight="700">Capacity &amp; throughput</text>
 <text x="665" y="592.0" font-size="11.5" fill="#3d4d66" font-weight="400">At most 2^12 = 4096 IDs per millisecond;</text>
 <text x="665" y="609.25" font-size="11.5" fill="#3d4d66" font-weight="400">beyond that it spins to the next millisecond.</text>
-<text x="665" y="626.5" font-size="11.5" fill="#3d4d66" font-weight="400">Roughly 500k IDs per second in a single</text>
-<text x="665" y="643.75" font-size="11.5" fill="#3d4d66" font-weight="400">process.</text>
+<text x="665" y="626.5" font-size="11.5" fill="#3d4d66" font-weight="400">Well over a million IDs per second in a</text>
+<text x="665" y="643.75" font-size="11.5" fill="#3d4d66" font-weight="400">single process.</text>
 <text x="665" y="661.0" font-size="11.5" fill="#3d4d66" font-weight="400">Nodes claim a unique (datacenter_id,</text>
 <text x="665" y="678.25" font-size="11.5" fill="#3d4d66" font-weight="400">worker_id) pair; the default layout allows 32 ×</text>
 <text x="665" y="695.5" font-size="11.5" fill="#3d4d66" font-weight="400">32 = 1024 nodes.</text>
@@ -70,8 +70,8 @@
 <polygon points="350,273.0 500.0,307.0 350,341.0 200.0,307.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
 <text x="350" y="312.0" font-size="11.3" fill="#0f1e33" font-weight="600" text-anchor="middle">t &lt; lastTimestamp (clock moved backwards)</text>
 <text x="178" y="360" font-size="10.5" fill="#b45309" font-weight="400">Yes → if the drift is within clock_tolerance_ms, reuse the previous</text>
-<text x="178" y="376" font-size="10.5" fill="#b45309" font-weight="400">millisecond; otherwise throw ClockDriftException and refuse to</text>
-<text x="178" y="392" font-size="10.5" fill="#b45309" font-weight="400">generate.</text>
+<text x="178" y="376" font-size="10.5" fill="#b45309" font-weight="400">millisecond. Beyond it, clock_drift_strategy decides: &#x27;wait&#x27; spins</text>
+<text x="178" y="392" font-size="10.5" fill="#b45309" font-weight="400">until the clock catches up, &#x27;throw&#x27; raises ClockDriftException.</text>
 <path d="M350.0,392.0 L350.0,416.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
 <rect x="180.0" y="416.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
 <text x="350" y="445.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset = t − epoch</text>

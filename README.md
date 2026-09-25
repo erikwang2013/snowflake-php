@@ -12,7 +12,7 @@ A distributed unique ID generator based on Twitter's Snowflake algorithm, compat
 
 ## About
 
-Snowflake PHP generates 64-bit, k-ordered, globally unique IDs without requiring a central coordinator. Each ID is composed of a timestamp, datacenter ID, worker ID, and sequence number — allowing hundreds of thousands of IDs per second per node with no database round-trips.
+Snowflake PHP generates 64-bit, k-ordered, globally unique IDs without requiring a central coordinator. Each ID is composed of a timestamp, datacenter ID, worker ID, and sequence number — allowing well over a million IDs per second per node with no database round-trips.
 
 Key features:
 
@@ -73,8 +73,8 @@ snowflake-php/
 
 Four layers, with dependencies pointing in one direction only:
 
-- **Application layer** — your Laravel / Webman / ThinkPHP / Hyperf application; it only ever asks the container for a `Snowflake` instance.
-- **Adapter layer** — one adapter per framework. Each registers a single shared instance in the framework container and ships a publishable config file.
+- **Application layer** — your Laravel / Webman / ThinkPHP / Hyperf application, any PSR-11 container, or plain PHP; it only ever asks for a `Snowflake` instance.
+- **Adapter layer** — one adapter per framework, plus a container-agnostic PSR-11 factory. Each registers a single shared instance and ships a publishable config file.
 - **Core layer** — `Snowflake` is the only stateful class: it validates the configuration, precomputes the bit shifts and fixed node bits, generates IDs, and parses them back.
 - **Contracts & resolvers** — `SequenceResolver` is the extension point. The core delegates every sequence allocation to it, so sequence strategy can be swapped without touching the generator.
 - **Cross-cutting** — a semantic exception hierarchy plus a single commented configuration file shared by every adapter.
@@ -91,7 +91,7 @@ Features group into three domains: **core** (generation, bit allocation, parsing
 
 Every `id()` call walks the same path:
 
-1. Read the clock and check for backward drift — tolerated up to `clock_tolerance_ms`, rejected beyond it.
+1. Read the clock and check for backward drift — tolerated up to `clock_tolerance_ms`; beyond that `clock_drift_strategy` decides whether to wait for the clock to catch up (`'wait'`) or refuse to generate (`'throw'`).
 2. Convert to an epoch offset and reject offsets that are negative or past the timestamp limit.
 3. Ask the sequence resolver for the next slot in this millisecond; when all 4096 slots are used, spin to the next millisecond and retry once.
 4. Assemble `(offset << timestampShift) | fixedBits | sequence`, advance `lastTimestamp`, and return the ID.
@@ -335,7 +335,7 @@ services:
 
 ## Native PHP (no framework)
 
-Nothing in this package needs a framework — the four adapters above only wire
+Nothing in this package needs a framework — the adapters above only wire
 `Snowflake` into a container for you. Without one, build it yourself:
 
 ```php

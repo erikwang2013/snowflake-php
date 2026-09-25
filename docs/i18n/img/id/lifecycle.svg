@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 942" width="980" height="942" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 950" width="980" height="950" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
 <title>Siklus Hidup ID</title>
 <desc>Satu panggilan id(): jalur lengkapnya, state yang disentuh, dan batas yang dipatuhi</desc>
 <defs>
 <marker id="mk-5b8def" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0.6 L9.5,5 L0,9.4 z" fill="#5b8def"/></marker>
 </defs>
-<rect width="980" height="942" fill="#ffffff"/>
+<rect width="980" height="950" fill="#ffffff"/>
 <text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">Siklus Hidup ID</text>
 <text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">Satu panggilan id(): jalur lengkapnya, state yang disentuh, dan batas yang dipatuhi</text>
 <line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
@@ -43,8 +43,8 @@
 <text x="665" y="592.0" font-size="11.5" fill="#3d4d66" font-weight="400">Maksimal 2^12 = 4096 ID per milidetik; di</text>
 <text x="665" y="609.25" font-size="11.5" fill="#3d4d66" font-weight="400">luar itu akan berputar ke milidetik</text>
 <text x="665" y="626.5" font-size="11.5" fill="#3d4d66" font-weight="400">berikutnya.</text>
-<text x="665" y="643.75" font-size="11.5" fill="#3d4d66" font-weight="400">Sekitar 500 ribu ID per detik dalam satu</text>
-<text x="665" y="661.0" font-size="11.5" fill="#3d4d66" font-weight="400">proses.</text>
+<text x="665" y="643.75" font-size="11.5" fill="#3d4d66" font-weight="400">Jauh lebih dari satu juta ID per detik dalam</text>
+<text x="665" y="661.0" font-size="11.5" fill="#3d4d66" font-weight="400">satu proses.</text>
 <text x="665" y="678.25" font-size="11.5" fill="#3d4d66" font-weight="400">Setiap node memakai pasangan (datacenter_id,</text>
 <text x="665" y="695.5" font-size="11.5" fill="#3d4d66" font-weight="400">worker_id) yang unik; tata letak default</text>
 <text x="665" y="712.75" font-size="11.5" fill="#3d4d66" font-weight="400">mendukung 32 × 32 = 1024 node.</text>
@@ -57,12 +57,12 @@
 <text x="670" y="771" font-size="10.0" fill="#b45309" font-weight="600">epoch 2024-01-01</text>
 <text x="920" y="771" font-size="10.0" fill="#6b7c96" font-weight="600" text-anchor="end">batas 2093</text>
 <text x="670" y="816" font-size="10.5" fill="#3d4d66" font-weight="400">Mulai: epoch = 2024-01-01 UTC</text>
-<text x="670" y="832" font-size="10.5" fill="#3d4d66" font-weight="400">Batas: 2^41 − 1 ms ≈ 69,7 tahun</text>
-<text x="670" y="848" font-size="10.5" fill="#3d4d66" font-weight="400">Kehabisan kapasitas melempar</text>
-<text x="670" y="864" font-size="10.5" fill="#3d4d66" font-weight="400">TimestampOverflowException</text>
-<text x="670" y="880" font-size="10.5" fill="#3d4d66" font-weight="400">Epoch yang lebih baru mengulang masa pakai</text>
-<text x="670" y="896" font-size="10.5" fill="#3d4d66" font-weight="400">penuh.</text>
-<text x="670" y="924" font-size="10.5" fill="#3d4d66" text-anchor="start"><tspan fill="#6b7c96" font-weight="400">Sekitar 3% terpakai pada 2026</tspan></text>
+<text x="670" y="830" font-size="10.5" fill="#3d4d66" font-weight="400">Batas: 2^41 − 1 ms ≈ 69,7 tahun</text>
+<text x="670" y="844" font-size="10.5" fill="#3d4d66" font-weight="400">Kehabisan kapasitas melempar</text>
+<text x="670" y="858" font-size="10.5" fill="#3d4d66" font-weight="400">TimestampOverflowException</text>
+<text x="670" y="872" font-size="10.5" fill="#3d4d66" font-weight="400">Epoch yang lebih baru mengulang masa pakai</text>
+<text x="670" y="886" font-size="10.5" fill="#3d4d66" font-weight="400">penuh.</text>
+<text x="670" y="912" font-size="10.5" fill="#3d4d66" text-anchor="start"><tspan fill="#6b7c96" font-weight="400">Sekitar 3% terpakai pada 2026</tspan></text>
 <rect x="240.0" y="120.0" width="220.0" height="36.0" rx="18.0" fill="#0f766e"/><text x="350.0" y="142.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Panggil id() / nextId()</text>
 <path d="M350.0,156.0 L350.0,180.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
 <rect x="180.0" y="180.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
@@ -73,29 +73,30 @@
 <polygon points="350,273.0 500.0,307.0 350,341.0 200.0,307.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
 <text x="350" y="312.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">t &lt; lastTimestamp (clock mundur)</text>
 <text x="178" y="360" font-size="10.5" fill="#b45309" font-weight="400">Ya → jika drift masih dalam clock_tolerance_ms, pakai ulang</text>
-<text x="178" y="376" font-size="10.5" fill="#b45309" font-weight="400">milidetik sebelumnya; jika tidak, lempar ClockDriftException dan</text>
-<text x="178" y="392" font-size="10.5" fill="#b45309" font-weight="400">menolak membuat ID.</text>
-<path d="M350.0,392.0 L350.0,416.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="416.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="445.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset = t − epoch</text>
-<text x="178" y="485" font-size="10.5" fill="#b45309" font-weight="400">offset adalah jarak dalam milidetik dari epoch yang dikonfigurasi.</text>
-<path d="M350.0,485.0 L350.0,509.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<text x="362" y="501.0" font-size="10.5" fill="#6b7c96" font-weight="600">Tidak</text>
-<polygon points="350,509.0 500.0,543.0 350,577.0 200.0,543.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
-<text x="350" y="540.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">Offset di luar rentang?</text>
-<text x="350" y="556.0" font-size="10.5" fill="#6b7c96" font-weight="400" text-anchor="middle">(di bawah 0 atau di atas batas)</text>
-<text x="178" y="596" font-size="10.5" fill="#b45309" font-weight="400">Ya → clock sebelum epoch melempar ClockDriftException; epoch</text>
-<text x="178" y="612" font-size="10.5" fill="#b45309" font-weight="400">yang sudah habis melempar TimestampOverflowException.</text>
-<path d="M350.0,612.0 L350.0,636.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="636.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="665.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">seq = resolver.next(offset, maxSequence)</text>
-<text x="178" y="705" font-size="10.5" fill="#b45309" font-weight="400">Saat sequence habis (null), ia berputar ke milidetik berikutnya dan</text>
-<text x="178" y="721" font-size="10.5" fill="#b45309" font-weight="400">mencoba sekali lagi, lalu gagal dengan RuntimeException.</text>
-<path d="M350.0,721.0 L350.0,745.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="745.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="774.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">lastTimestamp = t; rakit ID</text>
-<text x="178" y="814" font-size="10.5" fill="#b45309" font-weight="400">State hanya maju setelah semua guard terlewati, jadi panggilan</text>
-<text x="178" y="830" font-size="10.5" fill="#b45309" font-weight="400">yang gagal tidak merusak panggilan berikutnya.</text>
-<path d="M350.0,830.0 L350.0,854.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="854.0" width="340.0" height="38.0" rx="19.0" fill="#0f766e"/><text x="350.0" y="877.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Kembalikan ID unik 64-bit</text>
+<text x="178" y="376" font-size="10.5" fill="#b45309" font-weight="400">milidetik sebelumnya. Di luar itu, clock_drift_strategy menentukan:</text>
+<text x="178" y="392" font-size="10.5" fill="#b45309" font-weight="400">&#x27;wait&#x27; berputar sampai clock menyusul, &#x27;throw&#x27; melempar</text>
+<text x="178" y="408" font-size="10.5" fill="#b45309" font-weight="400">ClockDriftException.</text>
+<path d="M350.0,408.0 L350.0,432.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="432.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="461.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset = t − epoch</text>
+<text x="178" y="501" font-size="10.5" fill="#b45309" font-weight="400">offset adalah jarak dalam milidetik dari epoch yang dikonfigurasi.</text>
+<path d="M350.0,501.0 L350.0,525.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<text x="362" y="517.0" font-size="10.5" fill="#6b7c96" font-weight="600">Tidak</text>
+<polygon points="350,525.0 500.0,559.0 350,593.0 200.0,559.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
+<text x="350" y="556.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">Offset di luar rentang?</text>
+<text x="350" y="572.0" font-size="10.5" fill="#6b7c96" font-weight="400" text-anchor="middle">(di bawah 0 atau di atas batas)</text>
+<text x="178" y="612" font-size="10.5" fill="#b45309" font-weight="400">Ya → clock sebelum epoch melempar ClockDriftException; epoch</text>
+<text x="178" y="628" font-size="10.5" fill="#b45309" font-weight="400">yang sudah habis melempar TimestampOverflowException.</text>
+<path d="M350.0,628.0 L350.0,652.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="652.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="681.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">seq = resolver.next(offset, maxSequence)</text>
+<text x="178" y="721" font-size="10.5" fill="#b45309" font-weight="400">Saat sequence habis (null), ia berputar ke milidetik berikutnya dan</text>
+<text x="178" y="737" font-size="10.5" fill="#b45309" font-weight="400">mencoba sekali lagi, lalu gagal dengan RuntimeException.</text>
+<path d="M350.0,737.0 L350.0,761.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="761.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="790.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">lastTimestamp = t; rakit ID</text>
+<text x="178" y="830" font-size="10.5" fill="#b45309" font-weight="400">State hanya maju setelah semua guard terlewati, jadi panggilan</text>
+<text x="178" y="846" font-size="10.5" fill="#b45309" font-weight="400">yang gagal tidak merusak panggilan berikutnya.</text>
+<path d="M350.0,846.0 L350.0,870.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="870.0" width="340.0" height="38.0" rx="19.0" fill="#0f766e"/><text x="350.0" y="893.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Kembalikan ID unik 64-bit</text>
 </svg>

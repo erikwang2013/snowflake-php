@@ -12,15 +12,15 @@
 
 ## نبذة عامة
 
-يولّد Snowflake PHP معرّفات فريدة عالميًا بحجم 64 بت ومرتّبة (k-ordered) دون الحاجة إلى منسّق مركزي. يتكوّن كل ID من طابع زمني ومعرّف datacenter ومعرّف worker ورقم تسلسلي — ما يتيح مئات الآلاف من المعرّفات في الثانية لكل عقدة دون أي رحلة ذهاب وعودة إلى قاعدة البيانات.
+يولّد Snowflake PHP معرّفات فريدة عالميًا بحجم 64 بت ومرتّبة (k-ordered) دون الحاجة إلى منسّق مركزي. يتكوّن كل ID من طابع زمني ومعرّف datacenter ومعرّف worker ورقم تسلسلي — ما يتيح أكثر من مليون معرّف في الثانية بكثير لكل عقدة دون أي رحلة ذهاب وعودة إلى قاعدة البيانات.
 
 أبرز الميزات:
 
 - **PHP خالص بلا أي اعتماديات** — لا حاجة إلى إضافات (extensions) أو خدمات خارجية
-- **محلّلات تسلسل قابلة للتوصيل** — استراتيجيتان مدمجتان (متتابعة وعشوائية)، أو استخدم استراتيجيتك الخاصة
+- **محلّلات تسلسل قابلة للتوصيل** — ثلاث استراتيجيات مدمجة (متتابعة وعشوائية ومدعومة بـ Redis)، أو استخدم استراتيجيتك الخاصة
 - **توزيع مرن للبتات** — عدّل بتات الطابع الزمني/الـ worker/الـ datacenter/التسلسل بما يناسب حجمك
 - **تحمّل انحراف الساعة** — نافذة تسامح قابلة للضبط لتعديلات NTP
-- **مستقلّ عن أطر العمل** مع محوّلات من الدرجة الأولى لـ Laravel وThinkPHP وWebman وHyperf
+- **مستقلّ عن أطر العمل** — محوّلات من الدرجة الأولى لـ Laravel وThinkPHP وWebman وHyperf، أو PHP خالص بلا أي container على الإطلاق
 - **تحليل الـ ID** — فكّك المعرّفات المولّدة إلى مكوّناتها: الطابع الزمني والعقدة والتسلسل
 
 ## بنية المشروع
@@ -33,7 +33,8 @@ snowflake-php/
 │   │   └── SequenceResolver.php            # Sequence strategy interface
 │   ├── Resolvers/
 │   │   ├── SequentialSequenceResolver.php  # Default: 0..max per millisecond
-│   │   └── RandomSequenceResolver.php      # Random start per millisecond
+│   │   ├── RandomSequenceResolver.php      # Random start per millisecond
+│   │   └── RedisSequenceResolver.php       # Shared counter for multi-process nodes
 │   ├── Exceptions/
 │   │   ├── SnowflakeException.php          # Base exception
 │   │   ├── ClockDriftException.php
@@ -44,13 +45,26 @@ snowflake-php/
 │       ├── Laravel/                        # ServiceProvider + Facade + config
 │       ├── ThinkPHP/                       # Service + Facade + config
 │       ├── Hyperf/                         # ConfigProvider + config
-│       └── Webman/                         # config/app.php
+│       ├── Webman/                         # config/app.php
+│       └── Psr11/SnowflakeFactory.php      # Any PSR-11 container, no interface dependency
 ├── config/snowflake.php                    # Reference configuration with comments
 ├── tests/
 │   ├── bootstrap.php                       # Loads the autoloader, prints the mascot
 │   └── *Test.php                           # PHPUnit test suite
-├── docs/                                   # Design diagrams and sponsor images
-└── .github/workflows/                      # ci.yml (PHP 8.0–8.4), release.yml
+├── docs/
+│   ├── i18n/                               # Translated READMEs + localized diagrams
+│   │   ├── README.md                       # Language index
+│   │   ├── img/<lang>/                     # Generated SVGs (13 languages)
+│   │   └── <lang>/README.md                # One translated README per language
+│   ├── examples/plain-php.php              # Runnable no-framework example
+│   └── *.png                               # Sponsor images
+├── scripts/
+│   ├── generate-diagrams.py                # Builds docs/i18n/img/<lang>/*.svg
+│   ├── benchmark.php                       # Reproducible throughput benchmark
+│   ├── phpstan/stubs/                      # Framework stubs for static analysis
+│   └── i18n/labels.<lang>.json             # Diagram strings, one file per language
+├── phpstan.neon.dist                       # Level 8 static analysis config
+└── .github/workflows/                      # ci.yml (PHP 8.0–8.5), release.yml
 ```
 
 ## البنية المعمارية
@@ -59,8 +73,8 @@ snowflake-php/
 
 أربع طبقات، والاعتماديات تتجه في اتجاه واحد فقط:
 
-- **طبقة التطبيق** — تطبيقك المبني على Laravel / Webman / ThinkPHP / Hyperf؛ لا يطلب سوى نسخة `Snowflake` من الـ container.
-- **طبقة المحوّلات** — محوّل واحد لكل إطار عمل. يسجّل كل منها نسخة مشتركة واحدة في container الإطار، ويرفق معه ملف إعدادات قابلًا للنشر.
+- **طبقة التطبيق** — تطبيقك المبني على Laravel / Webman / ThinkPHP / Hyperf، أو أي container يدعم PSR-11، أو PHP خالص؛ لا يطلب سوى نسخة `Snowflake`.
+- **طبقة المحوّلات** — محوّل واحد لكل إطار عمل، بالإضافة إلى مصنع (factory) مستقلّ عن الـ container يدعم PSR-11. يسجّل كل منها نسخة مشتركة واحدة، ويرفق معه ملف إعدادات قابلًا للنشر.
 - **الطبقة الأساسية** — `Snowflake` هي الفئة الوحيدة ذات الحالة: تتحقق من الإعدادات، وتحسب مسبقًا إزاحات البتات وبتات العقدة الثابتة، وتولّد المعرّفات ثم تعيد تحليلها.
 - **العقود والمحلّلات** — `SequenceResolver` هو نقطة التوسّع. تفوّض النواة إليه كل تخصيص للتسلسل، لذا يمكن تبديل استراتيجية التسلسل دون المساس بالمولّد.
 - **الجوانب المتقاطعة** — تسلسل هرمي دلالي للاستثناءات، بالإضافة إلى ملف إعدادات واحد مشروح بالمعلّقات تشترك فيه كل المحوّلات.
@@ -77,7 +91,7 @@ snowflake-php/
 
 كل استدعاء لـ `id()` يمرّ بالمسار نفسه:
 
-1. اقرأ الساعة وتحقق من الارتداد إلى الخلف — يُتسامح معه حتى `clock_tolerance_ms`، ويُرفض فيما يتجاوزه.
+1. اقرأ الساعة وتحقق من الارتداد إلى الخلف — يُتسامح معه حتى `clock_tolerance_ms`؛ وما يتجاوزه يحسمه `clock_drift_strategy`: إما الانتظار حتى تلحق الساعة (`'wait'`) أو رفض التوليد (`'throw'`).
 2. حوّله إلى إزاحة عن الـ epoch وارفض الإزاحات السالبة أو التي تجاوزت حدّ الطابع الزمني.
 3. اطلب من محلّل التسلسل الخانة التالية في هذه الميلي ثانية؛ وعند استهلاك الخانات الـ 4096 كلها، انتظر (spin) حتى الميلي ثانية التالية وأعد المحاولة مرة واحدة.
 4. جمّع `(offset << timestampShift) | fixedBits | sequence`، ثم قدّم `lastTimestamp`، وأعد الـ ID.
@@ -86,7 +100,7 @@ snowflake-php/
 
 ## المتطلبات
 
-- PHP >= 8.0 (الإصدارات 8.0 – 8.4 مُتحقَّق منها في CI)
+- PHP >= 8.0 (الإصدارات 8.0 – 8.5 مُتحقَّق منها في CI، إلى جانب PHPStan بمستوى 8 على `src/`)
 - نظام 64 بت (مطلوب لعمليات الأعداد الصحيحة الأصلية بحجم 64 بت)
 - نسخة واحدة لكل عملية/coroutine — تحتفظ نسخة Snowflake بحالة التسلسل في الذاكرة، ولا يجوز مشاركتها بين العمليات أو الـ coroutines
 
@@ -125,6 +139,8 @@ $id = $snowflake->id();
 | `sequence_bits` | int | `12` | عدد بتات الرقم التسلسلي |
 | `sequence_resolver` | string | `SequentialSequenceResolver` | الاسم الكامل (FQCN) لـ SequenceResolver |
 | `clock_tolerance_ms` | int | `0` | أقصى انحراف للساعة إلى الخلف (0 = صارم) |
+| `clock_drift_strategy` | string | `'throw'` | يرفض `'throw'` التوليد عندما تتراجع الساعة إلى الخلف بما يتجاوز حدّ التسامح؛ أما `'wait'` فينتظر حتى تلحق ساعة النظام، ثم يستسلم بعد `clock_drift_wait_ms` ويُطلق `ClockDriftException` |
+| `clock_drift_wait_ms` | int | `1000` | مدة انتظار استراتيجية `'wait'` قبل الاستسلام |
 
 ### توزيع البتات
 
@@ -135,6 +151,24 @@ $id = $snowflake->id();
 ```
 
 أقصى عمر مع الـ epoch الافتراضي: نحو 69 سنة (حتى عام 2093 تقريبًا).
+
+كل بت يُمنح لمعرّف العقدة أو للتسلسل يُقتطع من الطابع الزمني، لذا فإن تسلسلًا عريضًا يقصّر عمر المولّد بصمت:
+
+| بتات worker + datacenter + sequence | بتات الطابع الزمني | العمر المتاح |
+|---|---|---|
+| 5 + 5 + 12 (الافتراضي) | 41 | نحو 69.7 سنة |
+| 7 + 7 + 10 | 39 | نحو 17.4 سنة |
+| 5 + 5 + 16 | 37 | نحو 4.4 سنة |
+| 5 + 5 + 20 | 33 | نحو 99 يومًا |
+
+اطلب حدّ أي توزيع:
+
+```php
+Snowflake::lifespanMs();                                                     // default layout, ~69.7 years in ms
+Snowflake::lifespanMs(workerBits: 7, datacenterBits: 7, sequenceBits: 10);   // ~17.4 years in ms
+```
+
+`Snowflake::lifespanMs(int $workerBits = 5, int $datacenterBits = 5, int $sequenceBits = 12): int` يعيد أقصى إزاحة زمنية بالمللي ثانية لتوزيع معيّن؛ والقيم الافتراضية للوسائط هي التوزيع الافتراضي. وبمجرد بلوغ الإزاحة هذا الحدّ يكون الـ epoch قد استُنفد — وأي epoch قديم انتهت نافذته يجعل أول استدعاء لـ `id()` يُطلق `TimestampOverflowException`.
 
 ### استخدام مصفوفة الإعدادات
 
@@ -279,6 +313,63 @@ class OrderService
 }
 ```
 
+### حاويات PSR-11
+
+Symfony وSlim وLaminas وأي container آخر: سجّل المصنع (factory). فهو لا يعتمد على شيء، لذا يعمل مع أي container — ولا حاجة إلى `psr/container`:
+
+```php
+use Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory;
+
+$container->set(\Erikwang2013\Snowflake\Snowflake::class, new SnowflakeFactory($config));
+// or build the config from the environment:
+$container->set(\Erikwang2013\Snowflake\Snowflake::class, SnowflakeFactory::fromEnvironment());
+```
+
+يقرأ `SnowflakeFactory::fromEnvironment()` المتغيرات نفسها `SNOWFLAKE_*` التي يستخدمها محوّل Laravel. ولأن حاوية PSR-11 تستدعي كائن المصنع نفسه، يصبح تعريف خدمة في Symfony سطرًا واحدًا:
+
+```yaml
+services:
+  Erikwang2013\Snowflake\Snowflake:
+    factory: ['@Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory', '__invoke']
+```
+
+## PHP خالص (بدون إطار عمل)
+
+لا يحتاج أي شيء في هذه الحزمة إلى إطار عمل — فالمحوّلات أعلاه تكتفي بربط `Snowflake` في container نيابةً عنك. وبدون إطار عمل، أنشئه بنفسك:
+
+```php
+require __DIR__ . '/vendor/autoload.php';
+
+use Erikwang2013\Snowflake\Snowflake;
+
+// Same variable names the Laravel adapter uses, so one .env-style setup
+// works whether or not a framework is present.
+$snowflake = Snowflake::fromConfig([
+    'worker_id'          => (int) (getenv('SNOWFLAKE_WORKER_ID') ?: 0),
+    'datacenter_id'      => (int) (getenv('SNOWFLAKE_DATACENTER_ID') ?: 0),
+    'clock_tolerance_ms' => 5,
+]);
+
+$id = $snowflake->id();
+```
+
+توجد نسخة قابلة للتشغيل من هذا — بما في ذلك singleton كسول بلا إطار عمل والثوابت (invariants) التي يتحقق منها — في [`docs/examples/plain-php.php`](../../examples/plain-php.php):
+
+```bash
+php docs/examples/plain-php.php
+```
+
+### اختيار العمر
+
+تحتفظ النسخة بـ `lastTimestamp` ومؤشّر التسلسل في الذاكرة، لذا فمدة حياتها هي الشيء الوحيد الذي يجدر إتقانه:
+
+| بيئة التشغيل | أنشئ النسخة |
+|---------|--------------------|
+| PHP-FPM وmod_php وCLI | داخل الطلب مباشرة، لكل طلب أو أمر — فلا شيء يُشارك بينها. |
+| Swoole وReactPHP وRoadRunner وFrankenPHP | مرة واحدة لكل **عملية worker**، من callback بدء الـ worker، بزوج فريد `(datacenter_id, worker_id)`. |
+
+لا تشارك نسخة واحدة بين الـ coroutines أو الخيوط: فـ `id()` يقرأ حالته ويكتبها، لذا قد يتداخل استدعاءان متزامنان فيمنحا رقم التسلسل نفسه. أنشئ نسخة لكل coroutine، أو احمِ النسخة المشتركة بقفل (mutex).
+
 ## تحليل الـ ID
 
 فكّك ID من Snowflake إلى مكوّناته:
@@ -300,9 +391,11 @@ $parsed = $snowflake->parseId($id);
 $parsed = Snowflake::parse($id, $epoch);
 ```
 
+عضو `datetime` يُنسَّق بدالة `date()` في PHP وفق **المنطقة الزمنية الافتراضية للخادم**، لذا يعرض خادمان في منطقتين زمنيتين مختلفتين المعرّف نفسه بصورة مختلفة. أما `timestamp_ms` فهي القيمة المطلقة المستقلة عن المنطقة الزمنية — قارن بها عند مطابقة المعرّفات بين الأجهزة.
+
 ## محلّلات التسلسل
 
-تنفيذان مدمجان:
+ثلاثة تنفيذات مدمجة:
 
 ### SequentialSequenceResolver (الافتراضي)
 
@@ -335,7 +428,7 @@ $snowflake = new Snowflake(
 ```php
 use Erikwang2013\Snowflake\Contracts\SequenceResolver;
 
-class RedisSequenceResolver implements SequenceResolver
+class SharedCounterSequenceResolver implements SequenceResolver
 {
     public function next(int $timestamp, int $maxSequence): ?int
     {
@@ -351,6 +444,20 @@ class RedisSequenceResolver implements SequenceResolver
     }
 }
 ```
+
+### RedisSequenceResolver
+
+تحتفظ المحلّلات داخل العملية بالتسلسل في الذاكرة، لذا قد تمنح عمليات تتشارك معرّف العقدة نفسه رقم التسلسل ذاته. أما `RedisSequenceResolver` فيحتفظ بالعدّاد في Redis بدلًا من ذلك — وهو الخيار المناسب عندما تتشارك عدة عمليات زوج `(datacenter_id, worker_id)` واحدًا:
+
+```php
+use Erikwang2013\Snowflake\Resolvers\RedisSequenceResolver;
+
+// Any client exposing incr(string $key): int and expire(string $key, int $seconds): bool
+$resolver = new RedisSequenceResolver($redis, 'snowflake:seq:', 1);
+$snowflake = new Snowflake(sequenceResolver: $resolver);
+```
+
+`__construct(object $client, string $keyPrefix = 'snowflake:seq:', int $ttlSeconds = 1)` — يُحقن العميل (client) من الخارج، فلا حاجة إلى إضافة `redis` ولا إلى Predis. ومدة TTL الطويلة آمنة: إذ يستمر العدّاد عندئذ في النمو داخل الميلي ثانية نفسها، وهو ما يعيد `null` بشكل صحيح حتى تبدأ الميلي ثانية التالية.
 
 ## معالجة الاستثناءات
 
@@ -392,9 +499,26 @@ $snowflake = new Snowflake(
 
 ## الأداء
 
-الإنتاجية المعتادة على عتاد حديث: **نحو 500,000 معرّف في الثانية** (عملية واحدة).
+تولّد المعرّفات بالكامل داخل العملية دون أي اعتماديات خارجية، لذا تحدّ الإنتاجيةَ سرعةُ استدعاء `microtime()` في PHP نفسه بالإضافة إلى بضعة عمليات على الأعداد الصحيحة.
 
-تولّد المعرّفات بالكامل داخل العملية دون أي اعتماديات خارجية. عنق الزجاجة الأساسي هو استدعاء `microtime()` في PHP وعمليات البتات على الأعداد الصحيحة، وكلاهما بترتيب O(1).
+قِيست على نواة واحدة من جهاز مطوّر (PHP 8.3.7، **Xdebug معطّل**، 300 ألف تكرار، أفضل 5 محاولات):
+
+| العملية | الإنتاجية | لكل استدعاء |
+|-----------|-----------:|---------:|
+| `microtime(true)` وحدها — الحدّ الأدنى | 10.3M/s | 97 ns |
+| `id()` — التوزيع الافتراضي 5+5+12 | **1.6M/s** | 633 ns |
+| `id()` + `parseId()` | 282k/s | 3.5 µs |
+| `Snowflake::fromConfig()` | 167k/s | 6.0 µs |
+
+يكلّف التوليد نحو ستة أضعاف استدعاء الساعة المجرّد، ويظل سقف تسلسل العقدة (4096 معرّفًا/ms = 4.1M/s) أعلى بكثير مما تستهلكه عملية PHP واحدة. أما التحليل والبناء فهما عمليتان تشخيصيتان لا مساران ساخنان — ابنِ النسخة مرة واحدة لكل عملية وأبقِ `parseId()` خارج الحلقات المكثّفة.
+
+أعِد إنتاج القياس على جهازك:
+
+```bash
+php scripts/benchmark.php
+```
+
+يطبع ops/sec وns/op مقابل خط أساس من `microtime()` المجرّدة، بأفضل نتيجة من N مع المدى. وهناك أمران يحدّدان ما إذا كانت الأرقام المطلقة ذات معنى: **Xdebug** (قد يكلّف رتبة كاملة من حيث الحجم — وتصرّح الترويسة عند تحميله) ومضيف مزدحم أو افتراضي، إذ قد يطغى استدعاء ساعته هو على القياس. قارن بخط الأساس بدل قراءة أي رقم منفرد كوعد.
 
 ## نرحّب بدعمكم
 

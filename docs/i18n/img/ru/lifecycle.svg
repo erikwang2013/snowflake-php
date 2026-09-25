@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 942" width="980" height="942" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 950" width="980" height="950" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
 <title>Жизненный цикл ID</title>
 <desc>Один вызов id(): весь путь, затрагиваемое состояние и соблюдаемые лимиты</desc>
 <defs>
 <marker id="mk-5b8def" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0.6 L9.5,5 L0,9.4 z" fill="#5b8def"/></marker>
 </defs>
-<rect width="980" height="942" fill="#ffffff"/>
+<rect width="980" height="950" fill="#ffffff"/>
 <text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">Жизненный цикл ID</text>
 <text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">Один вызов id(): весь путь, затрагиваемое состояние и соблюдаемые лимиты</text>
 <line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
@@ -43,8 +43,8 @@
 <text x="665" y="570" font-size="13.0" fill="#0f1e33" font-weight="700">Ёмкость и производительность</text>
 <text x="665" y="592.0" font-size="11.5" fill="#3d4d66" font-weight="400">Не более 2^12 = 4096 ID на миллисекунду;</text>
 <text x="665" y="609.25" font-size="11.5" fill="#3d4d66" font-weight="400">дальше — ожидание следующей миллисекунды.</text>
-<text x="665" y="626.5" font-size="11.5" fill="#3d4d66" font-weight="400">Около 500 тыс. ID в секунду в одном</text>
-<text x="665" y="643.75" font-size="11.5" fill="#3d4d66" font-weight="400">процессе.</text>
+<text x="665" y="626.5" font-size="11.5" fill="#3d4d66" font-weight="400">Заметно больше миллиона ID в секунду в</text>
+<text x="665" y="643.75" font-size="11.5" fill="#3d4d66" font-weight="400">одном процессе.</text>
 <text x="665" y="661.0" font-size="11.5" fill="#3d4d66" font-weight="400">Узлы занимают уникальную пару</text>
 <text x="665" y="678.25" font-size="11.5" fill="#3d4d66" font-weight="400">(datacenter_id, worker_id); раскладка по</text>
 <text x="665" y="695.5" font-size="11.5" fill="#3d4d66" font-weight="400">умолчанию даёт 32 × 32 = 1024 узла.</text>
@@ -57,12 +57,12 @@
 <text x="670" y="771" font-size="10.0" fill="#b45309" font-weight="600">эпоха 2024-01-01</text>
 <text x="920" y="771" font-size="10.0" fill="#6b7c96" font-weight="600" text-anchor="end">предел 2093</text>
 <text x="670" y="816" font-size="10.5" fill="#3d4d66" font-weight="400">Старт: epoch = 2024-01-01 UTC</text>
-<text x="670" y="832" font-size="10.5" fill="#3d4d66" font-weight="400">Предел: 2^41 − 1 мс ≈ 69,7 лет</text>
-<text x="670" y="848" font-size="10.5" fill="#3d4d66" font-weight="400">Исчерпание выбрасывает</text>
-<text x="670" y="864" font-size="10.5" fill="#3d4d66" font-weight="400">TimestampOverflowException</text>
-<text x="670" y="880" font-size="10.5" fill="#3d4d66" font-weight="400">Более поздняя эпоха возвращает полный срок</text>
-<text x="670" y="896" font-size="10.5" fill="#3d4d66" font-weight="400">службы.</text>
-<text x="670" y="924" font-size="10.5" fill="#3d4d66" text-anchor="start"><tspan fill="#6b7c96" font-weight="400">К 2026 израсходовано ~3%</tspan></text>
+<text x="670" y="830" font-size="10.5" fill="#3d4d66" font-weight="400">Предел: 2^41 − 1 мс ≈ 69,7 лет</text>
+<text x="670" y="844" font-size="10.5" fill="#3d4d66" font-weight="400">Исчерпание выбрасывает</text>
+<text x="670" y="858" font-size="10.5" fill="#3d4d66" font-weight="400">TimestampOverflowException</text>
+<text x="670" y="872" font-size="10.5" fill="#3d4d66" font-weight="400">Более поздняя эпоха возвращает полный срок</text>
+<text x="670" y="886" font-size="10.5" fill="#3d4d66" font-weight="400">службы.</text>
+<text x="670" y="912" font-size="10.5" fill="#3d4d66" text-anchor="start"><tspan fill="#6b7c96" font-weight="400">К 2026 израсходовано ~3%</tspan></text>
 <rect x="240.0" y="120.0" width="220.0" height="36.0" rx="18.0" fill="#0f766e"/><text x="350.0" y="142.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Вызов id() / nextId()</text>
 <path d="M350.0,156.0 L350.0,180.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
 <rect x="180.0" y="180.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
@@ -74,29 +74,30 @@
 <polygon points="350,289.0 500.0,323.0 350,357.0 200.0,323.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
 <text x="350" y="328.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">t &lt; lastTimestamp (часы пошли назад)</text>
 <text x="178" y="376" font-size="10.5" fill="#b45309" font-weight="400">Да → если дрейф укладывается в clock_tolerance_ms,</text>
-<text x="178" y="392" font-size="10.5" fill="#b45309" font-weight="400">переиспользуем предыдущую миллисекунду; иначе</text>
-<text x="178" y="408" font-size="10.5" fill="#b45309" font-weight="400">ClockDriftException и отказ генерировать.</text>
-<path d="M350.0,408.0 L350.0,432.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="432.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="461.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset = t − epoch</text>
-<text x="178" y="501" font-size="10.5" fill="#b45309" font-weight="400">offset — расстояние в миллисекундах от заданной эпохи.</text>
-<path d="M350.0,501.0 L350.0,525.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<text x="362" y="517.0" font-size="10.5" fill="#6b7c96" font-weight="600">Нет</text>
-<polygon points="350,525.0 500.0,559.0 350,593.0 200.0,559.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
-<text x="350" y="556.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset вне диапазона?</text>
-<text x="350" y="572.0" font-size="10.2" fill="#6b7c96" font-weight="400" text-anchor="middle">(меньше 0 или больше предела)</text>
-<text x="178" y="612" font-size="10.5" fill="#b45309" font-weight="400">Да → часы раньше эпохи дают ClockDriftException; исчерпанная</text>
-<text x="178" y="628" font-size="10.5" fill="#b45309" font-weight="400">эпоха — TimestampOverflowException.</text>
-<path d="M350.0,628.0 L350.0,652.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="652.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="681.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">seq = resolver.next(offset, maxSequence)</text>
-<text x="178" y="721" font-size="10.5" fill="#b45309" font-weight="400">Когда последовательность исчерпана (null), ждём следующую</text>
-<text x="178" y="737" font-size="10.5" fill="#b45309" font-weight="400">миллисекунду, повторяем один раз, затем RuntimeException.</text>
-<path d="M350.0,737.0 L350.0,761.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="761.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="790.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">lastTimestamp = t; собираем ID</text>
-<text x="178" y="830" font-size="10.5" fill="#b45309" font-weight="400">Состояние двигается только после всех проверок, поэтому</text>
-<text x="178" y="846" font-size="10.5" fill="#b45309" font-weight="400">сбойный вызов не отравит следующий.</text>
-<path d="M350.0,846.0 L350.0,870.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="870.0" width="340.0" height="38.0" rx="19.0" fill="#0f766e"/><text x="350.0" y="893.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Возвращаем 64-битный уникальный ID</text>
+<text x="178" y="392" font-size="10.5" fill="#b45309" font-weight="400">переиспользуем предыдущую миллисекунду. Дальше</text>
+<text x="178" y="408" font-size="10.5" fill="#b45309" font-weight="400">clock_drift_strategy решает: &#x27;wait&#x27; ждёт, пока часы догонят,</text>
+<text x="178" y="424" font-size="10.5" fill="#b45309" font-weight="400">&#x27;throw&#x27; выбрасывает ClockDriftException.</text>
+<path d="M350.0,424.0 L350.0,448.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="448.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="477.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset = t − epoch</text>
+<text x="178" y="517" font-size="10.5" fill="#b45309" font-weight="400">offset — расстояние в миллисекундах от заданной эпохи.</text>
+<path d="M350.0,517.0 L350.0,541.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<text x="362" y="533.0" font-size="10.5" fill="#6b7c96" font-weight="600">Нет</text>
+<polygon points="350,541.0 500.0,575.0 350,609.0 200.0,575.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
+<text x="350" y="572.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset вне диапазона?</text>
+<text x="350" y="588.0" font-size="10.2" fill="#6b7c96" font-weight="400" text-anchor="middle">(меньше 0 или больше предела)</text>
+<text x="178" y="628" font-size="10.5" fill="#b45309" font-weight="400">Да → часы раньше эпохи дают ClockDriftException; исчерпанная</text>
+<text x="178" y="644" font-size="10.5" fill="#b45309" font-weight="400">эпоха — TimestampOverflowException.</text>
+<path d="M350.0,644.0 L350.0,668.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="668.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="697.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">seq = resolver.next(offset, maxSequence)</text>
+<text x="178" y="737" font-size="10.5" fill="#b45309" font-weight="400">Когда последовательность исчерпана (null), ждём следующую</text>
+<text x="178" y="753" font-size="10.5" fill="#b45309" font-weight="400">миллисекунду, повторяем один раз, затем RuntimeException.</text>
+<path d="M350.0,753.0 L350.0,777.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="777.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="806.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">lastTimestamp = t; собираем ID</text>
+<text x="178" y="846" font-size="10.5" fill="#b45309" font-weight="400">Состояние двигается только после всех проверок, поэтому</text>
+<text x="178" y="862" font-size="10.5" fill="#b45309" font-weight="400">сбойный вызов не отравит следующий.</text>
+<path d="M350.0,862.0 L350.0,886.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="886.0" width="340.0" height="38.0" rx="19.0" fill="#0f766e"/><text x="350.0" y="909.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Возвращаем 64-битный уникальный ID</text>
 </svg>

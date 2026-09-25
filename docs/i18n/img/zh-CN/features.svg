@@ -1,83 +1,89 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 640" width="980" height="640" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 820" width="980" height="820" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
 <title>功能设计</title>
 <desc>三大能力域，九项核心功能</desc>
 <defs>
 </defs>
-<rect width="980" height="640" fill="#ffffff"/>
+<rect width="980" height="820" fill="#ffffff"/>
 <text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">功能设计</text>
 <text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">三大能力域，九项核心功能</text>
 <line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
 <rect x="835.9" y="36.0" width="104.1" height="26.0" rx="13" fill="#eef4ff" stroke="#c3d7ff" stroke-width="1.2"/>
 <text x="887.937375" y="53" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">snowflake-php</text>
-<rect x="40.0" y="120.0" width="286.7" height="476.0" rx="14" fill="#f8fbff" stroke="#dbe6f5" stroke-width="1.4"/>
+<rect x="40.0" y="120.0" width="286.7" height="652.0" rx="14" fill="#f8fbff" stroke="#dbe6f5" stroke-width="1.4"/>
 <rect x="56.0" y="136.0" width="80.5" height="28.0" rx="14.0" fill="#2563eb"/><text x="96.25" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">核心能力</text>
-<rect x="56.0" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
-<rect x="56.0" y="184.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
+<rect x="56.0" y="184.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="184.0" width="4.0" height="180.0" rx="2" fill="#2563eb"/>
 <text x="71.0" y="208" font-size="13.0" fill="#0f1e33" font-weight="700">唯一 ID 生成</text>
 <rect x="71.0" y="216.0" width="87.4" height="18.0" rx="9" fill="#f8fbff"/>
 <text x="114.721" y="229" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">id() · nextId()</text>
-<text x="71.0" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">64 位、k-ordered、全局唯一；单进程约</text>
-<text x="71.0" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">50 万 ID/秒，无中心协调节点、无数据库</text>
-<text x="71.0" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">往返。</text>
-<rect x="56.0" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
-<rect x="56.0" y="322.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
-<text x="71.0" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">弹性位分配</text>
-<rect x="71.0" y="354.0" width="171.6" height="18.0" rx="9" fill="#f8fbff"/>
-<text x="156.781375" y="367" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">worker_bits · datacenter_bits</text>
-<text x="71.0" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">时间戳/数据中心/节点/序列号位宽可自由</text>
-<text x="71.0" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">调整，默认 5+5+12 支持 1024 个节点。</text>
-<rect x="56.0" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
-<rect x="56.0" y="460.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
-<text x="71.0" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">ID 反向解析</text>
-<rect x="71.0" y="492.0" width="115.4" height="18.0" rx="9" fill="#f8fbff"/>
-<text x="128.72275" y="505" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">parseId() · parse()</text>
-<text x="71.0" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">将生成的 ID 还原为时间戳、数据中心、节</text>
-<text x="71.0" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">点与序列号，便于排障与数据分片。</text>
-<rect x="346.7" y="120.0" width="286.7" height="476.0" rx="14" fill="#f6fdfe" stroke="#dbe6f5" stroke-width="1.4"/>
+<text x="71.0" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">64 位、k-ordered、全局唯一；单进程每</text>
+<text x="71.0" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">秒可生成上百万个 ID，无中心协调节点、无</text>
+<text x="71.0" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">数据库往返。</text>
+<rect x="56.0" y="378.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="378.0" width="4.0" height="180.0" rx="2" fill="#2563eb"/>
+<text x="71.0" y="402" font-size="13.0" fill="#0f1e33" font-weight="700">弹性位分配</text>
+<rect x="71.0" y="410.0" width="171.6" height="18.0" rx="9" fill="#f8fbff"/>
+<text x="156.781375" y="423" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">worker_bits · datacenter_bits</text>
+<text x="71.0" y="444.0" font-size="11.5" fill="#3d4d66" font-weight="400">时间戳/数据中心/节点/序列号位宽均可调</text>
+<text x="71.0" y="461.25" font-size="11.5" fill="#3d4d66" font-weight="400">整，默认 5+5+12 支持 1024 个节点。向</text>
+<text x="71.0" y="478.5" font-size="11.5" fill="#3d4d66" font-weight="400">节点或序列号借位会缩短寿命，可用</text>
+<text x="71.0" y="495.75" font-size="11.5" fill="#3d4d66" font-weight="400">Snowflake::lifespanMs() 查询。</text>
+<rect x="56.0" y="572.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="572.0" width="4.0" height="180.0" rx="2" fill="#2563eb"/>
+<text x="71.0" y="596" font-size="13.0" fill="#0f1e33" font-weight="700">ID 反向解析</text>
+<rect x="71.0" y="604.0" width="115.4" height="18.0" rx="9" fill="#f8fbff"/>
+<text x="128.72275" y="617" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">parseId() · parse()</text>
+<text x="71.0" y="638.0" font-size="11.5" fill="#3d4d66" font-weight="400">将生成的 ID 还原为时间戳、数据中心、节</text>
+<text x="71.0" y="655.25" font-size="11.5" fill="#3d4d66" font-weight="400">点与序列号，便于排障与数据分片。</text>
+<rect x="346.7" y="120.0" width="286.7" height="652.0" rx="14" fill="#f6fdfe" stroke="#dbe6f5" stroke-width="1.4"/>
 <rect x="362.7" y="136.0" width="80.5" height="28.0" rx="14.0" fill="#0e7490"/><text x="402.9166666666667" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">扩展能力</text>
-<rect x="362.7" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
-<rect x="362.7" y="184.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
+<rect x="362.7" y="184.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="184.0" width="4.0" height="180.0" rx="2" fill="#0e7490"/>
 <text x="377.6666666666667" y="208" font-size="13.0" fill="#0f1e33" font-weight="700">可插拔序列策略</text>
 <rect x="377.7" y="216.0" width="109.2" height="18.0" rx="9" fill="#f6fdfe"/>
 <text x="432.2472916666667" y="229" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">SequenceResolver</text>
-<text x="377.6666666666667" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">面向接口设计，内置顺序与随机两种实现，</text>
-<text x="377.6666666666667" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">可实现 Redis 等跨进程共享序列策略。</text>
-<rect x="362.7" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
-<rect x="362.7" y="322.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
-<text x="377.6666666666667" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">时钟回拨保护</text>
-<rect x="377.7" y="354.0" width="117.9" height="18.0" rx="9" fill="#f6fdfe"/>
-<text x="436.6021666666667" y="367" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">clock_tolerance_ms</text>
-<text x="377.6666666666667" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">配置容忍窗口吸收 NTP 抖动；超出容忍即</text>
-<text x="377.6666666666667" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">抛出异常，避免产生重复 ID。</text>
-<rect x="362.7" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
-<rect x="362.7" y="460.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
-<text x="377.6666666666667" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">多框架适配</text>
-<rect x="377.7" y="492.0" width="73.1" height="18.0" rx="9" fill="#f6fdfe"/>
-<text x="414.2214166666667" y="505" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">Adapters/*</text>
-<text x="377.6666666666667" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">Laravel、Webman、ThinkPHP、Hyperf 开</text>
-<text x="377.6666666666667" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">箱即用，支持自动发现与依赖注入。</text>
-<rect x="653.3" y="120.0" width="286.7" height="476.0" rx="14" fill="#fbf9ff" stroke="#dbe6f5" stroke-width="1.4"/>
+<text x="377.6666666666667" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">序列号策略是接口：顺序、随机、Redis 三</text>
+<text x="377.6666666666667" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">种实现已内置，其它策略几行代码即可接入</text>
+<text x="377.6666666666667" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">。</text>
+<rect x="362.7" y="378.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="378.0" width="4.0" height="180.0" rx="2" fill="#0e7490"/>
+<text x="377.6666666666667" y="402" font-size="13.0" fill="#0f1e33" font-weight="700">时钟回拨保护</text>
+<rect x="377.7" y="410.0" width="117.9" height="18.0" rx="9" fill="#f6fdfe"/>
+<text x="436.6021666666667" y="423" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">clock_tolerance_ms</text>
+<text x="377.6666666666667" y="444.0" font-size="11.5" fill="#3d4d66" font-weight="400">可配置的容忍窗口吸收 NTP 抖动；超出后</text>
+<text x="377.6666666666667" y="461.25" font-size="11.5" fill="#3d4d66" font-weight="400">由 clock_drift_strategy 决定：&#x27;wait&#x27; 自旋</text>
+<text x="377.6666666666667" y="478.5" font-size="11.5" fill="#3d4d66" font-weight="400">等待追平，&#x27;throw&#x27; 拒绝生成。</text>
+<rect x="362.7" y="572.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="572.0" width="4.0" height="180.0" rx="2" fill="#0e7490"/>
+<text x="377.6666666666667" y="596" font-size="13.0" fill="#0f1e33" font-weight="700">多框架适配</text>
+<rect x="377.7" y="604.0" width="73.1" height="18.0" rx="9" fill="#f6fdfe"/>
+<text x="414.2214166666667" y="617" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">Adapters/*</text>
+<text x="377.6666666666667" y="638.0" font-size="11.5" fill="#3d4d66" font-weight="400">内置 Laravel、Webman、ThinkPHP、</text>
+<text x="377.6666666666667" y="655.25" font-size="11.5" fill="#3d4d66" font-weight="400">Hyperf 适配器，PSR-11 工厂覆盖其他容</text>
+<text x="377.6666666666667" y="672.5" font-size="11.5" fill="#3d4d66" font-weight="400">器；也可完全不用容器，直接原生 PHP。</text>
+<rect x="653.3" y="120.0" width="286.7" height="652.0" rx="14" fill="#fbf9ff" stroke="#dbe6f5" stroke-width="1.4"/>
 <rect x="669.3" y="136.0" width="80.5" height="28.0" rx="14.0" fill="#6d28d9"/><text x="709.5833333333334" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">工程保障</text>
-<rect x="669.3" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
-<rect x="669.3" y="184.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
+<rect x="669.3" y="184.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="184.0" width="4.0" height="180.0" rx="2" fill="#6d28d9"/>
 <text x="684.3333333333334" y="208" font-size="13.0" fill="#0f1e33" font-weight="700">严格配置校验</text>
 <rect x="684.3" y="216.0" width="79.2" height="18.0" rx="9" fill="#fbf9ff"/>
 <text x="723.9199583333334" y="229" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">fromConfig()</text>
 <text x="684.3333333333334" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">配置数组、配置文件、环境变量三入口，启</text>
 <text x="684.3333333333334" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">动即校验位数与节点范围，拒绝非法组合。</text>
-<rect x="669.3" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
-<rect x="669.3" y="322.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
-<text x="684.3333333333334" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">语义化异常体系</text>
-<rect x="684.3" y="354.0" width="82.5" height="18.0" rx="9" fill="#fbf9ff"/>
-<text x="725.5737083333333" y="367" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">Exceptions/*</text>
-<text x="684.3333333333334" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">5 类异常各自携带出错字段的实际值与上限</text>
-<text x="684.3333333333334" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">，异常信息可直接定位配置问题。</text>
-<rect x="669.3" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
-<rect x="669.3" y="460.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
-<text x="684.3333333333334" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">质量与交付</text>
-<rect x="684.3" y="492.0" width="126.2" height="18.0" rx="9" fill="#fbf9ff"/>
-<text x="747.4583333333334" y="505" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">ci.yml · release.yml</text>
-<text x="684.3333333333334" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">PHPUnit 全量单元测试，PHP 8.0–8.4 矩</text>
-<text x="684.3333333333334" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">阵 CI，推送 main 自动计算版本并发版。</text>
-<text x="40" y="632" font-size="11.5" fill="#6b7c96" font-weight="400">运行环境：PHP &gt;= 8.0（CI 覆盖 8.0 – 8.4） · 64 位系统 · 每进程/协程独立实例，序列状态不跨进程共享</text>
+<rect x="669.3" y="378.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="378.0" width="4.0" height="180.0" rx="2" fill="#6d28d9"/>
+<text x="684.3333333333334" y="402" font-size="13.0" fill="#0f1e33" font-weight="700">语义化异常体系</text>
+<rect x="684.3" y="410.0" width="82.5" height="18.0" rx="9" fill="#fbf9ff"/>
+<text x="725.5737083333333" y="423" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">Exceptions/*</text>
+<text x="684.3333333333334" y="444.0" font-size="11.5" fill="#3d4d66" font-weight="400">5 类异常各自携带出错字段的实际值与上限</text>
+<text x="684.3333333333334" y="461.25" font-size="11.5" fill="#3d4d66" font-weight="400">，异常信息可直接定位配置问题。</text>
+<rect x="669.3" y="572.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="572.0" width="4.0" height="180.0" rx="2" fill="#6d28d9"/>
+<text x="684.3333333333334" y="596" font-size="13.0" fill="#0f1e33" font-weight="700">质量与交付</text>
+<rect x="684.3" y="604.0" width="126.2" height="18.0" rx="9" fill="#fbf9ff"/>
+<text x="747.4583333333334" y="617" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">ci.yml · release.yml</text>
+<text x="684.3333333333334" y="638.0" font-size="11.5" fill="#3d4d66" font-weight="400">PHPUnit 全量测试、PHP 8.0–8.5 CI 矩阵</text>
+<text x="684.3333333333334" y="655.25" font-size="11.5" fill="#3d4d66" font-weight="400">、src/ 的 PHPStan level 8 静态分析，推</text>
+<text x="684.3333333333334" y="672.5" font-size="11.5" fill="#3d4d66" font-weight="400">送 main 自动发版。</text>
+<text x="40" y="796" font-size="11.5" fill="#6b7c96" font-weight="400">运行环境：PHP &gt;= 8.0（CI 覆盖 8.0 – 8.5） · 64 位系统 · 每进程/协程独立实例，序列状态不跨进程共享</text>
 </svg>

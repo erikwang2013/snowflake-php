@@ -1,76 +1,83 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 640" width="980" height="640" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 820" width="980" height="820" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
 <title>Feature-Design</title>
 <desc>Drei Fähigkeitsbereiche, neun Kern-Features</desc>
 <defs>
 </defs>
-<rect width="980" height="640" fill="#ffffff"/>
+<rect width="980" height="820" fill="#ffffff"/>
 <text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">Feature-Design</text>
 <text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">Drei Fähigkeitsbereiche, neun Kern-Features</text>
 <line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
 <rect x="835.9" y="36.0" width="104.1" height="26.0" rx="13" fill="#eef4ff" stroke="#c3d7ff" stroke-width="1.2"/>
 <text x="887.937375" y="53" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">snowflake-php</text>
-<rect x="40.0" y="120.0" width="286.7" height="476.0" rx="14" fill="#f8fbff" stroke="#dbe6f5" stroke-width="1.4"/>
+<rect x="40.0" y="120.0" width="286.7" height="652.0" rx="14" fill="#f8fbff" stroke="#dbe6f5" stroke-width="1.4"/>
 <rect x="56.0" y="136.0" width="118.3" height="28.0" rx="14.0" fill="#2563eb"/><text x="115.15" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Kernfunktionen</text>
-<rect x="56.0" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
-<rect x="56.0" y="184.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
+<rect x="56.0" y="184.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="184.0" width="4.0" height="180.0" rx="2" fill="#2563eb"/>
 <text x="71.0" y="208" font-size="13.0" fill="#0f1e33" font-weight="700">Eindeutige ID-Generierung</text>
 <rect x="71.0" y="216.0" width="87.4" height="18.0" rx="9" fill="#f8fbff"/>
 <text x="114.721" y="229" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">id() · nextId()</text>
 <text x="71.0" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">64-Bit, k-geordnet, global eindeutig;</text>
-<text x="71.0" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">rund 500k IDs pro Sekunde und</text>
-<text x="71.0" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">Prozess ohne zentrale Koordination und</text>
-<text x="71.0" y="301.75" font-size="11.5" fill="#3d4d66" font-weight="400">ohne Datenbank-Zugriff.</text>
-<rect x="56.0" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
-<rect x="56.0" y="322.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
-<text x="71.0" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">Flexible Bit-Aufteilung</text>
-<rect x="71.0" y="354.0" width="171.6" height="18.0" rx="9" fill="#f8fbff"/>
-<text x="156.781375" y="367" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">worker_bits · datacenter_bits</text>
-<text x="71.0" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">Zeitstempel-, Datacenter-, Worker- und</text>
-<text x="71.0" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">Sequenzbreite sind frei konfigurierbar;</text>
-<text x="71.0" y="422.5" font-size="11.5" fill="#3d4d66" font-weight="400">das Standard-Layout 5+5+12 unterstützt</text>
-<text x="71.0" y="439.75" font-size="11.5" fill="#3d4d66" font-weight="400">1024 Knoten.</text>
-<rect x="56.0" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
-<rect x="56.0" y="460.0" width="4.0" height="124.0" rx="2" fill="#2563eb"/>
-<text x="71.0" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">ID-Parsing</text>
-<rect x="71.0" y="492.0" width="115.4" height="18.0" rx="9" fill="#f8fbff"/>
-<text x="128.72275" y="505" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">parseId() · parse()</text>
-<text x="71.0" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">Zerlegt jede generierte ID wieder in</text>
-<text x="71.0" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">Zeitstempel, Datacenter, Worker und</text>
-<text x="71.0" y="560.5" font-size="11.5" fill="#3d4d66" font-weight="400">Sequenz — nützlich für Debugging und</text>
-<text x="71.0" y="577.75" font-size="11.5" fill="#3d4d66" font-weight="400">Sharding.</text>
-<rect x="346.7" y="120.0" width="286.7" height="476.0" rx="14" fill="#f6fdfe" stroke="#dbe6f5" stroke-width="1.4"/>
+<text x="71.0" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">deutlich über eine Million IDs pro</text>
+<text x="71.0" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">Sekunde und Prozess, ohne zentrale</text>
+<text x="71.0" y="301.75" font-size="11.5" fill="#3d4d66" font-weight="400">Koordination und ohne</text>
+<text x="71.0" y="319.0" font-size="11.5" fill="#3d4d66" font-weight="400">Datenbank-Zugriff.</text>
+<rect x="56.0" y="378.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="378.0" width="4.0" height="180.0" rx="2" fill="#2563eb"/>
+<text x="71.0" y="402" font-size="13.0" fill="#0f1e33" font-weight="700">Flexible Bit-Aufteilung</text>
+<rect x="71.0" y="410.0" width="171.6" height="18.0" rx="9" fill="#f8fbff"/>
+<text x="156.781375" y="423" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">worker_bits · datacenter_bits</text>
+<text x="71.0" y="444.0" font-size="11.5" fill="#3d4d66" font-weight="400">Zeitstempel-, Datacenter-, Worker- und</text>
+<text x="71.0" y="461.25" font-size="11.5" fill="#3d4d66" font-weight="400">Sequenzbreite sind frei konfigurierbar;</text>
+<text x="71.0" y="478.5" font-size="11.5" fill="#3d4d66" font-weight="400">das Standard-Layout 5+5+12 unterstützt</text>
+<text x="71.0" y="495.75" font-size="11.5" fill="#3d4d66" font-weight="400">1024 Knoten. Dem Zeitstempel</text>
+<text x="71.0" y="513.0" font-size="11.5" fill="#3d4d66" font-weight="400">entnommene Bits verkürzen die</text>
+<text x="71.0" y="530.25" font-size="11.5" fill="#3d4d66" font-weight="400">Lebensdauer; Snowflake::lifespanMs()</text>
+<text x="71.0" y="547.5" font-size="11.5" fill="#3d4d66" font-weight="400">gibt sie aus.</text>
+<rect x="56.0" y="572.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#c3d7ff" stroke-width="1.5"/>
+<rect x="56.0" y="572.0" width="4.0" height="180.0" rx="2" fill="#2563eb"/>
+<text x="71.0" y="596" font-size="13.0" fill="#0f1e33" font-weight="700">ID-Parsing</text>
+<rect x="71.0" y="604.0" width="115.4" height="18.0" rx="9" fill="#f8fbff"/>
+<text x="128.72275" y="617" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">parseId() · parse()</text>
+<text x="71.0" y="638.0" font-size="11.5" fill="#3d4d66" font-weight="400">Zerlegt jede generierte ID wieder in</text>
+<text x="71.0" y="655.25" font-size="11.5" fill="#3d4d66" font-weight="400">Zeitstempel, Datacenter, Worker und</text>
+<text x="71.0" y="672.5" font-size="11.5" fill="#3d4d66" font-weight="400">Sequenz — nützlich für Debugging und</text>
+<text x="71.0" y="689.75" font-size="11.5" fill="#3d4d66" font-weight="400">Sharding.</text>
+<rect x="346.7" y="120.0" width="286.7" height="652.0" rx="14" fill="#f6fdfe" stroke="#dbe6f5" stroke-width="1.4"/>
 <rect x="362.7" y="136.0" width="146.1" height="28.0" rx="14.0" fill="#0e7490"/><text x="435.7291666666667" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Erweiterungspunkte</text>
-<rect x="362.7" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
-<rect x="362.7" y="184.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
+<rect x="362.7" y="184.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="184.0" width="4.0" height="180.0" rx="2" fill="#0e7490"/>
 <text x="377.6666666666667" y="208" font-size="13.0" fill="#0f1e33" font-weight="700">Austauschbare Sequenz-Strategien</text>
 <rect x="377.7" y="216.0" width="109.2" height="18.0" rx="9" fill="#f6fdfe"/>
 <text x="432.2472916666667" y="229" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">SequenceResolver</text>
 <text x="377.6666666666667" y="250.0" font-size="11.5" fill="#3d4d66" font-weight="400">Der Sequenz-Resolver ist ein Interface;</text>
-<text x="377.6666666666667" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">zwei Implementierungen sind eingebaut,</text>
-<text x="377.6666666666667" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">eine Redis-gestützte gemeinsame</text>
-<text x="377.6666666666667" y="301.75" font-size="11.5" fill="#3d4d66" font-weight="400">Sequenz ist wenige Zeilen entfernt.</text>
-<rect x="362.7" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
-<rect x="362.7" y="322.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
-<text x="377.6666666666667" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">Schutz vor Clock-Drift</text>
-<rect x="377.7" y="354.0" width="117.9" height="18.0" rx="9" fill="#f6fdfe"/>
-<text x="436.6021666666667" y="367" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">clock_tolerance_ms</text>
-<text x="377.6666666666667" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">Ein konfigurierbares Toleranzfenster</text>
-<text x="377.6666666666667" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">fängt NTP-Jitter ab; darüber hinaus</text>
-<text x="377.6666666666667" y="422.5" font-size="11.5" fill="#3d4d66" font-weight="400">wird eine Exception geworfen statt</text>
-<text x="377.6666666666667" y="439.75" font-size="11.5" fill="#3d4d66" font-weight="400">doppelter IDs zu riskieren.</text>
-<rect x="362.7" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
-<rect x="362.7" y="460.0" width="4.0" height="124.0" rx="2" fill="#0e7490"/>
-<text x="377.6666666666667" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">Framework-Adapter</text>
-<rect x="377.7" y="492.0" width="73.1" height="18.0" rx="9" fill="#f6fdfe"/>
-<text x="414.2214166666667" y="505" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">Adapters/*</text>
-<text x="377.6666666666667" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">Laravel, Webman, ThinkPHP und Hyperf</text>
-<text x="377.6666666666667" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">funktionieren sofort, inklusive</text>
-<text x="377.6666666666667" y="560.5" font-size="11.5" fill="#3d4d66" font-weight="400">Auto-Discovery und</text>
-<text x="377.6666666666667" y="577.75" font-size="11.5" fill="#3d4d66" font-weight="400">Container-Integration.</text>
-<rect x="653.3" y="120.0" width="286.7" height="476.0" rx="14" fill="#fbf9ff" stroke="#dbe6f5" stroke-width="1.4"/>
+<text x="377.6666666666667" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">sequenzielle, zufällige und</text>
+<text x="377.6666666666667" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">Redis-gestützte Implementierungen sind</text>
+<text x="377.6666666666667" y="301.75" font-size="11.5" fill="#3d4d66" font-weight="400">eingebaut, alles Weitere ist wenige</text>
+<text x="377.6666666666667" y="319.0" font-size="11.5" fill="#3d4d66" font-weight="400">Zeilen entfernt.</text>
+<rect x="362.7" y="378.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="378.0" width="4.0" height="180.0" rx="2" fill="#0e7490"/>
+<text x="377.6666666666667" y="402" font-size="13.0" fill="#0f1e33" font-weight="700">Schutz vor Clock-Drift</text>
+<rect x="377.7" y="410.0" width="117.9" height="18.0" rx="9" fill="#f6fdfe"/>
+<text x="436.6021666666667" y="423" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">clock_tolerance_ms</text>
+<text x="377.6666666666667" y="444.0" font-size="11.5" fill="#3d4d66" font-weight="400">Ein konfigurierbares Toleranzfenster</text>
+<text x="377.6666666666667" y="461.25" font-size="11.5" fill="#3d4d66" font-weight="400">fängt NTP-Jitter ab. Darüber hinaus</text>
+<text x="377.6666666666667" y="478.5" font-size="11.5" fill="#3d4d66" font-weight="400">entscheidet clock_drift_strategy: &#x27;wait&#x27;</text>
+<text x="377.6666666666667" y="495.75" font-size="11.5" fill="#3d4d66" font-weight="400">wartet, bis die Uhr aufgeholt hat,</text>
+<text x="377.6666666666667" y="513.0" font-size="11.5" fill="#3d4d66" font-weight="400">&#x27;throw&#x27; verweigert die Generierung.</text>
+<rect x="362.7" y="572.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#a9dcea" stroke-width="1.5"/>
+<rect x="362.7" y="572.0" width="4.0" height="180.0" rx="2" fill="#0e7490"/>
+<text x="377.6666666666667" y="596" font-size="13.0" fill="#0f1e33" font-weight="700">Framework-Adapter</text>
+<rect x="377.7" y="604.0" width="73.1" height="18.0" rx="9" fill="#f6fdfe"/>
+<text x="414.2214166666667" y="617" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">Adapters/*</text>
+<text x="377.6666666666667" y="638.0" font-size="11.5" fill="#3d4d66" font-weight="400">Laravel, Webman, ThinkPHP und Hyperf</text>
+<text x="377.6666666666667" y="655.25" font-size="11.5" fill="#3d4d66" font-weight="400">sind eingebaut, und die PSR-11-Factory</text>
+<text x="377.6666666666667" y="672.5" font-size="11.5" fill="#3d4d66" font-weight="400">deckt jeden anderen Container ab —</text>
+<text x="377.6666666666667" y="689.75" font-size="11.5" fill="#3d4d66" font-weight="400">oder ganz ohne Container mit reinem</text>
+<text x="377.6666666666667" y="707.0" font-size="11.5" fill="#3d4d66" font-weight="400">PHP.</text>
+<rect x="653.3" y="120.0" width="286.7" height="652.0" rx="14" fill="#fbf9ff" stroke="#dbe6f5" stroke-width="1.4"/>
 <rect x="669.3" y="136.0" width="100.2" height="28.0" rx="14.0" fill="#6d28d9"/><text x="719.4270833333334" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Engineering</text>
-<rect x="669.3" y="184.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
-<rect x="669.3" y="184.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
+<rect x="669.3" y="184.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="184.0" width="4.0" height="180.0" rx="2" fill="#6d28d9"/>
 <text x="684.3333333333334" y="208" font-size="13.0" fill="#0f1e33" font-weight="700">Strikte Config-Validierung</text>
 <rect x="684.3" y="216.0" width="79.2" height="18.0" rx="9" fill="#fbf9ff"/>
 <text x="723.9199583333334" y="229" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">fromConfig()</text>
@@ -78,23 +85,23 @@
 <text x="684.3333333333334" y="267.25" font-size="11.5" fill="#3d4d66" font-weight="400">Umgebungsvariablen landen alle in</text>
 <text x="684.3333333333334" y="284.5" font-size="11.5" fill="#3d4d66" font-weight="400">einer validierten Factory, die</text>
 <text x="684.3333333333334" y="301.75" font-size="11.5" fill="#3d4d66" font-weight="400">unmögliche Kombinationen ablehnt.</text>
-<rect x="669.3" y="322.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
-<rect x="669.3" y="322.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
-<text x="684.3333333333334" y="346" font-size="13.0" fill="#0f1e33" font-weight="700">Semantische Exceptions</text>
-<rect x="684.3" y="354.0" width="82.5" height="18.0" rx="9" fill="#fbf9ff"/>
-<text x="725.5737083333333" y="367" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">Exceptions/*</text>
-<text x="684.3333333333334" y="388.0" font-size="11.5" fill="#3d4d66" font-weight="400">Fünf Exception-Typen, jeder mit dem</text>
-<text x="684.3333333333334" y="405.25" font-size="11.5" fill="#3d4d66" font-weight="400">fehlerhaften Wert und seinem Limit —</text>
-<text x="684.3333333333334" y="422.5" font-size="11.5" fill="#3d4d66" font-weight="400">die Meldung zeigt direkt auf die</text>
-<text x="684.3333333333334" y="439.75" font-size="11.5" fill="#3d4d66" font-weight="400">Fehlkonfiguration.</text>
-<rect x="669.3" y="460.0" width="254.7" height="124.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
-<rect x="669.3" y="460.0" width="4.0" height="124.0" rx="2" fill="#6d28d9"/>
-<text x="684.3333333333334" y="484" font-size="13.0" fill="#0f1e33" font-weight="700">Qualität &amp; Delivery</text>
-<rect x="684.3" y="492.0" width="126.2" height="18.0" rx="9" fill="#fbf9ff"/>
-<text x="747.4583333333334" y="505" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">ci.yml · release.yml</text>
-<text x="684.3333333333334" y="526.0" font-size="11.5" fill="#3d4d66" font-weight="400">Eine vollständige PHPUnit-Suite, eine</text>
-<text x="684.3333333333334" y="543.25" font-size="11.5" fill="#3d4d66" font-weight="400">CI-Matrix für PHP 8.0–8.4 und</text>
-<text x="684.3333333333334" y="560.5" font-size="11.5" fill="#3d4d66" font-weight="400">automatische Versionierung bei jedem</text>
-<text x="684.3333333333334" y="577.75" font-size="11.5" fill="#3d4d66" font-weight="400">Push auf main.</text>
-<text x="40" y="632" font-size="11.5" fill="#6b7c96" font-weight="400">Laufzeit: PHP &gt;= 8.0 (CI deckt 8.0 – 8.4 ab) · 64-Bit-System · eine Instanz je Prozess oder Coroutine, der Sequenzzustand wird nie geteilt</text>
+<rect x="669.3" y="378.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="378.0" width="4.0" height="180.0" rx="2" fill="#6d28d9"/>
+<text x="684.3333333333334" y="402" font-size="13.0" fill="#0f1e33" font-weight="700">Semantische Exceptions</text>
+<rect x="684.3" y="410.0" width="82.5" height="18.0" rx="9" fill="#fbf9ff"/>
+<text x="725.5737083333333" y="423" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">Exceptions/*</text>
+<text x="684.3333333333334" y="444.0" font-size="11.5" fill="#3d4d66" font-weight="400">Fünf Exception-Typen, jeder mit dem</text>
+<text x="684.3333333333334" y="461.25" font-size="11.5" fill="#3d4d66" font-weight="400">fehlerhaften Wert und seinem Limit —</text>
+<text x="684.3333333333334" y="478.5" font-size="11.5" fill="#3d4d66" font-weight="400">die Meldung zeigt direkt auf die</text>
+<text x="684.3333333333334" y="495.75" font-size="11.5" fill="#3d4d66" font-weight="400">Fehlkonfiguration.</text>
+<rect x="669.3" y="572.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>
+<rect x="669.3" y="572.0" width="4.0" height="180.0" rx="2" fill="#6d28d9"/>
+<text x="684.3333333333334" y="596" font-size="13.0" fill="#0f1e33" font-weight="700">Qualität &amp; Delivery</text>
+<rect x="684.3" y="604.0" width="126.2" height="18.0" rx="9" fill="#fbf9ff"/>
+<text x="747.4583333333334" y="617" font-size="10.5" fill="#6d28d9" font-weight="600" text-anchor="middle">ci.yml · release.yml</text>
+<text x="684.3333333333334" y="638.0" font-size="11.5" fill="#3d4d66" font-weight="400">Eine vollständige PHPUnit-Suite, PHP</text>
+<text x="684.3333333333334" y="655.25" font-size="11.5" fill="#3d4d66" font-weight="400">8.0–8.5 in der CI, PHPStan Level 8 auf</text>
+<text x="684.3333333333334" y="672.5" font-size="11.5" fill="#3d4d66" font-weight="400">src/ und automatische Versionierung</text>
+<text x="684.3333333333334" y="689.75" font-size="11.5" fill="#3d4d66" font-weight="400">bei jedem Push auf main.</text>
+<text x="40" y="796" font-size="11.5" fill="#6b7c96" font-weight="400">Laufzeit: PHP &gt;= 8.0 (CI deckt 8.0 – 8.5 ab) · 64-Bit-System · eine Instanz je Prozess oder Coroutine, der Sequenzzustand wird nie geteilt</text>
 </svg>

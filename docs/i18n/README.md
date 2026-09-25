@@ -30,10 +30,11 @@ python3 scripts/generate-diagrams.py          # every language
 python3 scripts/generate-diagrams.py en ja    # selected languages
 ```
 
-`scripts/i18n/labels.<lang>.json` holds every string that appears in a diagram
-(`scripts/i18n/labels.en.json` is the reference key set — all languages must
-carry exactly the same 132 keys). Adding a language means adding one label file
-and one README, then re-running the generator.
+`scripts/i18n/labels.<lang>.json` holds every string that appears in a diagram.
+`scripts/i18n/labels.en.json` is the reference key set: every language must
+carry exactly the same keys, and the generator refuses to build a language that
+is missing one. Adding a language means adding one label file and one README,
+then re-running the generator.
 
 ## Translating
 

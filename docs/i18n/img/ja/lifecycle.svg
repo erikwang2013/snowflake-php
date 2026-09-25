@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 942" width="980" height="942" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 950" width="980" height="950" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
 <title>ID ライフサイクル</title>
 <desc>1 回の id() 呼び出し：全経路、触れる状態、守る上限</desc>
 <defs>
 <marker id="mk-5b8def" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0.6 L9.5,5 L0,9.4 z" fill="#5b8def"/></marker>
 </defs>
-<rect width="980" height="942" fill="#ffffff"/>
+<rect width="980" height="950" fill="#ffffff"/>
 <text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">ID ライフサイクル</text>
 <text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">1 回の id() 呼び出し：全経路、触れる状態、守る上限</text>
 <line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
@@ -41,7 +41,7 @@
 <text x="665" y="570" font-size="13.0" fill="#0f1e33" font-weight="700">容量とスループット</text>
 <text x="665" y="592.0" font-size="11.5" fill="#3d4d66" font-weight="400">最大 2^12 = 4096 ID / ミリ秒。それを超える</text>
 <text x="665" y="609.25" font-size="11.5" fill="#3d4d66" font-weight="400">と次のミリ秒までスピンします。</text>
-<text x="665" y="626.5" font-size="11.5" fill="#3d4d66" font-weight="400">単一プロセスで毎秒約 50 万 ID。</text>
+<text x="665" y="626.5" font-size="11.5" fill="#3d4d66" font-weight="400">単一プロセスで毎秒 100 万 ID 超。</text>
 <text x="665" y="643.75" font-size="11.5" fill="#3d4d66" font-weight="400">ノードは (datacenter_id, worker_id) の組を一意</text>
 <text x="665" y="661.0" font-size="11.5" fill="#3d4d66" font-weight="400">に確保。デフォルト構成で 32 × 32 = 1024 ノ</text>
 <text x="665" y="678.25" font-size="11.5" fill="#3d4d66" font-weight="400">ード。</text>
@@ -54,11 +54,11 @@
 <text x="670" y="771" font-size="10.0" fill="#b45309" font-weight="600">エポック 2024-01-01</text>
 <text x="920" y="771" font-size="10.0" fill="#6b7c96" font-weight="600" text-anchor="end">上限 2093</text>
 <text x="670" y="816" font-size="10.5" fill="#3d4d66" font-weight="400">開始：エポック = 2024-01-01 UTC</text>
-<text x="670" y="832" font-size="10.5" fill="#3d4d66" font-weight="400">上限：2^41 − 1 ms ≈ 69.7 年</text>
-<text x="670" y="848" font-size="10.5" fill="#3d4d66" font-weight="400">枯渇時は TimestampOverflowException を送出</text>
-<text x="670" y="864" font-size="10.5" fill="#3d4d66" font-weight="400">より新しいエポックなら寿命をすべてリセットでき</text>
-<text x="670" y="880" font-size="10.5" fill="#3d4d66" font-weight="400">ます。</text>
-<text x="670" y="908" font-size="10.5" fill="#3d4d66" text-anchor="start"><tspan fill="#6b7c96" font-weight="400">2026 年時点で約 3% 消費</tspan></text>
+<text x="670" y="830" font-size="10.5" fill="#3d4d66" font-weight="400">上限：2^41 − 1 ms ≈ 69.7 年</text>
+<text x="670" y="844" font-size="10.5" fill="#3d4d66" font-weight="400">枯渇時は TimestampOverflowException を送出</text>
+<text x="670" y="858" font-size="10.5" fill="#3d4d66" font-weight="400">より新しいエポックなら寿命をすべてリセットでき</text>
+<text x="670" y="872" font-size="10.5" fill="#3d4d66" font-weight="400">ます。</text>
+<text x="670" y="898" font-size="10.5" fill="#3d4d66" text-anchor="start"><tspan fill="#6b7c96" font-weight="400">2026 年時点で約 3% 消費</tspan></text>
 <rect x="240.0" y="120.0" width="220.0" height="36.0" rx="18.0" fill="#0f766e"/><text x="350.0" y="142.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">id() / nextId() を呼び出す</text>
 <path d="M350.0,156.0 L350.0,180.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
 <rect x="180.0" y="180.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
@@ -69,28 +69,29 @@
 <polygon points="350,273.0 500.0,307.0 350,341.0 200.0,307.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
 <text x="350" y="312.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">t &lt; lastTimestamp (クロックが逆行)</text>
 <text x="178" y="360" font-size="10.5" fill="#b45309" font-weight="400">はい → ドリフトが clock_tolerance_ms 以内なら前のミリ秒を再利用</text>
-<text x="178" y="376" font-size="10.5" fill="#b45309" font-weight="400">。そうでなければ ClockDriftException を送出し生成を拒否。</text>
-<path d="M350.0,376.0 L350.0,400.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="400.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="429.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset = t − epoch</text>
-<text x="178" y="469" font-size="10.5" fill="#b45309" font-weight="400">offset は設定されたエポックからのミリ秒距離です。</text>
-<path d="M350.0,469.0 L350.0,493.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<text x="362" y="485.0" font-size="10.5" fill="#6b7c96" font-weight="600">いいえ</text>
-<polygon points="350,493.0 500.0,527.0 350,561.0 200.0,527.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
-<text x="350" y="524.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset が範囲外？</text>
-<text x="350" y="540.0" font-size="10.5" fill="#6b7c96" font-weight="400" text-anchor="middle">(0 未満または上限超過)</text>
-<text x="178" y="580" font-size="10.5" fill="#b45309" font-weight="400">はい → エポックより前の時刻なら ClockDriftException、エポック枯渇</text>
-<text x="178" y="596" font-size="10.5" fill="#b45309" font-weight="400">なら TimestampOverflowException を送出。</text>
-<path d="M350.0,596.0 L350.0,620.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="620.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="649.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">seq = resolver.next(offset, maxSequence)</text>
-<text x="178" y="689" font-size="10.5" fill="#b45309" font-weight="400">シーケンスが枯渇 (null) すると次のミリ秒までスピンして 1 回再試行</text>
-<text x="178" y="705" font-size="10.5" fill="#b45309" font-weight="400">し、それでも失敗すると RuntimeException を送出。</text>
-<path d="M350.0,705.0 L350.0,729.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="729.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="758.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">lastTimestamp = t; ID を合成</text>
-<text x="178" y="798" font-size="10.5" fill="#b45309" font-weight="400">すべてのガードを通過してから状態を進めるため、失敗した呼び出しが</text>
-<text x="178" y="814" font-size="10.5" fill="#b45309" font-weight="400">次に悪影響を与えません。</text>
-<path d="M350.0,814.0 L350.0,838.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="838.0" width="340.0" height="38.0" rx="19.0" fill="#0f766e"/><text x="350.0" y="861.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">64 ビットのユニーク ID を返す</text>
+<text x="178" y="376" font-size="10.5" fill="#b45309" font-weight="400">。超える場合は clock_drift_strategy が判断し、&#x27;wait&#x27; は追いつくまで</text>
+<text x="178" y="392" font-size="10.5" fill="#b45309" font-weight="400">スピン、&#x27;throw&#x27; は ClockDriftException を送出。</text>
+<path d="M350.0,392.0 L350.0,416.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="416.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="445.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset = t − epoch</text>
+<text x="178" y="485" font-size="10.5" fill="#b45309" font-weight="400">offset は設定されたエポックからのミリ秒距離です。</text>
+<path d="M350.0,485.0 L350.0,509.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<text x="362" y="501.0" font-size="10.5" fill="#6b7c96" font-weight="600">いいえ</text>
+<polygon points="350,509.0 500.0,543.0 350,577.0 200.0,543.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
+<text x="350" y="540.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset が範囲外？</text>
+<text x="350" y="556.0" font-size="10.5" fill="#6b7c96" font-weight="400" text-anchor="middle">(0 未満または上限超過)</text>
+<text x="178" y="596" font-size="10.5" fill="#b45309" font-weight="400">はい → エポックより前の時刻なら ClockDriftException、エポック枯渇</text>
+<text x="178" y="612" font-size="10.5" fill="#b45309" font-weight="400">なら TimestampOverflowException を送出。</text>
+<path d="M350.0,612.0 L350.0,636.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="636.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="665.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">seq = resolver.next(offset, maxSequence)</text>
+<text x="178" y="705" font-size="10.5" fill="#b45309" font-weight="400">シーケンスが枯渇 (null) すると次のミリ秒までスピンして 1 回再試行</text>
+<text x="178" y="721" font-size="10.5" fill="#b45309" font-weight="400">し、それでも失敗すると RuntimeException を送出。</text>
+<path d="M350.0,721.0 L350.0,745.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="745.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="774.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">lastTimestamp = t; ID を合成</text>
+<text x="178" y="814" font-size="10.5" fill="#b45309" font-weight="400">すべてのガードを通過してから状態を進めるため、失敗した呼び出しが</text>
+<text x="178" y="830" font-size="10.5" fill="#b45309" font-weight="400">次に悪影響を与えません。</text>
+<path d="M350.0,830.0 L350.0,854.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="854.0" width="340.0" height="38.0" rx="19.0" fill="#0f766e"/><text x="350.0" y="877.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">64 ビットのユニーク ID を返す</text>
 </svg>

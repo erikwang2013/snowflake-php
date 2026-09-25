@@ -12,15 +12,15 @@ Twitter-এর Snowflake অ্যালগরিদমের উপর ভি�
 
 ## পরিচিতি
 
-Snowflake PHP কোনো সেন্ট্রাল কোঅর্ডিনেটর ছাড়াই 64-bit, k-ordered, গ্লোবালি ইউনিক ID জেনারেট করে। প্রতিটি ID একটি timestamp, datacenter ID, worker ID ও sequence নম্বর দিয়ে গঠিত — ফলে প্রতি নোডে সেকেন্ডে কয়েক লাখ ID তৈরি হয়, কোনো ডেটাবেস রাউন্ড-ট্রিপ ছাড়াই।
+Snowflake PHP কোনো সেন্ট্রাল কোঅর্ডিনেটর ছাড়াই 64-bit, k-ordered, গ্লোবালি ইউনিক ID জেনারেট করে। প্রতিটি ID একটি timestamp, datacenter ID, worker ID ও sequence নম্বর দিয়ে গঠিত — ফলে প্রতি নোডে সেকেন্ডে দশ লাখেরও বেশি ID তৈরি হয়, কোনো ডেটাবেস রাউন্ড-ট্রিপ ছাড়াই।
 
 মূল ফিচার:
 
 - **পিওর PHP, শূন্য ডিপেন্ডেন্সি** — কোনো এক্সটেনশন বা এক্সটার্নাল সার্ভিস লাগে না
-- **প্লাগেবল sequence রিজলভার** — বিল্ট-ইন sequential ও random স্ট্র্যাটেজি, অথবা নিজেরটি আনুন
+- **প্লাগেবল sequence রিজলভার** — বিল্ট-ইন sequential, random ও Redis-ভিত্তিক স্ট্র্যাটেজি, অথবা নিজেরটি আনুন
 - **ফ্লেক্সিবল বিট অ্যালোকেশন** — আপনার স্কেল অনুযায়ী timestamp/worker/datacenter/sequence বিট সাজিয়ে নিন
 - **ক্লক ড্রিফট টলারেন্স** — NTP অ্যাডজাস্টমেন্টের জন্য কনফিগারেবল টলারেন্স উইন্ডো
-- **ফ্রেমওয়ার্ক অ্যাগনস্টিক**, সাথে Laravel, ThinkPHP, Webman ও Hyperf-এর জন্য ফার্স্ট-ক্লাস অ্যাডাপ্টার
+- **ফ্রেমওয়ার্ক অ্যাগনস্টিক** — Laravel, ThinkPHP, Webman ও Hyperf-এর জন্য ফার্স্ট-ক্লাস অ্যাডাপ্টার, অথবা কন্টেইনার ছাড়া প্লেইন PHP
 - **ID পার্সিং** — জেনারেট করা ID আবার timestamp, node ও sequence কম্পোনেন্টে ভেঙে দেখা যায়
 
 ## প্রজেক্ট স্ট্রাকচার
@@ -33,7 +33,8 @@ snowflake-php/
 │   │   └── SequenceResolver.php            # Sequence strategy interface
 │   ├── Resolvers/
 │   │   ├── SequentialSequenceResolver.php  # Default: 0..max per millisecond
-│   │   └── RandomSequenceResolver.php      # Random start per millisecond
+│   │   ├── RandomSequenceResolver.php      # Random start per millisecond
+│   │   └── RedisSequenceResolver.php       # Shared counter for multi-process nodes
 │   ├── Exceptions/
 │   │   ├── SnowflakeException.php          # Base exception
 │   │   ├── ClockDriftException.php
@@ -44,7 +45,8 @@ snowflake-php/
 │       ├── Laravel/                        # ServiceProvider + Facade + config
 │       ├── ThinkPHP/                       # Service + Facade + config
 │       ├── Hyperf/                         # ConfigProvider + config
-│       └── Webman/                         # config/app.php
+│       ├── Webman/                         # config/app.php
+│       └── Psr11/SnowflakeFactory.php      # Any PSR-11 container, no interface dependency
 ├── config/snowflake.php                    # Reference configuration with comments
 ├── tests/
 │   ├── bootstrap.php                       # Loads the autoloader, prints the mascot
@@ -54,11 +56,15 @@ snowflake-php/
 │   │   ├── README.md                       # Language index
 │   │   ├── img/<lang>/                     # Generated SVGs (13 languages)
 │   │   └── <lang>/README.md                # One translated README per language
+│   ├── examples/plain-php.php              # Runnable no-framework example
 │   └── *.png                               # Sponsor images
 ├── scripts/
 │   ├── generate-diagrams.py                # Builds docs/i18n/img/<lang>/*.svg
+│   ├── benchmark.php                       # Reproducible throughput benchmark
+│   ├── phpstan/stubs/                      # Framework stubs for static analysis
 │   └── i18n/labels.<lang>.json             # Diagram strings, one file per language
-└── .github/workflows/                      # ci.yml (PHP 8.0–8.4), release.yml
+├── phpstan.neon.dist                       # Level 8 static analysis config
+└── .github/workflows/                      # ci.yml (PHP 8.0–8.5), release.yml
 ```
 
 ## আর্কিটেকচার
@@ -67,8 +73,8 @@ snowflake-php/
 
 চারটি লেয়ার, নির্ভরতা শুধু এক দিকেই:
 
-- **অ্যাপ্লিকেশন লেয়ার** — আপনার Laravel / Webman / ThinkPHP / Hyperf অ্যাপ্লিকেশন; এটি কন্টেইনারের কাছে শুধু একটি `Snowflake` ইনস্ট্যান্স চায়।
-- **অ্যাডাপ্টার লেয়ার** — প্রতি ফ্রেমওয়ার্কে একটি অ্যাডাপ্টার। প্রতিটি ফ্রেমওয়ার্ক কন্টেইনারে একটি শেয়ারড ইনস্ট্যান্স রেজিস্টার করে এবং একটি পাবলিশযোগ্য config ফাইল দেয়।
+- **অ্যাপ্লিকেশন লেয়ার** — আপনার Laravel / Webman / ThinkPHP / Hyperf অ্যাপ্লিকেশন, যেকোনো PSR-11 কন্টেইনার, বা প্লেইন PHP; এটি কন্টেইনারের কাছে শুধু একটি `Snowflake` ইনস্ট্যান্স চায়।
+- **অ্যাডাপ্টার লেয়ার** — প্রতি ফ্রেমওয়ার্কে একটি অ্যাডাপ্টার, সাথে কন্টেইনার-নিরপেক্ষ একটি PSR-11 ফ্যাক্টরি। প্রতিটি একটি শেয়ারড ইনস্ট্যান্স রেজিস্টার করে এবং একটি পাবলিশযোগ্য config ফাইল দেয়।
 - **কোর লেয়ার** — `Snowflake`-ই একমাত্র stateful ক্লাস: এটি কনফিগারেশন ভ্যালিডেট করে, বিট শিফট ও ফিক্সড নোড বিট আগেই হিসাব করে রাখে, ID জেনারেট করে এবং আবার পার্স করে।
 - **কন্ট্রাক্ট ও রিজলভার** — `SequenceResolver` হলো এক্সটেনশন পয়েন্ট। কোর প্রতিটি sequence অ্যালোকেশন এর কাছে ডেলিগেট করে, তাই জেনারেটর ছুঁয়ে না-ই sequence স্ট্র্যাটেজি বদলানো যায়।
 - **ক্রস-কাটিং** — একটি সেমান্টিক এক্সেপশন হায়ারার্কি, সাথে সব অ্যাডাপ্টারের শেয়ার করা একটি কমেন্টেড কনফিগারেশন ফাইল।
@@ -85,7 +91,7 @@ snowflake-php/
 
 প্রতিটি `id()` কল একই পথ পাড়ি দেয়:
 
-1. ঘড়ি পড়া হয় এবং পিছিয়ে যাওয়া ড্রিফট চেক করা হয় — `clock_tolerance_ms` পর্যন্ত টলারেট করা হয়, এর বেশি হলে রিজেক্ট।
+1. ঘড়ি পড়া হয় এবং পিছিয়ে যাওয়া ড্রিফট চেক করা হয় — `clock_tolerance_ms` পর্যন্ত টলারেট করা হয়; এর বেশি হলে `clock_drift_strategy` ঠিক করে ক্লক ক্যাচ আপ করা পর্যন্ত অপেক্ষা করবে (`'wait'`) নাকি জেনারেট করতে অস্বীকার করবে (`'throw'`)।
 2. epoch অফসেটে রূপান্তর করা হয় এবং নেগেটিভ বা timestamp লিমিট পেরোনো অফসেট রিজেক্ট করা হয়।
 3. এই মিলিসেকেন্ডের পরের স্লটের জন্য sequence রিজলভারকে জিজ্ঞেস করা হয়; 4096টি স্লট শেষ হলে পরের মিলিসেকেন্ডে স্পিন করে একবার রিট্রাই করা হয়।
 4. `(offset << timestampShift) | fixedBits | sequence` অ্যাসেম্বল করা হয়, `lastTimestamp` এগিয়ে দেওয়া হয়, এবং ID রিটার্ন করা হয়।
@@ -94,7 +100,7 @@ snowflake-php/
 
 ## প্রয়োজনীয়তা
 
-- PHP >= 8.0 (CI-তে 8.0 – 8.4 ভেরিফায়েড)
+- PHP >= 8.0 (CI-তে 8.0 – 8.5 টেস্টেড, সাথে `src/`-এ PHPStan level 8)
 - 64-bit সিস্টেম (নেটিভ 64-bit ইন্টিজার অপারেশনের জন্য আবশ্যক)
 - প্রতি প্রসেস/করুটিনে একটি ইনস্ট্যান্স — Snowflake ইনস্ট্যান্স তার sequence স্টেট মেমোরিতে রাখে, তাই প্রসেস বা করুটিনের মধ্যে শেয়ার করা যাবে না
 
@@ -133,6 +139,8 @@ $id = $snowflake->id();
 | `sequence_bits` | int | `12` | sequence নম্বরের জন্য বিট |
 | `sequence_resolver` | string | `SequentialSequenceResolver` | SequenceResolver-এর FQCN |
 | `clock_tolerance_ms` | int | `0` | সর্বোচ্চ পিছিয়ে যাওয়া ক্লক ড্রিফট (0 = কঠোর) |
+| `clock_drift_strategy` | string | `'throw'` | `'throw'` টলারেন্সের বাইরে ক্লক পিছিয়ে গেলে জেনারেট করতে অস্বীকার করে; `'wait'` ওয়াল ক্লক ক্যাচ আপ করা পর্যন্ত স্পিন করে, `clock_drift_wait_ms` পরে হাল ছেড়ে `ClockDriftException` থ্রো করে |
+| `clock_drift_wait_ms` | int | `1000` | `'wait'` স্ট্র্যাটেজি হাল ছাড়ার আগে কতক্ষণ অপেক্ষা করে |
 
 ### বিট লেআউট
 
@@ -143,6 +151,24 @@ $id = $snowflake->id();
 ```
 
 ডিফল্ট epoch-এ সর্বোচ্চ লাইফস্প্যান: ~69 বছর (প্রায় 2093 পর্যন্ত)।
+
+node id বা sequence-কে দেওয়া প্রতিটি বিট timestamp থেকে নেওয়া হয়, তাই চওড়া sequence চুপচাপ জেনারেটরের আয়ু কমিয়ে দেয়:
+
+| worker + datacenter + sequence বিট | timestamp বিট | ব্যবহারযোগ্য লাইফস্প্যান |
+|---|---|---|
+| 5 + 5 + 12 (ডিফল্ট) | 41 | ~69.7 বছর |
+| 7 + 7 + 10 | 39 | ~17.4 বছর |
+| 5 + 5 + 16 | 37 | ~4.4 বছর |
+| 5 + 5 + 20 | 33 | ~99 দিন |
+
+যেকোনো লেআউটের লিমিট জেনে নিন:
+
+```php
+Snowflake::lifespanMs();                                                     // default layout, ~69.7 years in ms
+Snowflake::lifespanMs(workerBits: 7, datacenterBits: 7, sequenceBits: 10);   // ~17.4 years in ms
+```
+
+`Snowflake::lifespanMs(int $workerBits = 5, int $datacenterBits = 5, int $sequenceBits = 12): int` একটি লেআউটের সর্বোচ্চ timestamp অফসেট মিলিসেকেন্ডে রিটার্ন করে; আর্গুমেন্টগুলোর ডিফল্ট মান ডিফল্ট লেআউট। অফসেট এই লিমিটে পৌঁছালেই epoch শেষ — যে epoch-এর উইন্ডো ইতিমধ্যেই বন্ধ হয়ে গেছে, সেখানে একেবারে প্রথম `id()` কলই `TimestampOverflowException` থ্রো করে।
 
 ### কনফিগারেশন অ্যারে ব্যবহার
 
@@ -287,6 +313,63 @@ class OrderService
 }
 ```
 
+### PSR-11 কন্টেইনার
+
+Symfony, Slim, Laminas বা অন্য যেকোনো কন্টেইনার: ফ্যাক্টরিটি রেজিস্টার করুন। এটি কোনো কিছুতে নির্ভর করে না, তাই যেকোনো কন্টেইনারই চলবে — `psr/container` লাগে না:
+
+```php
+use Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory;
+
+$container->set(\Erikwang2013\Snowflake\Snowflake::class, new SnowflakeFactory($config));
+// or build the config from the environment:
+$container->set(\Erikwang2013\Snowflake\Snowflake::class, SnowflakeFactory::fromEnvironment());
+```
+
+`SnowflakeFactory::fromEnvironment()` Laravel অ্যাডাপ্টারের মতো একই `SNOWFLAKE_*` ভেরিয়েবল পড়ে। PSR-11 কন্টেইনার ফ্যাক্টরি অবজেক্টটিকেই কল করে, তাই Symfony সার্ভিস ডেফিনিশন এক লাইনের:
+
+```yaml
+services:
+  Erikwang2013\Snowflake\Snowflake:
+    factory: ['@Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory', '__invoke']
+```
+
+## নেটিভ PHP (কোনো ফ্রেমওয়ার্ক ছাড়া)
+
+এই প্যাকেজের কোনো কিছুই ফ্রেমওয়ার্ক চায় না — উপরের চারটি অ্যাডাপ্টার শুধু আপনার জন্য `Snowflake`-কে কন্টেইনারে যুক্ত করে দেয়। কন্টেইনার ছাড়া নিজেই বানিয়ে নিন:
+
+```php
+require __DIR__ . '/vendor/autoload.php';
+
+use Erikwang2013\Snowflake\Snowflake;
+
+// Same variable names the Laravel adapter uses, so one .env-style setup
+// works whether or not a framework is present.
+$snowflake = Snowflake::fromConfig([
+    'worker_id'          => (int) (getenv('SNOWFLAKE_WORKER_ID') ?: 0),
+    'datacenter_id'      => (int) (getenv('SNOWFLAKE_DATACENTER_ID') ?: 0),
+    'clock_tolerance_ms' => 5,
+]);
+
+$id = $snowflake->id();
+```
+
+এর একটি রানযোগ্য রূপ — ফ্রেমওয়ার্ক-মুক্ত লেজি সিঙ্গেলটন এবং এটি যে ইনভেরিয়েন্টগুলো চেক করে, সবসহ — আছে [`docs/examples/plain-php.php`](../../examples/plain-php.php)-এ:
+
+```bash
+php docs/examples/plain-php.php
+```
+
+### লাইফটাইম বেছে নেওয়া
+
+ইনস্ট্যান্সটি `lastTimestamp` ও sequence কার্সর মেমোরিতে রাখে, তাই এটি কত দিন বাঁচবে — এটিই একমাত্র বিষয় যা ঠিকভাবে পাওয়া জরুরি:
+
+| রানটাইম | ইনস্ট্যান্স তৈরি করুন |
+|---------|--------------------|
+| PHP-FPM, mod_php, CLI | ইনলাইন, প্রতি রিকোয়েস্ট বা কমান্ডে — এদের মধ্যে কিছুই শেয়ার হয় না। |
+| Swoole, ReactPHP, RoadRunner, FrankenPHP | প্রতি **worker প্রসেসে** একবার, worker-start কলব্যাক থেকে, ইউনিক `(datacenter_id, worker_id)` জোড়া দিয়ে। |
+
+একটি ইনস্ট্যান্স কখনো করুটিন বা থ্রেডের মধ্যে শেয়ার করবেন না: `id()` নিজের স্টেট পড়ে ও লেখে, তাই দুটি সমান্তরাল কল ইন্টারলিভ হয়ে একই sequence নম্বর দিয়ে দিতে পারে। প্রতি করুটিনে একটি ইনস্ট্যান্স তৈরি করুন, বা শেয়ার করা ইনস্ট্যান্সটি mutex দিয়ে গার্ড করুন।
+
 ## ID পার্সিং
 
 একটি Snowflake ID-কে তার কম্পোনেন্টে ভাগ করুন:
@@ -308,9 +391,11 @@ $parsed = $snowflake->parseId($id);
 $parsed = Snowflake::parse($id, $epoch);
 ```
 
+`datetime` মেম্বারটি PHP-র `date()` দিয়ে **সার্ভারের ডিফল্ট টাইমজোনে** ফরম্যাট করা, তাই আলাদা টাইমজোনের দুটি হোস্ট একই ID ভিন্নভাবে দেখায়। `timestamp_ms` হলো টাইমজোন-নিরপেক্ষ পরম মান — একাধিক মেশিনের ID মেলানোর সময় এটিই মিলিয়ে দেখুন।
+
 ## sequence রিজলভার
 
-দুটি বিল্ট-ইন ইমপ্লিমেন্টেশন:
+তিনটি বিল্ট-ইন ইমপ্লিমেন্টেশন:
 
 ### SequentialSequenceResolver (ডিফল্ট)
 
@@ -343,7 +428,7 @@ $snowflake = new Snowflake(
 ```php
 use Erikwang2013\Snowflake\Contracts\SequenceResolver;
 
-class RedisSequenceResolver implements SequenceResolver
+class SharedCounterSequenceResolver implements SequenceResolver
 {
     public function next(int $timestamp, int $maxSequence): ?int
     {
@@ -359,6 +444,20 @@ class RedisSequenceResolver implements SequenceResolver
     }
 }
 ```
+
+### RedisSequenceResolver
+
+ইন-প্রসেস রিজলভারগুলো sequence মেমোরিতে রাখে, তাই একই node id শেয়ার করা প্রসেসগুলো একই sequence নম্বর দিয়ে দিতে পারে। `RedisSequenceResolver` বদলে কাউন্টারটি Redis-এ রাখে — একাধিক প্রসেস যখন একই `(datacenter_id, worker_id)` জোড়া শেয়ার করে, তখন এটিই ব্যবহার করুন:
+
+```php
+use Erikwang2013\Snowflake\Resolvers\RedisSequenceResolver;
+
+// Any client exposing incr(string $key): int and expire(string $key, int $seconds): bool
+$resolver = new RedisSequenceResolver($redis, 'snowflake:seq:', 1);
+$snowflake = new Snowflake(sequenceResolver: $resolver);
+```
+
+`__construct(object $client, string $keyPrefix = 'snowflake:seq:', int $ttlSeconds = 1)` — ক্লায়েন্টটি ইনজেক্ট করা হয়, তাই `redis` এক্সটেনশন বা Predis কোনোটিই লাগে না। লম্বা TTL নিরাপদ: তখন কাউন্টার একই মিলিসেকেন্ডের ভেতরেই বাড়তেই থাকে, ফলে পরের মিলিসেকেন্ড শুরু না হওয়া পর্যন্ত সঠিকভাবেই `null` দেয়।
 
 ## এক্সেপশন হ্যান্ডলিং
 
@@ -400,11 +499,28 @@ $snowflake = new Snowflake(
 
 ## পারফরম্যান্স
 
-আধুনিক হার্ডওয়্যারে সাধারণ থ্রুপুট: **~500,000 ID/সেকেন্ড** (একক প্রসেস)।
+ID সম্পূর্ণভাবে ইন-প্রসেসে তৈরি হয়, কোনো এক্সটার্নাল ডিপেন্ডেন্সি নেই, তাই থ্রুপুট সীমিত হয় PHP-র নিজের `microtime()` কল আর কয়েকটি ইন্টিজার অপারেশন দিয়ে।
 
-ID সম্পূর্ণভাবে ইন-প্রসেসে তৈরি হয়, কোনো এক্সটার্নাল ডিপেন্ডেন্সি নেই। মূল বটলনেক হলো PHP-র `microtime()` কল ও ইন্টিজার বিট অপারেশন, দুটোই O(1)।
+একটি ডেভেলপার মেশিনের এক কোরে মাপা (PHP 8.3.7, **Xdebug বন্ধ**, 300k ইটারেশন, 5-এর মধ্যে সেরা):
 
-## সাপোর্ট
+| অপারেশন | থ্রুপুট | প্রতি কল |
+|-----------|-----------:|---------:|
+| শুধু `microtime(true)` — ফ্লোর | 10.3M/s | 97 ns |
+| `id()` — ডিফল্ট 5+5+12 লেআউট | **1.6M/s** | 633 ns |
+| `id()` + `parseId()` | 282k/s | 3.5 µs |
+| `Snowflake::fromConfig()` | 167k/s | 6.0 µs |
+
+জেনারেশনে একটি নগদ ক্লক কলের প্রায় ছয় গুণ খরচ হয়, আর একটি নোডের sequence সিলিং (4096 ID/ms = 4.1M/s) একটি PHP প্রসেস যা কনজিউম করতে পারে তার অনেক উপরে থাকে। পার্সিং ও কনস্ট্রাকশন ডায়াগনস্টিক অপারেশন, হট পাথ নয় — প্রতি প্রসেসে একবার ইনস্ট্যান্স বানান আর `parseId()`-কে টাইট লুপের বাইরে রাখুন।
+
+নিজের মেশিনে এটি রিপ্রোডিউস করুন:
+
+```bash
+php scripts/benchmark.php
+```
+
+এটি একটি নগদ `microtime()` বেসলাইনের বিপরীতে ops/sec ও ns/op প্রিন্ট করে, best-of-N সাথে স্প্রেড। পরম সংখ্যাগুলোর কোনো মানে আছে কি না তা দুটি জিনিস ঠিক করে: **Xdebug** (এটি এক অর্ডার অফ ম্যাগনিচিউড খরচ করতে পারে — লোড থাকলে হেডার তা জানায়) এবং ব্যস্ত বা ভার্চুয়ালাইজড হোস্ট, যার নিজের ক্লক কলই মাপজোখকে ছাপিয়ে যেতে পারে। কোনো একক সংখ্যাকে প্রতিশ্রুতি ভেবে না পড়ে বেসলাইনের সাথে তুলনা করুন।
+
+## সাপোর্ট স্বাগতম
 
 | WeChat Pay | Alipay |
 |:---:|:---:|

@@ -294,7 +294,7 @@ def pet(L):
 # --------------------------------------------------------------- architecture
 
 def architecture(L):
-    W, H = 980, 958
+    W, H = 980, 986
     body = [header(W, L("arch.title"), L("arch.subtitle"))]
 
     def band(y, h, key, color, tint):
@@ -305,9 +305,10 @@ def architecture(L):
         return "\n".join(out)
 
     body.append(band(116, 88, "arch.band.app", BLUE, "#f8fbff"))
-    bw = (W - 80 - 48 - 48) / 4
+    bw = (W - 80 - 48 - 48) / 5
     for i, (k, ks) in enumerate([("arch.app1", "arch.app1.sub"), ("arch.app2", "arch.app2.sub"),
-                                 ("arch.app3", "arch.app3.sub"), ("arch.app4", "arch.app4.sub")]):
+                                 ("arch.app3", "arch.app3.sub"), ("arch.app4", "arch.app4.sub"),
+                                 ("arch.app5", "arch.app5.sub")]):
         x = 64 + i * (bw + 16)
         body.append(rect(x, 142, bw, 52, "#ffffff", BLUE_B, 10))
         body.append(text(x + bw / 2, 165, L(k), fit(L(k), 13, bw - 16, "600"), INK, "600", "middle"))
@@ -316,7 +317,8 @@ def architecture(L):
     body.append(text(500, 220, L("arch.arrow.instance"), fit(L("arch.arrow.instance"), 11, 400), MUTED))
 
     adp = [("arch.ad1", "arch.ad1.sub1", "arch.ad1.sub2"), ("arch.ad2", "arch.ad2.sub1", "arch.ad2.sub2"),
-           ("arch.ad3", "arch.ad3.sub1", "arch.ad3.sub2"), ("arch.ad4", "arch.ad4.sub1", "arch.ad4.sub2")]
+           ("arch.ad3", "arch.ad3.sub1", "arch.ad3.sub2"), ("arch.ad4", "arch.ad4.sub1", "arch.ad4.sub2"),
+           ("arch.ad5", "arch.ad5.sub1", "arch.ad5.sub2")]
     body.append(band(232, 108, "arch.band.adapter", BLUE, "#f8fbff"))
     for i, (k, k1, k2) in enumerate(adp):
         x = 64 + i * (bw + 16)
@@ -343,15 +345,15 @@ def architecture(L):
     body.append(arrow(490, 560, 490, 582, ARROW_HI, 2, head="5b8def"))
     body.append(text(500, 576, L("arch.arrow.next"), fit(L("arch.arrow.next"), 11, 400), MUTED))
 
-    body.append(band(588, 152, "arch.band.contract", CYAN, "#f6fdfe"))
-    body.append(rect(64, 612, 300, 104, "#ffffff", CYAN_B, 10))
+    body.append(band(588, 180, "arch.band.contract", CYAN, "#f6fdfe"))
+    body.append(rect(64, 612, 300, 140, "#ffffff", CYAN_B, 10))
     body.append(text(80, 638, "SequenceResolver", 13, CYAN, "700", family=MONO))
     body.append(text(80, 658, L("arch.iface.sub"), fit(L("arch.iface.sub"), 10.5, 268), MUTED))
     body.append(text(80, 682, "next(int $timestamp,", 10.5, BODY, family=MONO))
     body.append(text(80, 698, "     int $maxSequence): ?int", 10.5, BODY, family=MONO))
     for i, (k, ks) in enumerate([("arch.impl1", "arch.impl1.sub"), ("arch.impl2", "arch.impl2.sub"),
-                                 ("arch.impl3", "arch.impl3.sub")]):
-        y = 612 + i * 40
+                                 ("arch.impl3", "arch.impl3.sub"), ("arch.impl4", "arch.impl4.sub")]):
+        y = 612 + i * 36
         body.append(rect(400, y, 540, 32, "#ffffff", CYAN_B, 8))
         body.append(arrow(400, y + 16, 368, y + 16, CYAN, 1.8, head="0e7490"))
         name, sub = L(k), L(ks)
@@ -359,14 +361,14 @@ def architecture(L):
         body.append(tline(414, y + 21, [(name, CYAN, "700"), (sub, MUTED, "400")], size))
     body.append(text(356, 668, L("arch.implements"), 10, FAINT, "600", "end"))
 
-    body.append(band(768, 150, "arch.band.cross", SLATE, "#fbfcfe"))
-    body.append(text(64, 800, L("arch.exc.title"), 12, INK, "700"))
+    body.append(band(796, 150, "arch.band.cross", SLATE, "#fbfcfe"))
+    body.append(text(64, 828, L("arch.exc.title"), 12, INK, "700"))
     exs = [("SnowflakeException " + L("arch.exc.base"), SLATE, SLATE_T),
            ("ClockDriftException", RED, RED_T),
            ("TimestampOverflowException", AMBER, AMBER_T),
            ("InvalidWorkerIdException", AMBER, AMBER_T),
            ("InvalidDatacenterIdException", AMBER, AMBER_T)]
-    px, py = 64, 812
+    px, py = 64, 840
     for name, c, t in exs:
         w = tw(name, 10.5, "600") + 22
         if px + w > 560:
@@ -374,19 +376,19 @@ def architecture(L):
         body.append(rect(px, py, w, 22, t, None, 11))
         body.append(text(px + w / 2, py + 15, name, 10.5, c, "600", "middle"))
         px += w + 8
-    body.append(line(608, 792, 608, 898, LINE, 1.5, cap="butt"))
-    body.append(text(632, 800, L("arch.cfg.title"), 12, INK, "700"))
+    body.append(line(608, 820, 608, 926, LINE, 1.5, cap="butt"))
+    body.append(text(632, 828, L("arch.cfg.title"), 12, INK, "700"))
     cfg = []
     for k in ("arch.cfg1", "arch.cfg2", "arch.cfg3"):
         cfg.extend(wrap(L(k), 11, 288))
-    body.append(block(632, 822, cfg, 11 if len(cfg) <= 4 else 10, BODY, lh=15))
+    body.append(block(632, 850, cfg, 11 if len(cfg) <= 4 else 10, BODY, lh=15))
     return svg(W, H, "\n".join(body), L("arch.title"), L("arch.subtitle"))
 
 
 # ------------------------------------------------------------------- features
 
 def features(L):
-    W, H = 980, 640
+    W, H = 980, 820
     body = [header(W, L("feat.title"), L("feat.subtitle"))]
     groups = [
         ("feat.g1", BLUE, "#f8fbff", BLUE_B, [1, 2, 3]),
@@ -397,21 +399,21 @@ def features(L):
     for gi, (gkey, color, tint, border, cards) in enumerate(groups):
         x = 40 + gi * (pw + 20)
         name = L(gkey)
-        body.append(rect(x, 120, pw, 476, tint, LINE, 14, 1.4))
+        body.append(rect(x, 120, pw, 652, tint, LINE, 14, 1.4))
         body.append(pill(x + 16, 136, min(tw(name, 12.5, "700") + 28, pw - 32), 28,
                          name, color, 12.5, maxw=pw - 32))
         for ci, n in enumerate(cards):
-            y = 184 + ci * 138
-            body.append(card(x + 16, y, pw - 32, 124, L(f"feat.c{n}"), [L(f"feat.c{n}.desc")],
+            y = 184 + ci * 194
+            body.append(card(x + 16, y, pw - 32, 180, L(f"feat.c{n}"), [L(f"feat.c{n}.desc")],
                              color, "#ffffff", border, 13, 11.5, L(f"feat.c{n}.tag"), tint))
-    body.append(text(40, 632, L("feat.footer"), fit(L("feat.footer"), 11.5, W - 80), MUTED))
+    body.append(text(40, 796, L("feat.footer"), fit(L("feat.footer"), 11.5, W - 80), MUTED))
     return svg(W, H, "\n".join(body), L("feat.title"), L("feat.subtitle"))
 
 
 # ------------------------------------------------------------------ lifecycle
 
 def lifecycle(L):
-    W, H = 980, 942
+    W, H = 980, 950
     CX, RX, RW = 350, 650, 290
     body = [header(W, L("life.title"), L("life.subtitle"))]
 
@@ -455,8 +457,12 @@ def lifecycle(L):
     tl = []
     for k in ("life.time.l1", "life.time.l2", "life.time.l3", "life.time.l4"):
         tl.extend(wrap(L(k), 10.5, 248))
-    body.append(block(tx, ty + 36, tl, 10.5, BODY, lh=16))
-    body.append(tline(tx, ty + 48 + 16 * len(tl),
+    # The block's height depends on how many lines the translation needs;
+    # tighten the leading when it runs long so the trailing note stays inside
+    # the card instead of landing on its bottom border.
+    lh = 16 if len(tl) <= 4 else 14
+    body.append(block(tx, ty + 36, tl, 10.5, BODY, lh=lh))
+    body.append(tline(tx, ty + 48 + lh * len(tl),
                       [(L("life.time.now"), MUTED, "400")], 10.5))
 
     state = {"y": 120, "prev": None}

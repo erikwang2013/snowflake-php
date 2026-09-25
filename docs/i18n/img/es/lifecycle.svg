@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 942" width="980" height="942" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 950" width="980" height="950" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
 <title>Ciclo de vida del ID</title>
 <desc>Una llamada a id(): el recorrido completo, el estado que toca y los límites que respeta</desc>
 <defs>
 <marker id="mk-5b8def" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0.6 L9.5,5 L0,9.4 z" fill="#5b8def"/></marker>
 </defs>
-<rect width="980" height="942" fill="#ffffff"/>
+<rect width="980" height="950" fill="#ffffff"/>
 <text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">Ciclo de vida del ID</text>
 <text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">Una llamada a id(): el recorrido completo, el estado que toca y los límites que respeta</text>
 <line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
@@ -43,8 +43,8 @@
 <text x="665" y="592.0" font-size="11.5" fill="#3d4d66" font-weight="400">Como máximo 2^12 = 4096 ID por</text>
 <text x="665" y="609.25" font-size="11.5" fill="#3d4d66" font-weight="400">milisegundo; más allá avanza al siguiente</text>
 <text x="665" y="626.5" font-size="11.5" fill="#3d4d66" font-weight="400">milisegundo.</text>
-<text x="665" y="643.75" font-size="11.5" fill="#3d4d66" font-weight="400">Unos 500.000 ID por segundo en un solo</text>
-<text x="665" y="661.0" font-size="11.5" fill="#3d4d66" font-weight="400">proceso.</text>
+<text x="665" y="643.75" font-size="11.5" fill="#3d4d66" font-weight="400">Muy por encima del millón de ID por</text>
+<text x="665" y="661.0" font-size="11.5" fill="#3d4d66" font-weight="400">segundo en un solo proceso.</text>
 <text x="665" y="678.25" font-size="11.5" fill="#3d4d66" font-weight="400">Cada nodo usa un par (datacenter_id,</text>
 <text x="665" y="695.5" font-size="11.5" fill="#3d4d66" font-weight="400">worker_id) único; la distribución por defecto</text>
 <text x="665" y="712.75" font-size="11.5" fill="#3d4d66" font-weight="400">permite 32 × 32 = 1024 nodos.</text>
@@ -57,12 +57,12 @@
 <text x="670" y="771" font-size="10.0" fill="#b45309" font-weight="600">época 2024-01-01</text>
 <text x="920" y="771" font-size="10.0" fill="#6b7c96" font-weight="600" text-anchor="end">límite 2093</text>
 <text x="670" y="816" font-size="10.5" fill="#3d4d66" font-weight="400">Inicio: época = 2024-01-01 UTC</text>
-<text x="670" y="832" font-size="10.5" fill="#3d4d66" font-weight="400">Límite: 2^41 − 1 ms ≈ 69,7 años</text>
-<text x="670" y="848" font-size="10.5" fill="#3d4d66" font-weight="400">El agotamiento lanza</text>
-<text x="670" y="864" font-size="10.5" fill="#3d4d66" font-weight="400">TimestampOverflowException</text>
-<text x="670" y="880" font-size="10.5" fill="#3d4d66" font-weight="400">Una época más reciente reinicia toda la vida</text>
-<text x="670" y="896" font-size="10.5" fill="#3d4d66" font-weight="400">útil.</text>
-<text x="670" y="924" font-size="10.5" fill="#3d4d66" text-anchor="start"><tspan fill="#6b7c96" font-weight="400">Un 3% consumido en 2026</tspan></text>
+<text x="670" y="830" font-size="10.5" fill="#3d4d66" font-weight="400">Límite: 2^41 − 1 ms ≈ 69,7 años</text>
+<text x="670" y="844" font-size="10.5" fill="#3d4d66" font-weight="400">El agotamiento lanza</text>
+<text x="670" y="858" font-size="10.5" fill="#3d4d66" font-weight="400">TimestampOverflowException</text>
+<text x="670" y="872" font-size="10.5" fill="#3d4d66" font-weight="400">Una época más reciente reinicia toda la vida</text>
+<text x="670" y="886" font-size="10.5" fill="#3d4d66" font-weight="400">útil.</text>
+<text x="670" y="912" font-size="10.5" fill="#3d4d66" text-anchor="start"><tspan fill="#6b7c96" font-weight="400">Un 3% consumido en 2026</tspan></text>
 <rect x="240.0" y="120.0" width="220.0" height="36.0" rx="18.0" fill="#0f766e"/><text x="350.0" y="142.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Llama a id() / nextId()</text>
 <path d="M350.0,156.0 L350.0,180.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
 <rect x="180.0" y="180.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
@@ -73,28 +73,30 @@
 <polygon points="350,273.0 500.0,307.0 350,341.0 200.0,307.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
 <text x="350" y="312.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">t &lt; lastTimestamp (el reloj retrocedió)</text>
 <text x="178" y="360" font-size="10.5" fill="#b45309" font-weight="400">Sí → si la deriva está dentro de clock_tolerance_ms, reutiliza el</text>
-<text x="178" y="376" font-size="10.5" fill="#b45309" font-weight="400">milisegundo anterior; si no, lanza ClockDriftException y no genera.</text>
-<path d="M350.0,376.0 L350.0,400.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="400.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="429.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset = t − epoch</text>
-<text x="178" y="469" font-size="10.5" fill="#b45309" font-weight="400">offset es la distancia en milisegundos desde la época configurada.</text>
-<path d="M350.0,469.0 L350.0,493.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<text x="362" y="485.0" font-size="10.5" fill="#6b7c96" font-weight="600">No</text>
-<polygon points="350,493.0 500.0,527.0 350,561.0 200.0,527.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
-<text x="350" y="524.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">¿Offset fuera de rango?</text>
-<text x="350" y="540.0" font-size="8.3" fill="#6b7c96" font-weight="400" text-anchor="middle">(menor que 0 o por encima del límite)</text>
-<text x="178" y="580" font-size="10.5" fill="#b45309" font-weight="400">Sí → un reloj anterior a la época lanza ClockDriftException; una</text>
-<text x="178" y="596" font-size="10.5" fill="#b45309" font-weight="400">época agotada lanza TimestampOverflowException.</text>
-<path d="M350.0,596.0 L350.0,620.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="620.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="649.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">seq = resolver.next(offset, maxSequence)</text>
-<text x="178" y="689" font-size="10.5" fill="#b45309" font-weight="400">Cuando la secuencia se agota (null) avanza al siguiente</text>
-<text x="178" y="705" font-size="10.5" fill="#b45309" font-weight="400">milisegundo y reintenta una vez; luego falla con RuntimeException.</text>
-<path d="M350.0,705.0 L350.0,729.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="729.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="758.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">lastTimestamp = t; ensambla el ID</text>
-<text x="178" y="798" font-size="10.5" fill="#b45309" font-weight="400">El estado solo avanza cuando pasan todas las guardas, así que</text>
-<text x="178" y="814" font-size="10.5" fill="#b45309" font-weight="400">una llamada fallida no contamina la siguiente.</text>
-<path d="M350.0,814.0 L350.0,838.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="838.0" width="340.0" height="38.0" rx="19.0" fill="#0f766e"/><text x="350.0" y="861.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Devuelve un ID único de 64 bits</text>
+<text x="178" y="376" font-size="10.5" fill="#b45309" font-weight="400">milisegundo anterior. Más allá, clock_drift_strategy decide: &#x27;wait&#x27;</text>
+<text x="178" y="392" font-size="10.5" fill="#b45309" font-weight="400">espera a que el reloj se ponga al día y &#x27;throw&#x27; lanza</text>
+<text x="178" y="408" font-size="10.5" fill="#b45309" font-weight="400">ClockDriftException.</text>
+<path d="M350.0,408.0 L350.0,432.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="432.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="461.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset = t − epoch</text>
+<text x="178" y="501" font-size="10.5" fill="#b45309" font-weight="400">offset es la distancia en milisegundos desde la época configurada.</text>
+<path d="M350.0,501.0 L350.0,525.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<text x="362" y="517.0" font-size="10.5" fill="#6b7c96" font-weight="600">No</text>
+<polygon points="350,525.0 500.0,559.0 350,593.0 200.0,559.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
+<text x="350" y="556.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">¿Offset fuera de rango?</text>
+<text x="350" y="572.0" font-size="8.3" fill="#6b7c96" font-weight="400" text-anchor="middle">(menor que 0 o por encima del límite)</text>
+<text x="178" y="612" font-size="10.5" fill="#b45309" font-weight="400">Sí → un reloj anterior a la época lanza ClockDriftException; una</text>
+<text x="178" y="628" font-size="10.5" fill="#b45309" font-weight="400">época agotada lanza TimestampOverflowException.</text>
+<path d="M350.0,628.0 L350.0,652.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="652.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="681.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">seq = resolver.next(offset, maxSequence)</text>
+<text x="178" y="721" font-size="10.5" fill="#b45309" font-weight="400">Cuando la secuencia se agota (null) avanza al siguiente</text>
+<text x="178" y="737" font-size="10.5" fill="#b45309" font-weight="400">milisegundo y reintenta una vez; luego falla con RuntimeException.</text>
+<path d="M350.0,737.0 L350.0,761.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="761.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="790.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">lastTimestamp = t; ensambla el ID</text>
+<text x="178" y="830" font-size="10.5" fill="#b45309" font-weight="400">El estado solo avanza cuando pasan todas las guardas, así que</text>
+<text x="178" y="846" font-size="10.5" fill="#b45309" font-weight="400">una llamada fallida no contamina la siguiente.</text>
+<path d="M350.0,846.0 L350.0,870.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="870.0" width="340.0" height="38.0" rx="19.0" fill="#0f766e"/><text x="350.0" y="893.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Devuelve un ID único de 64 bits</text>
 </svg>

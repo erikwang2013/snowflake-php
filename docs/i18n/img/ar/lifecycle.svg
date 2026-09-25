@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 942" width="980" height="942" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 950" width="980" height="950" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC', 'Hiragino Sans', 'Yu Gothic', 'Malgun Gothic', Roboto, 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', 'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Nirmala UI', 'Noto Sans Devanagari', 'Bangla MN', 'Bangla Sangam MN', 'Noto Sans Bengali', 'Geeza Pro', 'Noto Sans Arabic', Arial, sans-serif">
 <title>دورة حياة الـ ID</title>
 <desc>استدعاء id() واحد: المسار الكامل، والحالة التي يلمسها، والحدود التي يحترمها</desc>
 <defs>
 <marker id="mk-5b8def" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0.6 L9.5,5 L0,9.4 z" fill="#5b8def"/></marker>
 </defs>
-<rect width="980" height="942" fill="#ffffff"/>
+<rect width="980" height="950" fill="#ffffff"/>
 <text x="40" y="54" font-size="27.0" fill="#0f1e33" font-weight="700">دورة حياة الـ ID</text>
 <text x="40" y="82" font-size="13.5" fill="#6b7c96" font-weight="400">استدعاء id() واحد: المسار الكامل، والحالة التي يلمسها، والحدود التي يحترمها</text>
 <line x1="40.0" y1="100.0" x2="940.0" y2="100.0" stroke="#e8eefa" stroke-width="1.5" stroke-linecap="butt"/>
@@ -42,8 +42,8 @@
 <text x="665" y="592.0" font-size="11.5" fill="#3d4d66" font-weight="400">4096 معرّفًا كحد أقصى (2^12) لكل ميلي</text>
 <text x="665" y="609.25" font-size="11.5" fill="#3d4d66" font-weight="400">ثانية؛ وبعدها ينتظر حتى الميلي ثانية</text>
 <text x="665" y="626.5" font-size="11.5" fill="#3d4d66" font-weight="400">التالية.</text>
-<text x="665" y="643.75" font-size="11.5" fill="#3d4d66" font-weight="400">نحو 500 ألف معرّف في الثانية في العملية</text>
-<text x="665" y="661.0" font-size="11.5" fill="#3d4d66" font-weight="400">الواحدة.</text>
+<text x="665" y="643.75" font-size="11.5" fill="#3d4d66" font-weight="400">أكثر من مليون معرّف في الثانية بكثير في</text>
+<text x="665" y="661.0" font-size="11.5" fill="#3d4d66" font-weight="400">العملية الواحدة.</text>
 <text x="665" y="678.25" font-size="11.5" fill="#3d4d66" font-weight="400">تحجز كل عقدة زوجًا فريدًا (datacenter_id,</text>
 <text x="665" y="695.5" font-size="11.5" fill="#3d4d66" font-weight="400">worker_id)؛ والتوزيع الافتراضي يتيح 32 × 32</text>
 <text x="665" y="712.75" font-size="11.5" fill="#3d4d66" font-weight="400">= 1024 عقدة.</text>
@@ -70,28 +70,29 @@
 <polygon points="350,273.0 500.0,307.0 350,341.0 200.0,307.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
 <text x="350" y="312.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">t &lt; lastTimestamp (تراجعت الساعة)</text>
 <text x="178" y="360" font-size="10.5" fill="#b45309" font-weight="400">نعم ← إذا كان الانحراف ضمن clock_tolerance_ms تُعاد الميلي</text>
-<text x="178" y="376" font-size="10.5" fill="#b45309" font-weight="400">ثانية السابقة؛ وإلا يُطلق ClockDriftException ويُرفض التوليد.</text>
-<path d="M350.0,376.0 L350.0,400.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="400.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="429.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset = t − epoch</text>
-<text x="178" y="469" font-size="10.5" fill="#b45309" font-weight="400">offset هي المسافة بالمللي ثانية من الـ epoch المضبوط.</text>
-<path d="M350.0,469.0 L350.0,493.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<text x="362" y="485.0" font-size="10.5" fill="#6b7c96" font-weight="600">لا</text>
-<polygon points="350,493.0 500.0,527.0 350,561.0 200.0,527.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
-<text x="350" y="524.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">هل offset خارج النطاق؟</text>
-<text x="350" y="540.0" font-size="10.5" fill="#6b7c96" font-weight="400" text-anchor="middle">(أقل من 0 أو فوق الحد)</text>
-<text x="178" y="580" font-size="10.5" fill="#b45309" font-weight="400">نعم ← ساعة قبل الـ epoch تُطلق ClockDriftException؛ وepoch</text>
-<text x="178" y="596" font-size="10.5" fill="#b45309" font-weight="400">مستنفد يُطلق TimestampOverflowException.</text>
-<path d="M350.0,596.0 L350.0,620.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="620.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="649.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">seq = resolver.next(offset, maxSequence)</text>
-<text x="178" y="689" font-size="10.5" fill="#b45309" font-weight="400">عند استنفاد التسلسل (null) ينتظر حتى الميلي ثانية التالية ويعيد</text>
-<text x="178" y="705" font-size="10.5" fill="#b45309" font-weight="400">المحاولة مرة واحدة، ثم يفشل بـ RuntimeException.</text>
-<path d="M350.0,705.0 L350.0,729.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="729.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
-<text x="350" y="758.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">lastTimestamp = t؛ جمّع المعرّف</text>
-<text x="178" y="798" font-size="10.5" fill="#b45309" font-weight="400">لا تتقدّم الحالة إلا بعد اجتياز كل الفحوص، فلا يُفسد استدعاء</text>
-<text x="178" y="814" font-size="10.5" fill="#b45309" font-weight="400">فاشل الاستدعاء التالي.</text>
-<path d="M350.0,814.0 L350.0,838.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
-<rect x="180.0" y="838.0" width="340.0" height="38.0" rx="19.0" fill="#0f766e"/><text x="350.0" y="861.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">أعِد معرّفًا فريدًا بحجم 64 بت</text>
+<text x="178" y="376" font-size="10.5" fill="#b45309" font-weight="400">ثانية السابقة. وما يتجاوزه يحسمه clock_drift_strategy: &#x27;wait&#x27; ينتظر</text>
+<text x="178" y="392" font-size="10.5" fill="#b45309" font-weight="400">حتى تلحق الساعة، و&#x27;throw&#x27; يُطلق ClockDriftException.</text>
+<path d="M350.0,392.0 L350.0,416.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="416.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="445.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">offset = t − epoch</text>
+<text x="178" y="485" font-size="10.5" fill="#b45309" font-weight="400">offset هي المسافة بالمللي ثانية من الـ epoch المضبوط.</text>
+<path d="M350.0,485.0 L350.0,509.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<text x="362" y="501.0" font-size="10.5" fill="#6b7c96" font-weight="600">لا</text>
+<polygon points="350,509.0 500.0,543.0 350,577.0 200.0,543.0" fill="#fff" stroke="#2563eb" stroke-width="1.8"/>
+<text x="350" y="540.0" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">هل offset خارج النطاق؟</text>
+<text x="350" y="556.0" font-size="10.5" fill="#6b7c96" font-weight="400" text-anchor="middle">(أقل من 0 أو فوق الحد)</text>
+<text x="178" y="596" font-size="10.5" fill="#b45309" font-weight="400">نعم ← ساعة قبل الـ epoch تُطلق ClockDriftException؛ وepoch</text>
+<text x="178" y="612" font-size="10.5" fill="#b45309" font-weight="400">مستنفد يُطلق TimestampOverflowException.</text>
+<path d="M350.0,612.0 L350.0,636.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="636.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="665.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">seq = resolver.next(offset, maxSequence)</text>
+<text x="178" y="705" font-size="10.5" fill="#b45309" font-weight="400">عند استنفاد التسلسل (null) ينتظر حتى الميلي ثانية التالية ويعيد</text>
+<text x="178" y="721" font-size="10.5" fill="#b45309" font-weight="400">المحاولة مرة واحدة، ثم يفشل بـ RuntimeException.</text>
+<path d="M350.0,721.0 L350.0,745.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="745.0" width="340.0" height="50.0" rx="10" fill="#fff" stroke="#c3d7ff" stroke-width="1.5"/>
+<text x="350" y="774.5" font-size="12.5" fill="#0f1e33" font-weight="600" text-anchor="middle">lastTimestamp = t؛ جمّع المعرّف</text>
+<text x="178" y="814" font-size="10.5" fill="#b45309" font-weight="400">لا تتقدّم الحالة إلا بعد اجتياز كل الفحوص، فلا يُفسد استدعاء</text>
+<text x="178" y="830" font-size="10.5" fill="#b45309" font-weight="400">فاشل الاستدعاء التالي.</text>
+<path d="M350.0,830.0 L350.0,854.0" fill="none" stroke="#5b8def" stroke-width="2" stroke-linecap="round" marker-end="url(#mk-5b8def)"/>
+<rect x="180.0" y="854.0" width="340.0" height="38.0" rx="19.0" fill="#0f766e"/><text x="350.0" y="877.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">أعِد معرّفًا فريدًا بحجم 64 بت</text>
 </svg>

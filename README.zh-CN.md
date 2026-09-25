@@ -12,7 +12,7 @@
 
 ## 项目说明
 
-Snowflake PHP 无需中心协调节点即可生成 64 位、k-ordered、全局唯一的 ID。每个 ID 由时间戳、数据中心 ID、工作节点 ID 和序列号组合而成——单节点每秒可生成数十万个 ID，无需数据库往返。
+Snowflake PHP 无需中心协调节点即可生成 64 位、k-ordered、全局唯一的 ID。每个 ID 由时间戳、数据中心 ID、工作节点 ID 和序列号组合而成——单节点每秒可生成上百万个 ID，无需数据库往返。
 
 核心特性：
 
@@ -73,8 +73,8 @@ snowflake-php/
 
 四层结构，依赖方向单向向下：
 
-- **应用层** — 你的 Laravel / Webman / ThinkPHP / Hyperf 应用，只需从容器中获取 `Snowflake` 实例。
-- **适配层** — 每个框架一个适配器，各自向容器注册共享单例，并随包发布可覆盖的配置文件。
+- **应用层** — 你的 Laravel / Webman / ThinkPHP / Hyperf 应用、任意 PSR-11 容器，或原生 PHP，只需取到 `Snowflake` 实例。
+- **适配层** — 每个框架一个适配器，另有与容器无关的 PSR-11 工厂；各自注册共享单例并随包发布可覆盖的配置文件。
 - **核心层** — `Snowflake` 是唯一的有状态类：负责配置校验、位运算预计算、ID 生成与反解。
 - **契约与实现层** — `SequenceResolver` 是扩展点，核心将序列号分配全部委托给它，因此更换策略无需改动生成器。
 - **横切关注点** — 语义化异常体系，以及各个适配器共用的同一份带注释配置文件。
@@ -91,7 +91,7 @@ snowflake-php/
 
 每次 `id()` 调用都遵循同一条路径：
 
-1. 读取当前毫秒并检查时钟回拨——在 `clock_tolerance_ms` 内可容忍，超出即拒绝生成。
+1. 读取当前毫秒并检查时钟回拨——在 `clock_tolerance_ms` 内可容忍；超出后由 `clock_drift_strategy` 决定：`'wait'` 等待墙钟追平，`'throw'` 直接拒绝生成。
 2. 换算为相对 epoch 的偏移量，并拒绝小于 0 或超出时间戳上限的偏移。
 3. 向序列号策略申请当前毫秒的下一个序列号；4096 个序列全部用尽时自旋等待下一毫秒并重试一次。
 4. 组装 `(offset << timestampShift) | fixedBits | sequence`，推进 `lastTimestamp` 后返回 ID。
@@ -335,7 +335,7 @@ services:
 
 ## 原生 PHP（无框架）
 
-包本身不依赖任何框架——上面四个适配器只是帮你把 `Snowflake` 接进各自容器。没有框架时自己装配即可：
+包本身不依赖任何框架——上面那些适配器只是帮你把 `Snowflake` 接进容器。没有框架时自己装配即可：
 
 ```php
 require __DIR__ . '/vendor/autoload.php';
