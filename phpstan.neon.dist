@@ -10,6 +10,9 @@ parameters:
 	# adapters touch are stubbed instead of ignored. scanFiles registers the
 	# stubbed classes, functions and constants as symbols to analyse against;
 	# the files are never autoloaded, so the stubs cannot leak into a runtime.
+	#
+	# The Yii2 and Yii3 adapters are config files only - they touch no
+	# framework symbol, so they need no stub.
 	scanFiles:
 		- scripts/phpstan/stubs/illuminate.php
 		- scripts/phpstan/stubs/thinkphp.php

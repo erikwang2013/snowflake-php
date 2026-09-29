@@ -1,6 +1,6 @@
 {
     "name": "erikwang2013/snowflake-php",
-    "description": "A distributed unique ID generator based on Twitter's Snowflake algorithm, compatible with Laravel, Webman, ThinkPHP, and Hyperf.",
+    "description": "A distributed unique ID generator based on Twitter's Snowflake algorithm, compatible with Laravel, Yii2, Yii3, Webman, ThinkPHP, and Hyperf.",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -48,13 +48,22 @@
         },
         "hyperf": {
             "config": "Erikwang2013\\Snowflake\\Adapters\\Hyperf\\ConfigProvider"
+        },
+        "config-plugin-options": {
+            "source-directory": "src/Adapters/Yii3/config"
+        },
+        "config-plugin": {
+            "params": "params.php",
+            "di": "di.php"
         }
     },
     "suggest": {
         "laravel/framework": "For Laravel integration",
         "workerman/webman-framework": "For Webman integration",
         "topthink/framework": "For ThinkPHP 6+ integration",
-        "hyperf/framework": "For Hyperf integration"
+        "hyperf/framework": "For Hyperf integration",
+        "yiisoft/yii2": "For Yii2 integration",
+        "yiisoft/config": "For Yii3 integration"
     },
     "config": {
         "sort-packages": true

@@ -37,9 +37,8 @@ namespace Erikwang2013\Snowflake\Tests {
     use Erikwang2013\Snowflake\Snowflake;
 
     /**
-     * All five shipped config files are valid arrays with the required
-     * keys, and every adapter config builds a working Snowflake via
-     * Snowflake::fromConfig.
+     * Every shipped config file is a valid array with the required keys, and
+     * each one builds a working Snowflake via Snowflake::fromConfig.
      */
     class AdapterConfigTest extends TestCase
     {
@@ -95,6 +94,9 @@ namespace Erikwang2013\Snowflake\Tests {
                 'thinkphp' => [dirname(__DIR__) . '/src/Adapters/ThinkPHP/config/snowflake.php', ''],
                 'hyperf' => [dirname(__DIR__) . '/src/Adapters/Hyperf/config/snowflake.php', ''],
                 'webman' => [dirname(__DIR__) . '/src/Adapters/Webman/config/app.php', 'snowflake'],
+                'yii2' => [dirname(__DIR__) . '/src/Adapters/Yii2/config/snowflake.php', ''],
+                // Yii3 params are namespaced by package name.
+                'yii3' => [dirname(__DIR__) . '/src/Adapters/Yii3/config/params.php', 'erikwang2013/snowflake-php'],
             ];
         }
 
@@ -111,6 +113,44 @@ namespace Erikwang2013\Snowflake\Tests {
 
                 $this->assertGreaterThanOrEqual($config['epoch'], $parsed['timestamp_ms'], $name);
             }
+        }
+
+        /**
+         * The Yii3 DI file must define the generator from its own params file.
+         *
+         * The yiisoft/config plugin includes every config file with the merged
+         * params in scope (Yiisoft\Config\Config::buildFile()); wrapping the
+         * require in a closure reproduces that scope without the plugin.
+         */
+        public function testYii3DiDefinitionBuildsWorkingGenerator(): void
+        {
+            $params = require dirname(__DIR__) . '/src/Adapters/Yii3/config/params.php';
+
+            $definitions = (static function (array $params): array {
+                return require dirname(__DIR__) . '/src/Adapters/Yii3/config/di.php';
+            })($params);
+
+            $this->assertArrayHasKey(Snowflake::class, $definitions);
+
+            $snowflake = $definitions[Snowflake::class]();
+
+            $this->assertInstanceOf(Snowflake::class, $snowflake);
+            $this->assertSame(
+                $snowflake,
+                $definitions[Snowflake::class](),
+                'repeated resolution must not build a second generator over the same worker id'
+            );
+
+            $parsed = $snowflake->parseId($snowflake->id());
+
+            $this->assertSame(
+                $params['erikwang2013/snowflake-php']['worker_id'],
+                $parsed['worker_id']
+            );
+            $this->assertGreaterThanOrEqual(
+                $params['erikwang2013/snowflake-php']['epoch'],
+                $parsed['timestamp_ms']
+            );
         }
 
         public function testHyperfConfigProviderPublishesConfig(): void
