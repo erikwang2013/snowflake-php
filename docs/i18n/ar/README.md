@@ -8,7 +8,7 @@
   <sub>التميمة تُشحن مع الكود أيضًا — <code>echo Snowflake::MASCOT;</code> يطبعها في أي طرفية.</sub>
 </p>
 
-مولّد معرّفات فريدة موزّعة مبني على خوارزمية Snowflake من Twitter، متوافق مع Laravel وWebman وThinkPHP وHyperf.
+مولّد معرّفات فريدة موزّعة مبني على خوارزمية Snowflake من Twitter، متوافق مع Laravel وYii2 وYii3 وWebman وThinkPHP وHyperf.
 
 ## نبذة عامة
 
@@ -20,7 +20,7 @@
 - **محلّلات تسلسل قابلة للتوصيل** — ثلاث استراتيجيات مدمجة (متتابعة وعشوائية ومدعومة بـ Redis)، أو استخدم استراتيجيتك الخاصة
 - **توزيع مرن للبتات** — عدّل بتات الطابع الزمني/الـ worker/الـ datacenter/التسلسل بما يناسب حجمك
 - **تحمّل انحراف الساعة** — نافذة تسامح قابلة للضبط لتعديلات NTP
-- **مستقلّ عن أطر العمل** — محوّلات من الدرجة الأولى لـ Laravel وThinkPHP وWebman وHyperf، أو PHP خالص بلا أي container على الإطلاق
+- **مستقلّ عن أطر العمل** — محوّلات من الدرجة الأولى لـ Laravel وYii2 وYii3 وThinkPHP وWebman وHyperf، أو PHP خالص بلا أي container على الإطلاق
 - **تحليل الـ ID** — فكّك المعرّفات المولّدة إلى مكوّناتها: الطابع الزمني والعقدة والتسلسل
 
 ## بنية المشروع
@@ -46,6 +46,8 @@ snowflake-php/
 │       ├── ThinkPHP/                       # Service + Facade + config
 │       ├── Hyperf/                         # ConfigProvider + config
 │       ├── Webman/                         # config/app.php
+│       ├── Yii2/                           # config/snowflake.php
+│       ├── Yii3/                           # config/params.php + di.php (auto-merged)
 │       └── Psr11/SnowflakeFactory.php      # Any PSR-11 container, no interface dependency
 ├── config/snowflake.php                    # Reference configuration with comments
 ├── tests/
@@ -73,7 +75,7 @@ snowflake-php/
 
 أربع طبقات، والاعتماديات تتجه في اتجاه واحد فقط:
 
-- **طبقة التطبيق** — تطبيقك المبني على Laravel / Webman / ThinkPHP / Hyperf، أو أي container يدعم PSR-11، أو PHP خالص؛ لا يطلب سوى نسخة `Snowflake`.
+- **طبقة التطبيق** — تطبيقك المبني على Laravel / Yii2 / Yii3 / Webman / ThinkPHP / Hyperf، أو أي container يدعم PSR-11، أو PHP خالص؛ لا يطلب سوى نسخة `Snowflake`.
 - **طبقة المحوّلات** — محوّل واحد لكل إطار عمل، بالإضافة إلى مصنع (factory) مستقلّ عن الـ container يدعم PSR-11. يسجّل كل منها نسخة مشتركة واحدة، ويرفق معه ملف إعدادات قابلًا للنشر.
 - **الطبقة الأساسية** — `Snowflake` هي الفئة الوحيدة ذات الحالة: تتحقق من الإعدادات، وتحسب مسبقًا إزاحات البتات وبتات العقدة الثابتة، وتولّد المعرّفات ثم تعيد تحليلها.
 - **العقود والمحلّلات** — `SequenceResolver` هو نقطة التوسّع. تفوّض النواة إليه كل تخصيص للتسلسل، لذا يمكن تبديل استراتيجية التسلسل دون المساس بالمولّد.
@@ -312,6 +314,84 @@ class OrderService
     }
 }
 ```
+
+### Yii2
+
+1. انسخ ملف الإعدادات إلى تطبيقك:
+```bash
+cp vendor/erikwang2013/snowflake-php/src/Adapters/Yii2/config/snowflake.php \
+   config/snowflake.php
+```
+
+2. سجّل المولّد كنسخة وحيدة (singleton) داخل الـ container في `config/web.php` (و`config/console.php` عندما يولّد الـ console معرّفات أيضًا):
+```php
+use Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory;
+use Erikwang2013\Snowflake\Snowflake;
+
+return [
+    'container' => [
+        'singletons' => [
+            Snowflake::class => new SnowflakeFactory(require __DIR__ . '/snowflake.php'),
+        ],
+    ],
+];
+```
+
+3. الاستخدام:
+```php
+// Container
+$id = Yii::$container->get(Snowflake::class)->id();
+
+// Dependency injection — the container resolves the type hint
+use Erikwang2013\Snowflake\Snowflake;
+
+class OrderService
+{
+    public function __construct(private Snowflake $snowflake) {}
+
+    public function create(): int
+    {
+        return $this->snowflake->id();
+    }
+}
+
+$service = Yii::$container->get(OrderService::class);
+```
+
+يقرأ ملف الإعدادات المنسوخ المتغيرات نفسها `SNOWFLAKE_*` التي تستخدمها بقية المحوّلات. ويحتاج قسم `container` في الإعدادات إلى Yii 2.0.11+.
+
+### Yii3
+
+يهيّئ Yii3 نفسه تلقائيًا: يعلن `composer.json` عن إعدادات الحزمة في `extra.config-plugin`، لذا تدمج إضافة `yiisoft/config` الملفين `src/Adapters/Yii3/config/params.php` و`di.php` في مجموعتَي `params` و`di` لدى التطبيق عند التثبيت. من دون خطوة تسجيل.
+
+1. تجاوز القيم الافتراضية اختياريًا في ملف `config/common/params.php` داخل تطبيقك — فالمفاتيح التي تدرجها لها الأولوية على مفاتيح الحزمة، وأي مفتاح تتركه يعود إلى القيم الافتراضية المدمجة في المولّد:
+```php
+return [
+    'erikwang2013/snowflake-php' => [
+        'worker_id' => 1,
+        'datacenter_id' => 1,
+    ],
+];
+```
+
+2. استخدم الـ container أو حقن المُنشئ (constructor injection):
+```php
+use Erikwang2013\Snowflake\Snowflake;
+
+$id = $container->get(Snowflake::class)->id();
+
+class OrderService
+{
+    public function __construct(private Snowflake $snowflake) {}
+
+    public function create(): int
+    {
+        return $this->snowflake->id();
+    }
+}
+```
+
+يسرد `params.php` كل مفتاح متاح مع قيمته الافتراضية.
 
 ### حاويات PSR-11
 

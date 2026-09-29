@@ -70,12 +70,12 @@
 <text x="377.6666666666667" y="596" font-size="13.0" fill="#0f1e33" font-weight="700">ফ্রেমওয়ার্ক অ্যাডাপ্টার</text>
 <rect x="377.7" y="604.0" width="73.1" height="18.0" rx="9" fill="#f6fdfe"/>
 <text x="414.2214166666667" y="617" font-size="10.5" fill="#0e7490" font-weight="600" text-anchor="middle">Adapters/*</text>
-<text x="377.6666666666667" y="638.0" font-size="11.5" fill="#3d4d66" font-weight="400">Laravel, Webman, ThinkPHP ও Hyperf</text>
-<text x="377.6666666666667" y="655.25" font-size="11.5" fill="#3d4d66" font-weight="400">অ্যাডাপ্টার বিল্ট-ইন, আর PSR-11</text>
-<text x="377.6666666666667" y="672.5" font-size="11.5" fill="#3d4d66" font-weight="400">ফ্যাক্টরি অন্য যেকোনো</text>
-<text x="377.6666666666667" y="689.75" font-size="11.5" fill="#3d4d66" font-weight="400">কন্টেইনার কভার করে — অথবা</text>
-<text x="377.6666666666667" y="707.0" font-size="11.5" fill="#3d4d66" font-weight="400">প্লেইন PHP-তে কন্টেইনার ছাড়াই</text>
-<text x="377.6666666666667" y="724.25" font-size="11.5" fill="#3d4d66" font-weight="400">চলুন।</text>
+<text x="377.6666666666667" y="638.0" font-size="11.5" fill="#3d4d66" font-weight="400">Laravel, Yii2, Yii3, Webman, ThinkPHP</text>
+<text x="377.6666666666667" y="655.25" font-size="11.5" fill="#3d4d66" font-weight="400">ও Hyperf অ্যাডাপ্টার বিল্ট-ইন,</text>
+<text x="377.6666666666667" y="672.5" font-size="11.5" fill="#3d4d66" font-weight="400">আর PSR-11 ফ্যাক্টরি অন্য</text>
+<text x="377.6666666666667" y="689.75" font-size="11.5" fill="#3d4d66" font-weight="400">যেকোনো কন্টেইনার কভার করে —</text>
+<text x="377.6666666666667" y="707.0" font-size="11.5" fill="#3d4d66" font-weight="400">অথবা প্লেইন PHP-তে কন্টেইনার</text>
+<text x="377.6666666666667" y="724.25" font-size="11.5" fill="#3d4d66" font-weight="400">ছাড়াই চলুন।</text>
 <rect x="653.3" y="120.0" width="286.7" height="652.0" rx="14" fill="#fbf9ff" stroke="#dbe6f5" stroke-width="1.4"/>
 <rect x="669.3" y="136.0" width="140.6" height="28.0" rx="14.0" fill="#6d28d9"/><text x="739.6395833333333" y="154.5" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">ইঞ্জিনিয়ারিং</text>
 <rect x="669.3" y="184.0" width="254.7" height="180.0" rx="12" fill="#ffffff" stroke="#d5c6fa" stroke-width="1.5"/>

@@ -8,7 +8,7 @@
   <sub>La mascota también viene con el código — <code>echo Snowflake::MASCOT;</code> la imprime en cualquier terminal.</sub>
 </p>
 
-Generador de ID únicos distribuidos basado en el algoritmo Snowflake de Twitter, compatible con Laravel, Webman, ThinkPHP y Hyperf.
+Generador de ID únicos distribuidos basado en el algoritmo Snowflake de Twitter, compatible con Laravel, Yii2, Yii3, Webman, ThinkPHP y Hyperf.
 
 ## Acerca de
 
@@ -20,7 +20,7 @@ Características principales:
 - **Resolvers de secuencia intercambiables** — estrategias secuencial, aleatoria y respaldada por Redis integradas, o implementa la tuya
 - **Asignación flexible de bits** — ajusta los bits de timestamp/worker/datacenter/secuencia según tu escala
 - **Tolerancia a la deriva del reloj** — ventana de tolerancia configurable para los ajustes de NTP
-- **Independiente del framework** — adaptadores de primera clase para Laravel, ThinkPHP, Webman y Hyperf, o PHP puro sin contenedor alguno
+- **Independiente del framework** — adaptadores de primera clase para Laravel, Yii2, Yii3, ThinkPHP, Webman y Hyperf, o PHP puro sin contenedor alguno
 - **Análisis de ID** — descompone los ID generados en sus componentes de timestamp, nodo y secuencia
 
 ## Estructura del proyecto
@@ -46,6 +46,8 @@ snowflake-php/
 │       ├── ThinkPHP/                       # Service + Facade + config
 │       ├── Hyperf/                         # ConfigProvider + config
 │       ├── Webman/                         # config/app.php
+│       ├── Yii2/                           # config/snowflake.php
+│       ├── Yii3/                           # config/params.php + di.php (auto-merged)
 │       └── Psr11/SnowflakeFactory.php      # Any PSR-11 container, no interface dependency
 ├── config/snowflake.php                    # Reference configuration with comments
 ├── tests/
@@ -73,7 +75,7 @@ snowflake-php/
 
 Cuatro capas, con dependencias que apuntan en una sola dirección:
 
-- **Capa de aplicación** — tu aplicación Laravel / Webman / ThinkPHP / Hyperf, cualquier contenedor PSR-11 o PHP puro; solo pide una instancia de `Snowflake`.
+- **Capa de aplicación** — tu aplicación Laravel / Yii2 / Yii3 / Webman / ThinkPHP / Hyperf, cualquier contenedor PSR-11 o PHP puro; solo pide una instancia de `Snowflake`.
 - **Capa de adaptadores** — un adaptador por framework, más una fábrica PSR-11 independiente del contenedor. Cada uno registra una única instancia compartida e incluye un archivo de configuración publicable.
 - **Capa core** — `Snowflake` es la única clase con estado: valida la configuración, precalcula los desplazamientos de bits y los bits fijos del nodo, genera ID y los vuelve a analizar.
 - **Contratos y resolvers** — `SequenceResolver` es el punto de extensión. El core le delega toda la asignación de secuencias, de modo que la estrategia de secuencia se puede cambiar sin tocar el generador.
@@ -313,6 +315,84 @@ class OrderService
 }
 ```
 
+### Yii2
+
+1. Copia el archivo de configuración a tu aplicación:
+```bash
+cp vendor/erikwang2013/snowflake-php/src/Adapters/Yii2/config/snowflake.php \
+   config/snowflake.php
+```
+
+2. Registra el generador como singleton del contenedor en `config/web.php` (y `config/console.php` cuando la consola también genera ID):
+```php
+use Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory;
+use Erikwang2013\Snowflake\Snowflake;
+
+return [
+    'container' => [
+        'singletons' => [
+            Snowflake::class => new SnowflakeFactory(require __DIR__ . '/snowflake.php'),
+        ],
+    ],
+];
+```
+
+3. Uso:
+```php
+// Container
+$id = Yii::$container->get(Snowflake::class)->id();
+
+// Dependency injection — the container resolves the type hint
+use Erikwang2013\Snowflake\Snowflake;
+
+class OrderService
+{
+    public function __construct(private Snowflake $snowflake) {}
+
+    public function create(): int
+    {
+        return $this->snowflake->id();
+    }
+}
+
+$service = Yii::$container->get(OrderService::class);
+```
+
+El archivo de configuración copiado lee las mismas variables de entorno `SNOWFLAKE_*` que los demás adaptadores. La sección de configuración `container` requiere Yii 2.0.11+.
+
+### Yii3
+
+Yii3 se cablea solo: `composer.json` declara la configuración del paquete en `extra.config-plugin`, así que el plugin `yiisoft/config` fusiona `src/Adapters/Yii3/config/params.php` y `di.php` en los grupos `params` y `di` de la aplicación al instalar. Ningún paso de registro.
+
+1. Opcionalmente, sobrescribe los valores por defecto en el `config/common/params.php` de tu aplicación — las claves que enumeres ganan a las del paquete, y todo lo que omitas vuelve a los valores por defecto integrados del generador:
+```php
+return [
+    'erikwang2013/snowflake-php' => [
+        'worker_id' => 1,
+        'datacenter_id' => 1,
+    ],
+];
+```
+
+2. Usa el contenedor o la inyección por constructor:
+```php
+use Erikwang2013\Snowflake\Snowflake;
+
+$id = $container->get(Snowflake::class)->id();
+
+class OrderService
+{
+    public function __construct(private Snowflake $snowflake) {}
+
+    public function create(): int
+    {
+        return $this->snowflake->id();
+    }
+}
+```
+
+`params.php` enumera cada clave disponible con su valor por defecto.
+
 ### Contenedores PSR-11
 
 Symfony, Slim, Laminas y cualquier otro contenedor: registra la fábrica. No depende de nada, así que sirve cualquier contenedor — no se requiere `psr/container`:
@@ -335,7 +415,7 @@ services:
 
 ## PHP nativo (sin framework)
 
-Nada de este paquete necesita un framework: los cuatro adaptadores de arriba solo te registran `Snowflake` en un contenedor. Sin ninguno, constrúyelo tú mismo:
+Nada de este paquete necesita un framework: los adaptadores de arriba solo te registran `Snowflake` en un contenedor. Sin ninguno, constrúyelo tú mismo:
 
 ```php
 require __DIR__ . '/vendor/autoload.php';

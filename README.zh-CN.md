@@ -8,7 +8,7 @@
   <sub>宠物也已随代码发布——<code>echo Snowflake::MASCOT;</code> 即可在终端打印它。</sub>
 </p>
 
-基于 Twitter Snowflake 算法的分布式唯一 ID 生成器，兼容 Laravel、Webman、ThinkPHP、Hyperf 框架。
+基于 Twitter Snowflake 算法的分布式唯一 ID 生成器，兼容 Laravel、Yii2、Yii3、Webman、ThinkPHP、Hyperf 框架。
 
 ## 项目说明
 
@@ -20,7 +20,7 @@ Snowflake PHP 无需中心协调节点即可生成 64 位、k-ordered、全局�
 - **可插拔序列号策略** — 内置顺序递增、随机与 Redis 三种策略，支持自定义
 - **灵活的位分配** — 可调整时间戳/节点/数据中心/序列号的位数以适应业务规模
 - **时钟回拨容忍** — 可配置的 NTP 校时容忍窗口
-- **框架无关** — 提供 Laravel、ThinkPHP、Webman、Hyperf 的一流适配器，也可完全不依赖容器直接用原生 PHP
+- **框架无关** — 提供 Laravel、Yii2、Yii3、ThinkPHP、Webman、Hyperf 的一流适配器，也可完全不依赖容器直接用原生 PHP
 - **ID 解析** — 可将生成的 ID 反向分解为时间戳、节点、序列号等成分
 
 ## 项目结构
@@ -46,6 +46,8 @@ snowflake-php/
 │       ├── ThinkPHP/                       # Service + Facade + 配置
 │       ├── Hyperf/                         # ConfigProvider + 配置
 │       ├── Webman/                         # config/app.php
+│       ├── Yii2/                           # config/snowflake.php
+│       ├── Yii3/                           # config/params.php + di.php（自动合并）
 │       └── Psr11/SnowflakeFactory.php      # 任意 PSR-11 容器，不依赖容器接口
 ├── config/snowflake.php                    # 带注释的参考配置文件
 ├── tests/
@@ -73,7 +75,7 @@ snowflake-php/
 
 四层结构，依赖方向单向向下：
 
-- **应用层** — 你的 Laravel / Webman / ThinkPHP / Hyperf 应用、任意 PSR-11 容器，或原生 PHP，只需取到 `Snowflake` 实例。
+- **应用层** — 你的 Laravel / Yii2 / Yii3 / Webman / ThinkPHP / Hyperf 应用、任意 PSR-11 容器，或原生 PHP，只需取到 `Snowflake` 实例。
 - **适配层** — 每个框架一个适配器，另有与容器无关的 PSR-11 工厂；各自注册共享单例并随包发布可覆盖的配置文件。
 - **核心层** — `Snowflake` 是唯一的有状态类：负责配置校验、位运算预计算、ID 生成与反解。
 - **契约与实现层** — `SequenceResolver` 是扩展点，核心将序列号分配全部委托给它，因此更换策略无需改动生成器。
@@ -312,6 +314,87 @@ class OrderService
     }
 }
 ```
+
+### Yii2
+
+1. 复制配置文件到应用：
+```bash
+cp vendor/erikwang2013/snowflake-php/src/Adapters/Yii2/config/snowflake.php \
+   config/snowflake.php
+```
+
+2. 在 `config/web.php` 中注册为容器单例（控制台也要生成 ID 时同样加到 `config/console.php`）：
+```php
+use Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory;
+use Erikwang2013\Snowflake\Snowflake;
+
+return [
+    'container' => [
+        'singletons' => [
+            Snowflake::class => new SnowflakeFactory(require __DIR__ . '/snowflake.php'),
+        ],
+    ],
+];
+```
+
+3. 使用：
+```php
+// 容器
+$id = Yii::$container->get(Snowflake::class)->id();
+
+// 依赖注入 —— 容器会自动解析类型提示
+use Erikwang2013\Snowflake\Snowflake;
+
+class OrderService
+{
+    public function __construct(private Snowflake $snowflake) {}
+
+    public function create(): int
+    {
+        return $this->snowflake->id();
+    }
+}
+
+$service = Yii::$container->get(OrderService::class);
+```
+
+复制过去的配置文件读取的 `SNOWFLAKE_*` 环境变量与其他适配器完全一致。
+`container` 配置段需要 Yii 2.0.11+。
+
+### Yii3
+
+Yii3 无需手动注册：`composer.json` 通过 `extra.config-plugin` 声明了包配置，
+安装时 `yiisoft/config` 插件会把 `src/Adapters/Yii3/config/params.php` 与
+`di.php` 自动合并进应用的 `params` 与 `di` 分组。
+
+1. 如需覆盖默认值，在应用的 `config/common/params.php` 中列出要改的键 —— 列出的键优先于包内默认值，未列出的键回落到生成器内置默认值：
+```php
+return [
+    'erikwang2013/snowflake-php' => [
+        'worker_id' => 1,
+        'datacenter_id' => 1,
+    ],
+];
+```
+
+2. 从容器取用，或直接构造器注入：
+```php
+use Erikwang2013\Snowflake\Snowflake;
+
+$id = $container->get(Snowflake::class)->id();
+
+class OrderService
+{
+    public function __construct(private Snowflake $snowflake) {}
+
+    public function create(): int
+    {
+        return $this->snowflake->id();
+    }
+}
+```
+
+`params.php` 列出了全部可用配置项及其默认值。
 
 ### PSR-11 容器
 

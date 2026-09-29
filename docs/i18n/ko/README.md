@@ -8,7 +8,7 @@
   <sub>마스코트는 코드와 함께 배포됩니다 — <code>echo Snowflake::MASCOT;</code> 를 실행하면 어떤 터미널에서든 출력됩니다.</sub>
 </p>
 
-트위터 Snowflake 알고리즘에 기반한 분산 고유 ID 생성기로, Laravel, Webman, ThinkPHP, Hyperf와 호환됩니다.
+트위터 Snowflake 알고리즘에 기반한 분산 고유 ID 생성기로, Laravel, Yii2, Yii3, Webman, ThinkPHP, Hyperf와 호환됩니다.
 
 ## 개요
 
@@ -20,7 +20,7 @@ Snowflake PHP는 중앙 조정자 없이 64비트, k-정렬된 전역 고유 ID�
 - **교체 가능한 시퀀스 리졸버** — 순차, 무작위, Redis 기반 전략이 기본 제공되며, 직접 구현할 수도 있습니다
 - **유연한 비트 할당** — 타임스탬프/워커/데이터센터/시퀀스 비트를 규모에 맞게 조정할 수 있습니다
 - **시계 드리프트 허용** — NTP 보정을 위한 허용 범위를 설정할 수 있습니다
-- **프레임워크 비종속** — Laravel, ThinkPHP, Webman, Hyperf용 어댑터는 물론, 컨테이너가 전혀 없는 순수 PHP도 지원합니다
+- **프레임워크 비종속** — Laravel, Yii2, Yii3, ThinkPHP, Webman, Hyperf용 어댑터는 물론, 컨테이너가 전혀 없는 순수 PHP도 지원합니다
 - **ID 파싱** — 생성된 ID를 타임스탬프, 노드, 시퀀스 구성 요소로 다시 분해합니다
 
 ## 프로젝트 구조
@@ -46,6 +46,8 @@ snowflake-php/
 │       ├── ThinkPHP/                       # Service + Facade + config
 │       ├── Hyperf/                         # ConfigProvider + config
 │       ├── Webman/                         # config/app.php
+│       ├── Yii2/                           # config/snowflake.php
+│       ├── Yii3/                           # config/params.php + di.php (auto-merged)
 │       └── Psr11/SnowflakeFactory.php      # Any PSR-11 container, no interface dependency
 ├── config/snowflake.php                    # Reference configuration with comments
 ├── tests/
@@ -73,7 +75,7 @@ snowflake-php/
 
 네 개의 계층으로 이루어져 있고, 의존성은 한 방향으로만 향합니다:
 
-- **애플리케이션 계층** — 여러분의 Laravel / Webman / ThinkPHP / Hyperf 애플리케이션, 임의의 PSR-11 컨테이너, 또는 순수 PHP로, 컨테이너에 `Snowflake` 인스턴스만 요청합니다.
+- **애플리케이션 계층** — 여러분의 Laravel / Yii2 / Yii3 / Webman / ThinkPHP / Hyperf 애플리케이션, 임의의 PSR-11 컨테이너, 또는 순수 PHP로, 컨테이너에 `Snowflake` 인스턴스만 요청합니다.
 - **어댑터 계층** — 프레임워크마다 어댑터가 하나씩 있고, 여기에 컨테이너 비종속 PSR-11 팩토리가 더해집니다. 각 어댑터는 공유 인스턴스 하나를 등록하고, 배포 가능한 설정 파일을 함께 제공합니다.
 - **코어 계층** — `Snowflake`가 유일한 상태 보유 클래스입니다. 설정을 검증하고, 비트 시프트와 고정 노드 비트를 미리 계산하며, ID를 생성하고 다시 파싱합니다.
 - **계약과 리졸버** — `SequenceResolver`가 확장 지점입니다. 코어는 모든 시퀀스 할당을 여기에 위임하므로, 생성기를 건드리지 않고도 시퀀스 전략을 교체할 수 있습니다.
@@ -313,6 +315,84 @@ class OrderService
 }
 ```
 
+### Yii2
+
+1. 설정 파일을 애플리케이션으로 복사합니다:
+```bash
+cp vendor/erikwang2013/snowflake-php/src/Adapters/Yii2/config/snowflake.php \
+   config/snowflake.php
+```
+
+2. `config/web.php`에서 생성기를 컨테이너 싱글턴으로 등록합니다 (콘솔에서도 ID를 생성한다면 `config/console.php`에도):
+```php
+use Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory;
+use Erikwang2013\Snowflake\Snowflake;
+
+return [
+    'container' => [
+        'singletons' => [
+            Snowflake::class => new SnowflakeFactory(require __DIR__ . '/snowflake.php'),
+        ],
+    ],
+];
+```
+
+3. 사용법:
+```php
+// Container
+$id = Yii::$container->get(Snowflake::class)->id();
+
+// Dependency injection — the container resolves the type hint
+use Erikwang2013\Snowflake\Snowflake;
+
+class OrderService
+{
+    public function __construct(private Snowflake $snowflake) {}
+
+    public function create(): int
+    {
+        return $this->snowflake->id();
+    }
+}
+
+$service = Yii::$container->get(OrderService::class);
+```
+
+복사한 설정 파일은 다른 어댑터와 동일한 `SNOWFLAKE_*` 환경 변수를 읽습니다. `container` 설정 섹션에는 Yii 2.0.11 이상이 필요합니다.
+
+### Yii3
+
+Yii3는 등록 단계가 없습니다: `composer.json`이 `extra.config-plugin`에 패키지 설정을 선언하므로, 설치 시 `yiisoft/config` 플러그인이 `src/Adapters/Yii3/config/params.php`와 `di.php`를 애플리케이션의 `params` 및 `di` 그룹에 병합합니다.
+
+1. 필요하다면 애플리케이션의 `config/common/params.php`에서 기본값을 덮어씁니다 — 여기에 나열한 키가 패키지의 값보다 우선하고, 나열하지 않은 키는 생성기 내장 기본값으로 폴백합니다:
+```php
+return [
+    'erikwang2013/snowflake-php' => [
+        'worker_id' => 1,
+        'datacenter_id' => 1,
+    ],
+];
+```
+
+2. 컨테이너 또는 생성자 주입으로 사용합니다:
+```php
+use Erikwang2013\Snowflake\Snowflake;
+
+$id = $container->get(Snowflake::class)->id();
+
+class OrderService
+{
+    public function __construct(private Snowflake $snowflake) {}
+
+    public function create(): int
+    {
+        return $this->snowflake->id();
+    }
+}
+```
+
+`params.php`에는 사용 가능한 모든 키와 기본값이 나열되어 있습니다.
+
 ### PSR-11 컨테이너
 
 Symfony, Slim, Laminas 및 그 밖의 어떤 컨테이너든: 팩토리를 등록하면 됩니다. 아무것에도 의존하지 않으므로 어떤 컨테이너에서도 동작하며, `psr/container`는 필요하지 않습니다:
@@ -335,7 +415,7 @@ services:
 
 ## 네이티브 PHP (프레임워크 없음)
 
-이 패키지에서 프레임워크가 필요한 부분은 없습니다 — 위의 네 가지 어댑터는 `Snowflake`를 여러분 대신 컨테이너에 연결해 줄 뿐입니다. 컨테이너가 없다면 직접 만들면 됩니다:
+이 패키지에서 프레임워크가 필요한 부분은 없습니다 — 위의 어댑터는 `Snowflake`를 여러분 대신 컨테이너에 연결해 줄 뿐입니다. 컨테이너가 없다면 직접 만들면 됩니다:
 
 ```php
 require __DIR__ . '/vendor/autoload.php';

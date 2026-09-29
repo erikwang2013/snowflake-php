@@ -294,7 +294,36 @@ def pet(L):
 # --------------------------------------------------------------- architecture
 
 def architecture(L):
-    W, H = 980, 986
+    """Layered view: application → adapters → core → contracts, plus the
+    cross-cutting pieces.
+
+    Every shipped adapter gets a slot, and the two top bands lay their slots
+    out in a centred grid, so adding a framework means adding labels - not
+    coordinates. All vertical positions derive from the band heights, which
+    derive from the number of slots.
+    """
+    W = 980
+    COLS, GAP = 4, 16                     # slots per row inside a band
+    BW = (W - 112 - (COLS - 1) * GAP) / COLS
+    X0 = 64
+    PITCH = 64                            # row pitch inside a band
+    APP_H, ADP_H, CORE_H, CORE_PITCH = 52, 64, 58, 74
+    TOP, AFTER_ARROW = 116, 28            # first band top, gap after an arrow
+
+    def rows(n):
+        return (n + COLS - 1) // COLS
+
+    def slots(items, y0, box_h):
+        """Yield (key-tuple, x, y) for each slot, later rows centred."""
+        out = []
+        total = rows(len(items))
+        for i, item in enumerate(items):
+            row, col = divmod(i, COLS)
+            in_row = min(COLS, len(items) - row * COLS)
+            offset = (COLS - in_row) * (BW + GAP) / 2
+            out.append((item, X0 + offset + col * (BW + GAP), y0 + row * PITCH))
+        return out, total * PITCH - (PITCH - box_h) + 48   # band height
+
     body = [header(W, L("arch.title"), L("arch.subtitle"))]
 
     def band(y, h, key, color, tint):
@@ -304,71 +333,85 @@ def architecture(L):
         out.append(pill(58, y - 13, lw, 26, label, color, 12))
         return "\n".join(out)
 
-    body.append(band(116, 88, "arch.band.app", BLUE, "#f8fbff"))
-    bw = (W - 80 - 48 - 48) / 5
-    for i, (k, ks) in enumerate([("arch.app1", "arch.app1.sub"), ("arch.app2", "arch.app2.sub"),
-                                 ("arch.app3", "arch.app3.sub"), ("arch.app4", "arch.app4.sub"),
-                                 ("arch.app5", "arch.app5.sub")]):
-        x = 64 + i * (bw + 16)
-        body.append(rect(x, 142, bw, 52, "#ffffff", BLUE_B, 10))
-        body.append(text(x + bw / 2, 165, L(k), fit(L(k), 13, bw - 16, "600"), INK, "600", "middle"))
-        body.append(text(x + bw / 2, 183, L(ks), fit(L(ks), 11, bw - 16), MUTED, "400", "middle"))
-    body.append(arrow(490, 204, 490, 226, ARROW_HI, 2, head="5b8def"))
-    body.append(text(500, 220, L("arch.arrow.instance"), fit(L("arch.arrow.instance"), 11, 400), MUTED))
+    # Key numbers follow shipment history; the grid reads frameworks first, the
+    # generic PSR-11 / plain-PHP escape hatch last.
+    apps = [("arch.app1", "arch.app1.sub"), ("arch.app2", "arch.app2.sub"),
+            ("arch.app3", "arch.app3.sub"), ("arch.app4", "arch.app4.sub"),
+            ("arch.app6", "arch.app6.sub"), ("arch.app7", "arch.app7.sub"),
+            ("arch.app5", "arch.app5.sub")]
+    app_slots, app_h = slots(apps, TOP + 26, APP_H)
+    body.append(band(TOP, app_h, "arch.band.app", BLUE, "#f8fbff"))
+    for (k, ks), x, y in app_slots:
+        body.append(rect(x, y, BW, APP_H, "#ffffff", BLUE_B, 10))
+        body.append(text(x + BW / 2, y + 23, L(k), fit(L(k), 13, BW - 16, "600"), INK, "600", "middle"))
+        body.append(text(x + BW / 2, y + 41, L(ks), fit(L(ks), 11, BW - 16), MUTED, "400", "middle"))
 
     adp = [("arch.ad1", "arch.ad1.sub1", "arch.ad1.sub2"), ("arch.ad2", "arch.ad2.sub1", "arch.ad2.sub2"),
            ("arch.ad3", "arch.ad3.sub1", "arch.ad3.sub2"), ("arch.ad4", "arch.ad4.sub1", "arch.ad4.sub2"),
+           ("arch.ad6", "arch.ad6.sub1", "arch.ad6.sub2"), ("arch.ad7", "arch.ad7.sub1", "arch.ad7.sub2"),
            ("arch.ad5", "arch.ad5.sub1", "arch.ad5.sub2")]
-    body.append(band(232, 108, "arch.band.adapter", BLUE, "#f8fbff"))
-    for i, (k, k1, k2) in enumerate(adp):
-        x = 64 + i * (bw + 16)
-        body.append(rect(x, 258, bw, 64, "#ffffff", BLUE_B, 10))
-        body.append(text(x + 14, 279, L(k), fit(L(k), 12.5, bw - 24, "700"), BLUE, "700"))
-        body.append(text(x + 14, 297, L(k1), fit(L(k1), 10.5, bw - 24), BODY))
-        body.append(text(x + 14, 313, L(k2), fit(L(k2), 10.5, bw - 24), MUTED))
-    body.append(arrow(490, 340, 490, 362, ARROW_HI, 2, head="5b8def"))
-    body.append(text(500, 356, L("arch.arrow.config"), 11, MUTED, family=MONO))
+    adp_y = TOP + app_h + AFTER_ARROW
+    body.append(arrow(490, TOP + app_h, 490, TOP + app_h + 22, ARROW_HI, 2, head="5b8def"))
+    body.append(text(500, TOP + app_h + 16, L("arch.arrow.instance"), fit(L("arch.arrow.instance"), 11, 400), MUTED))
+    adp_slots, adp_h = slots(adp, adp_y + 26, ADP_H)
+    body.append(band(adp_y, adp_h, "arch.band.adapter", BLUE, "#f8fbff"))
+    for (k, k1, k2), x, y in adp_slots:
+        body.append(rect(x, y, BW, ADP_H, "#ffffff", BLUE_B, 10))
+        body.append(text(x + 14, y + 21, L(k), fit(L(k), 12.5, BW - 24, "700"), BLUE, "700"))
+        body.append(text(x + 14, y + 39, L(k1), fit(L(k1), 10.5, BW - 24), BODY))
+        body.append(text(x + 14, y + 55, L(k2), fit(L(k2), 10.5, BW - 24), MUTED))
 
-    body.append(band(368, 192, "arch.band.core", BLUE, "#f3f8ff"))
-    body.append(text(64, 398, L("arch.core.title"), fit(L("arch.core.title"), 12.5, W - 200, "700"),
-                     INK, "700"))
+    core_y = adp_y + adp_h + AFTER_ARROW
+    body.append(arrow(490, adp_y + adp_h, 490, adp_y + adp_h + 22, ARROW_HI, 2, head="5b8def"))
+    body.append(text(500, adp_y + adp_h + 16, L("arch.arrow.config"), 11, MUTED, family=MONO))
+
     core = [("arch.core1", "arch.core1.sub"), ("arch.core2", "arch.core2.sub"),
             ("arch.core3", "arch.core3.sub"), ("arch.core4", "arch.core4.sub"),
             ("arch.core5", "arch.core5.sub"), ("arch.core6", "arch.core6.sub")]
+    core_rows = rows(len(core))
+    # First row sits below the band title (44), not at the band's 26px inset.
+    core_h = 44 + (core_rows - 1) * CORE_PITCH + CORE_H + 16
+    body.append(band(core_y, core_h, "arch.band.core", BLUE, "#f3f8ff"))
+    body.append(text(64, core_y + 30, L("arch.core.title"), fit(L("arch.core.title"), 12.5, W - 200, "700"),
+                     INK, "700"))
     cw = (W - 80 - 48 - 32) / 3
     for i, (k, ks) in enumerate(core):
         x = 64 + (i % 3) * (cw + 16)
-        y = 412 + (i // 3) * 74
-        body.append(rect(x, y, cw, 58, "#ffffff", BLUE_B, 10))
+        y = core_y + 44 + (i // 3) * CORE_PITCH
+        body.append(rect(x, y, cw, CORE_H, "#ffffff", BLUE_B, 10))
         body.append(text(x + 14, y + 25, L(k), fit(L(k), 12.5, cw - 24, "600"), INK, "600"))
         body.append(text(x + 14, y + 45, L(ks), fit(L(ks), 10.5, cw - 24), MUTED))
-    body.append(arrow(490, 560, 490, 582, ARROW_HI, 2, head="5b8def"))
-    body.append(text(500, 576, L("arch.arrow.next"), fit(L("arch.arrow.next"), 11, 400), MUTED))
 
-    body.append(band(588, 180, "arch.band.contract", CYAN, "#f6fdfe"))
-    body.append(rect(64, 612, 300, 140, "#ffffff", CYAN_B, 10))
-    body.append(text(80, 638, "SequenceResolver", 13, CYAN, "700", family=MONO))
-    body.append(text(80, 658, L("arch.iface.sub"), fit(L("arch.iface.sub"), 10.5, 268), MUTED))
-    body.append(text(80, 682, "next(int $timestamp,", 10.5, BODY, family=MONO))
-    body.append(text(80, 698, "     int $maxSequence): ?int", 10.5, BODY, family=MONO))
+    iface_y = core_y + core_h + AFTER_ARROW
+    body.append(arrow(490, core_y + core_h, 490, core_y + core_h + 22, ARROW_HI, 2, head="5b8def"))
+    body.append(text(500, core_y + core_h + 16, L("arch.arrow.next"), fit(L("arch.arrow.next"), 11, 400), MUTED))
+
+    contract_h = 180
+    body.append(band(iface_y, contract_h, "arch.band.contract", CYAN, "#f6fdfe"))
+    body.append(rect(64, iface_y + 24, 300, 140, "#ffffff", CYAN_B, 10))
+    body.append(text(80, iface_y + 50, "SequenceResolver", 13, CYAN, "700", family=MONO))
+    body.append(text(80, iface_y + 70, L("arch.iface.sub"), fit(L("arch.iface.sub"), 10.5, 268), MUTED))
+    body.append(text(80, iface_y + 94, "next(int $timestamp,", 10.5, BODY, family=MONO))
+    body.append(text(80, iface_y + 110, "     int $maxSequence): ?int", 10.5, BODY, family=MONO))
     for i, (k, ks) in enumerate([("arch.impl1", "arch.impl1.sub"), ("arch.impl2", "arch.impl2.sub"),
                                  ("arch.impl3", "arch.impl3.sub"), ("arch.impl4", "arch.impl4.sub")]):
-        y = 612 + i * 36
+        y = iface_y + 24 + i * 36
         body.append(rect(400, y, 540, 32, "#ffffff", CYAN_B, 8))
         body.append(arrow(400, y + 16, 368, y + 16, CYAN, 1.8, head="0e7490"))
         name, sub = L(k), L(ks)
         size = min(fit(name + sub, 11.5, 512, "700"), 11.5)
         body.append(tline(414, y + 21, [(name, CYAN, "700"), (sub, MUTED, "400")], size))
-    body.append(text(356, 668, L("arch.implements"), 10, FAINT, "600", "end"))
+    body.append(text(356, iface_y + 80, L("arch.implements"), 10, FAINT, "600", "end"))
 
-    body.append(band(796, 150, "arch.band.cross", SLATE, "#fbfcfe"))
-    body.append(text(64, 828, L("arch.exc.title"), 12, INK, "700"))
+    cross_y = iface_y + contract_h + AFTER_ARROW
+    body.append(band(cross_y, 150, "arch.band.cross", SLATE, "#fbfcfe"))
+    body.append(text(64, cross_y + 32, L("arch.exc.title"), 12, INK, "700"))
     exs = [("SnowflakeException " + L("arch.exc.base"), SLATE, SLATE_T),
            ("ClockDriftException", RED, RED_T),
            ("TimestampOverflowException", AMBER, AMBER_T),
            ("InvalidWorkerIdException", AMBER, AMBER_T),
            ("InvalidDatacenterIdException", AMBER, AMBER_T)]
-    px, py = 64, 840
+    px, py = 64, cross_y + 44
     for name, c, t in exs:
         w = tw(name, 10.5, "600") + 22
         if px + w > 560:
@@ -376,12 +419,14 @@ def architecture(L):
         body.append(rect(px, py, w, 22, t, None, 11))
         body.append(text(px + w / 2, py + 15, name, 10.5, c, "600", "middle"))
         px += w + 8
-    body.append(line(608, 820, 608, 926, LINE, 1.5, cap="butt"))
-    body.append(text(632, 828, L("arch.cfg.title"), 12, INK, "700"))
+    body.append(line(608, cross_y + 24, 608, cross_y + 130, LINE, 1.5, cap="butt"))
+    body.append(text(632, cross_y + 32, L("arch.cfg.title"), 12, INK, "700"))
     cfg = []
     for k in ("arch.cfg1", "arch.cfg2", "arch.cfg3"):
         cfg.extend(wrap(L(k), 11, 288))
-    body.append(block(632, 850, cfg, 11 if len(cfg) <= 4 else 10, BODY, lh=15))
+    body.append(block(632, cross_y + 54, cfg, 11 if len(cfg) <= 4 else 10, BODY, lh=15))
+
+    H = cross_y + 150 + 40
     return svg(W, H, "\n".join(body), L("arch.title"), L("arch.subtitle"))
 
 

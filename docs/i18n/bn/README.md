@@ -8,7 +8,7 @@
   <sub>মাসকটটি কোডের সাথেও আসে — <code>echo Snowflake::MASCOT;</code> যেকোনো টার্মিনালে এটি প্রিন্ট করে।</sub>
 </p>
 
-Twitter-এর Snowflake অ্যালগরিদমের উপর ভিত্তি করে তৈরি একটি ডিস্ট্রিবিউটেড ইউনিক ID জেনারেটর, যা Laravel, Webman, ThinkPHP ও Hyperf-এর সাথে কম্প্যাটিবল।
+Twitter-এর Snowflake অ্যালগরিদমের উপর ভিত্তি করে তৈরি একটি ডিস্ট্রিবিউটেড ইউনিক ID জেনারেটর, যা Laravel, Yii2, Yii3, Webman, ThinkPHP ও Hyperf-এর সাথে কম্প্যাটিবল।
 
 ## পরিচিতি
 
@@ -20,7 +20,7 @@ Snowflake PHP কোনো সেন্ট্রাল কোঅর্ডিন�
 - **প্লাগেবল sequence রিজলভার** — বিল্ট-ইন sequential, random ও Redis-ভিত্তিক স্ট্র্যাটেজি, অথবা নিজেরটি আনুন
 - **ফ্লেক্সিবল বিট অ্যালোকেশন** — আপনার স্কেল অনুযায়ী timestamp/worker/datacenter/sequence বিট সাজিয়ে নিন
 - **ক্লক ড্রিফট টলারেন্স** — NTP অ্যাডজাস্টমেন্টের জন্য কনফিগারেবল টলারেন্স উইন্ডো
-- **ফ্রেমওয়ার্ক অ্যাগনস্টিক** — Laravel, ThinkPHP, Webman ও Hyperf-এর জন্য ফার্স্ট-ক্লাস অ্যাডাপ্টার, অথবা কন্টেইনার ছাড়া প্লেইন PHP
+- **ফ্রেমওয়ার্ক অ্যাগনস্টিক** — Laravel, Yii2, Yii3, ThinkPHP, Webman ও Hyperf-এর জন্য ফার্স্ট-ক্লাস অ্যাডাপ্টার, অথবা কন্টেইনার ছাড়া প্লেইন PHP
 - **ID পার্সিং** — জেনারেট করা ID আবার timestamp, node ও sequence কম্পোনেন্টে ভেঙে দেখা যায়
 
 ## প্রজেক্ট স্ট্রাকচার
@@ -46,6 +46,8 @@ snowflake-php/
 │       ├── ThinkPHP/                       # Service + Facade + config
 │       ├── Hyperf/                         # ConfigProvider + config
 │       ├── Webman/                         # config/app.php
+│       ├── Yii2/                           # config/snowflake.php
+│       ├── Yii3/                           # config/params.php + di.php (auto-merged)
 │       └── Psr11/SnowflakeFactory.php      # Any PSR-11 container, no interface dependency
 ├── config/snowflake.php                    # Reference configuration with comments
 ├── tests/
@@ -73,7 +75,7 @@ snowflake-php/
 
 চারটি লেয়ার, নির্ভরতা শুধু এক দিকেই:
 
-- **অ্যাপ্লিকেশন লেয়ার** — আপনার Laravel / Webman / ThinkPHP / Hyperf অ্যাপ্লিকেশন, যেকোনো PSR-11 কন্টেইনার, বা প্লেইন PHP; এটি কন্টেইনারের কাছে শুধু একটি `Snowflake` ইনস্ট্যান্স চায়।
+- **অ্যাপ্লিকেশন লেয়ার** — আপনার Laravel / Yii2 / Yii3 / Webman / ThinkPHP / Hyperf অ্যাপ্লিকেশন, যেকোনো PSR-11 কন্টেইনার, বা প্লেইন PHP; এটি কন্টেইনারের কাছে শুধু একটি `Snowflake` ইনস্ট্যান্স চায়।
 - **অ্যাডাপ্টার লেয়ার** — প্রতি ফ্রেমওয়ার্কে একটি অ্যাডাপ্টার, সাথে কন্টেইনার-নিরপেক্ষ একটি PSR-11 ফ্যাক্টরি। প্রতিটি একটি শেয়ারড ইনস্ট্যান্স রেজিস্টার করে এবং একটি পাবলিশযোগ্য config ফাইল দেয়।
 - **কোর লেয়ার** — `Snowflake`-ই একমাত্র stateful ক্লাস: এটি কনফিগারেশন ভ্যালিডেট করে, বিট শিফট ও ফিক্সড নোড বিট আগেই হিসাব করে রাখে, ID জেনারেট করে এবং আবার পার্স করে।
 - **কন্ট্রাক্ট ও রিজলভার** — `SequenceResolver` হলো এক্সটেনশন পয়েন্ট। কোর প্রতিটি sequence অ্যালোকেশন এর কাছে ডেলিগেট করে, তাই জেনারেটর ছুঁয়ে না-ই sequence স্ট্র্যাটেজি বদলানো যায়।
@@ -313,6 +315,84 @@ class OrderService
 }
 ```
 
+### Yii2
+
+1. config ফাইলটি আপনার অ্যাপ্লিকেশনে কপি করুন:
+```bash
+cp vendor/erikwang2013/snowflake-php/src/Adapters/Yii2/config/snowflake.php \
+   config/snowflake.php
+```
+
+2. `config/web.php`-এ generator-কে কন্টেইনার সিঙ্গেলটন হিসেবে রেজিস্টার করুন (এবং কনসোলও যখন ID জেনারেট করে, তখন `config/console.php`-এও):
+```php
+use Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory;
+use Erikwang2013\Snowflake\Snowflake;
+
+return [
+    'container' => [
+        'singletons' => [
+            Snowflake::class => new SnowflakeFactory(require __DIR__ . '/snowflake.php'),
+        ],
+    ],
+];
+```
+
+3. ব্যবহার:
+```php
+// Container
+$id = Yii::$container->get(Snowflake::class)->id();
+
+// Dependency injection — the container resolves the type hint
+use Erikwang2013\Snowflake\Snowflake;
+
+class OrderService
+{
+    public function __construct(private Snowflake $snowflake) {}
+
+    public function create(): int
+    {
+        return $this->snowflake->id();
+    }
+}
+
+$service = Yii::$container->get(OrderService::class);
+```
+
+কপি করা config বাকি অ্যাডাপ্টারগুলোর মতো একই `SNOWFLAKE_*` এনভায়রনমেন্ট ভেরিয়েবল পড়ে। `container` config সেকশনের জন্য Yii 2.0.11+ দরকার।
+
+### Yii3
+
+Yii3 নিজেই নিজেকে ওয়্যার করে নেয়: `composer.json` প্যাকেজ config-টি `extra.config-plugin`-এ ডিক্লেয়ার করে, তাই `yiisoft/config` প্লাগিন ইনস্টলের সময় `src/Adapters/Yii3/config/params.php` ও `di.php` অ্যাপ্লিকেশনের `params` ও `di` গ্রুপে মার্জ করে দেয়। কোনো রেজিস্ট্রেশন স্টেপ নেই।
+
+1. চাইলে আপনার অ্যাপ্লিকেশনের `config/common/params.php`-এ ডিফল্টগুলো ওভাররাইড করুন — আপনি যে কী-গুলো দেবেন সেগুলো প্যাকেজের চেয়ে অগ্রাধিকার পায়, আর যা বাদ দেবেন তা generator-এর বিল্ট-ইন ডিফল্টে ফিরে যায়:
+```php
+return [
+    'erikwang2013/snowflake-php' => [
+        'worker_id' => 1,
+        'datacenter_id' => 1,
+    ],
+];
+```
+
+2. কন্টেইনার বা কনস্ট্রাক্টর ইনজেকশন ব্যবহার করুন:
+```php
+use Erikwang2013\Snowflake\Snowflake;
+
+$id = $container->get(Snowflake::class)->id();
+
+class OrderService
+{
+    public function __construct(private Snowflake $snowflake) {}
+
+    public function create(): int
+    {
+        return $this->snowflake->id();
+    }
+}
+```
+
+`params.php`-এ প্রতিটি উপলব্ধ কী তার ডিফল্টসহ তালিকাভুক্ত।
+
 ### PSR-11 কন্টেইনার
 
 Symfony, Slim, Laminas বা অন্য যেকোনো কন্টেইনার: ফ্যাক্টরিটি রেজিস্টার করুন। এটি কোনো কিছুতে নির্ভর করে না, তাই যেকোনো কন্টেইনারই চলবে — `psr/container` লাগে না:
@@ -335,7 +415,7 @@ services:
 
 ## নেটিভ PHP (কোনো ফ্রেমওয়ার্ক ছাড়া)
 
-এই প্যাকেজের কোনো কিছুই ফ্রেমওয়ার্ক চায় না — উপরের চারটি অ্যাডাপ্টার শুধু আপনার জন্য `Snowflake`-কে কন্টেইনারে যুক্ত করে দেয়। কন্টেইনার ছাড়া নিজেই বানিয়ে নিন:
+এই প্যাকেজের কোনো কিছুই ফ্রেমওয়ার্ক চায় না — উপরের অ্যাডাপ্টারগুলো শুধু আপনার জন্য `Snowflake`-কে কন্টেইনারে যুক্ত করে দেয়। কন্টেইনার ছাড়া নিজেই বানিয়ে নিন:
 
 ```php
 require __DIR__ . '/vendor/autoload.php';

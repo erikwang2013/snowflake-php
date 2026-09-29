@@ -8,7 +8,7 @@
   <sub>Талисман поставляется вместе с кодом — <code>echo Snowflake::MASCOT;</code> выведет его в любом терминале.</sub>
 </p>
 
-Генератор распределённых уникальных ID на основе алгоритма Snowflake от Twitter, совместимый с Laravel, Webman, ThinkPHP и Hyperf.
+Генератор распределённых уникальных ID на основе алгоритма Snowflake от Twitter, совместимый с Laravel, Yii2, Yii3, Webman, ThinkPHP и Hyperf.
 
 ## О проекте
 
@@ -20,7 +20,7 @@ Snowflake PHP генерирует 64-битные, k-ordered, глобальн�
 - **Сменные резолверы последовательности** — встроенные последовательная, случайная и на Redis стратегии, или своя собственная
 - **Гибкое распределение битов** — настраивайте биты timestamp/воркера/датацентра/последовательности под свой масштаб
 - **Устойчивость к дрейфу часов** — настраиваемое окно допуска для корректировок NTP
-- **Не привязан к фреймворку** — готовые адаптеры для Laravel, ThinkPHP, Webman и Hyperf или чистый PHP вообще без контейнера
+- **Не привязан к фреймворку** — готовые адаптеры для Laravel, Yii2, Yii3, ThinkPHP, Webman и Hyperf или чистый PHP вообще без контейнера
 - **Разбор ID** — раскладывает сгенерированный ID обратно на метку времени, узел и последовательность
 
 ## Структура проекта
@@ -46,6 +46,8 @@ snowflake-php/
 │       ├── ThinkPHP/                       # Service + Facade + config
 │       ├── Hyperf/                         # ConfigProvider + config
 │       ├── Webman/                         # config/app.php
+│       ├── Yii2/                           # config/snowflake.php
+│       ├── Yii3/                           # config/params.php + di.php (auto-merged)
 │       └── Psr11/SnowflakeFactory.php      # Any PSR-11 container, no interface dependency
 ├── config/snowflake.php                    # Reference configuration with comments
 ├── tests/
@@ -73,7 +75,7 @@ snowflake-php/
 
 Четыре слоя, зависимости направлены только в одну сторону:
 
-- **Слой приложения** — ваше приложение на Laravel / Webman / ThinkPHP / Hyperf, любой контейнер PSR-11 или чистый PHP; он лишь запрашивает экземпляр `Snowflake`.
+- **Слой приложения** — ваше приложение на Laravel / Yii2 / Yii3 / Webman / ThinkPHP / Hyperf, любой контейнер PSR-11 или чистый PHP; он лишь запрашивает экземпляр `Snowflake`.
 - **Слой адаптеров** — по одному адаптеру на фреймворк плюс не зависящая от контейнера фабрика PSR-11. Каждый регистрирует единственный общий экземпляр и поставляет публикуемый файл конфигурации.
 - **Слой ядра** — `Snowflake` — единственный класс с состоянием: он проверяет конфигурацию, предвычисляет битовые сдвиги и фиксированные биты узла, генерирует ID и разбирает их обратно.
 - **Контракты и резолверы** — `SequenceResolver` — точка расширения. Ядро делегирует ему выдачу каждой последовательности, поэтому стратегию можно заменить, не трогая генератор.
@@ -313,6 +315,84 @@ class OrderService
 }
 ```
 
+### Yii2
+
+1. Скопируйте файл конфигурации в своё приложение:
+```bash
+cp vendor/erikwang2013/snowflake-php/src/Adapters/Yii2/config/snowflake.php \
+   config/snowflake.php
+```
+
+2. Зарегистрируйте генератор как синглтон контейнера в `config/web.php` (а также в `config/console.php`, если ID генерирует и консоль):
+```php
+use Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory;
+use Erikwang2013\Snowflake\Snowflake;
+
+return [
+    'container' => [
+        'singletons' => [
+            Snowflake::class => new SnowflakeFactory(require __DIR__ . '/snowflake.php'),
+        ],
+    ],
+];
+```
+
+3. Использование:
+```php
+// Container
+$id = Yii::$container->get(Snowflake::class)->id();
+
+// Dependency injection — the container resolves the type hint
+use Erikwang2013\Snowflake\Snowflake;
+
+class OrderService
+{
+    public function __construct(private Snowflake $snowflake) {}
+
+    public function create(): int
+    {
+        return $this->snowflake->id();
+    }
+}
+
+$service = Yii::$container->get(OrderService::class);
+```
+
+Скопированная конфигурация читает те же переменные `SNOWFLAKE_*`, что и остальные адаптеры. Секции `container` конфигурации нужен Yii 2.0.11+.
+
+### Yii3
+
+Yii3 подключается сам: `composer.json` объявляет конфигурацию пакета в `extra.config-plugin`, поэтому плагин `yiisoft/config` при установке объединяет `src/Adapters/Yii3/config/params.php` и `di.php` с группами `params` и `di` приложения. Шаг регистрации не нужен.
+
+1. При необходимости переопределите значения по умолчанию в `config/common/params.php` вашего приложения — перечисленные вами ключи побеждают ключи пакета, а всё пропущенное откатывается к встроенным значениям по умолчанию генератора:
+```php
+return [
+    'erikwang2013/snowflake-php' => [
+        'worker_id' => 1,
+        'datacenter_id' => 1,
+    ],
+];
+```
+
+2. Используйте контейнер или внедрение в конструктор:
+```php
+use Erikwang2013\Snowflake\Snowflake;
+
+$id = $container->get(Snowflake::class)->id();
+
+class OrderService
+{
+    public function __construct(private Snowflake $snowflake) {}
+
+    public function create(): int
+    {
+        return $this->snowflake->id();
+    }
+}
+```
+
+`params.php` перечисляет все доступные ключи с их значениями по умолчанию.
+
 ### Контейнеры PSR-11
 
 Symfony, Slim, Laminas и любой другой контейнер: зарегистрируйте фабрику. Она ни от чего не зависит, поэтому подойдёт любой контейнер — `psr/container` не требуется:
@@ -335,7 +415,7 @@ services:
 
 ## Нативный PHP (без фреймворка)
 
-Ничего в этом пакете не требует фреймворка — четыре адаптера выше лишь
+Ничего в этом пакете не требует фреймворка — адаптеры выше лишь
 регистрируют `Snowflake` в контейнере за вас. Без контейнера соберите всё сами:
 
 ```php

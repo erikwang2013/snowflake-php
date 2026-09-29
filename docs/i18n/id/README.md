@@ -8,7 +8,7 @@
   <sub>Maskotnya ikut dikirim bersama kodenya — <code>echo Snowflake::MASCOT;</code> akan mencetaknya di terminal mana pun.</sub>
 </p>
 
-Generator ID unik terdistribusi berdasarkan algoritma Snowflake milik Twitter, kompatibel dengan Laravel, Webman, ThinkPHP, dan Hyperf.
+Generator ID unik terdistribusi berdasarkan algoritma Snowflake milik Twitter, kompatibel dengan Laravel, Yii2, Yii3, Webman, ThinkPHP, dan Hyperf.
 
 ## Tentang
 
@@ -20,7 +20,7 @@ Fitur utama:
 - **Sequence resolver yang dapat dipasang** — strategi sekuensial, acak, dan berbasis Redis sudah tersedia bawaan, atau pakai milik Anda sendiri
 - **Alokasi bit fleksibel** — sesuaikan bit timestamp/worker/datacenter/sequence dengan skala Anda
 - **Toleransi clock drift** — jendela toleransi yang dapat dikonfigurasi untuk penyesuaian NTP
-- **Agnostik framework** — adapter kelas satu untuk Laravel, ThinkPHP, Webman, dan Hyperf, atau PHP murni tanpa container sama sekali
+- **Agnostik framework** — adapter kelas satu untuk Laravel, Yii2, Yii3, ThinkPHP, Webman, dan Hyperf, atau PHP murni tanpa container sama sekali
 - **Parsing ID** — uraikan ID yang dihasilkan kembali menjadi komponen timestamp, node, dan sequence
 
 ## Struktur Proyek
@@ -46,6 +46,8 @@ snowflake-php/
 │       ├── ThinkPHP/                       # Service + Facade + config
 │       ├── Hyperf/                         # ConfigProvider + config
 │       ├── Webman/                         # config/app.php
+│       ├── Yii2/                           # config/snowflake.php
+│       ├── Yii3/                           # config/params.php + di.php (auto-merged)
 │       └── Psr11/SnowflakeFactory.php      # Any PSR-11 container, no interface dependency
 ├── config/snowflake.php                    # Reference configuration with comments
 ├── tests/
@@ -73,7 +75,7 @@ snowflake-php/
 
 Empat lapisan, dengan dependensi yang hanya mengarah ke satu arah:
 
-- **Lapisan aplikasi** — aplikasi Laravel / Webman / ThinkPHP / Hyperf Anda, container PSR-11 apa pun, atau PHP murni; lapisan ini hanya meminta instance `Snowflake`.
+- **Lapisan aplikasi** — aplikasi Laravel / Yii2 / Yii3 / Webman / ThinkPHP / Hyperf Anda, container PSR-11 apa pun, atau PHP murni; lapisan ini hanya meminta instance `Snowflake`.
 - **Lapisan adapter** — satu adapter untuk setiap framework, plus factory PSR-11 yang agnostik container. Masing-masing mendaftarkan satu instance bersama dan menyertakan file config yang dapat dipublikasikan.
 - **Lapisan inti** — `Snowflake` adalah satu-satunya kelas stateful: ia memvalidasi konfigurasi, menghitung bit shift dan bit node tetap di awal, membuat ID, lalu mengurainya kembali.
 - **Kontrak & resolver** — `SequenceResolver` adalah titik ekstensinya. Inti mendelegasikan setiap alokasi sequence kepadanya, sehingga strategi sequence bisa ditukar tanpa menyentuh generator.
@@ -313,6 +315,84 @@ class OrderService
 }
 ```
 
+### Yii2
+
+1. Salin file config ke aplikasi Anda:
+```bash
+cp vendor/erikwang2013/snowflake-php/src/Adapters/Yii2/config/snowflake.php \
+   config/snowflake.php
+```
+
+2. Daftarkan generator sebagai singleton container di `config/web.php` (dan `config/console.php` saat console juga menghasilkan ID):
+```php
+use Erikwang2013\Snowflake\Adapters\Psr11\SnowflakeFactory;
+use Erikwang2013\Snowflake\Snowflake;
+
+return [
+    'container' => [
+        'singletons' => [
+            Snowflake::class => new SnowflakeFactory(require __DIR__ . '/snowflake.php'),
+        ],
+    ],
+];
+```
+
+3. Penggunaan:
+```php
+// Container
+$id = Yii::$container->get(Snowflake::class)->id();
+
+// Dependency injection — the container resolves the type hint
+use Erikwang2013\Snowflake\Snowflake;
+
+class OrderService
+{
+    public function __construct(private Snowflake $snowflake) {}
+
+    public function create(): int
+    {
+        return $this->snowflake->id();
+    }
+}
+
+$service = Yii::$container->get(OrderService::class);
+```
+
+Config yang disalin membaca variabel environment `SNOWFLAKE_*` yang sama seperti adapter lainnya. Bagian config `container` memerlukan Yii 2.0.11+.
+
+### Yii3
+
+Yii3 mengatur dirinya sendiri: `composer.json` mendeklarasikan config paket di `extra.config-plugin`, sehingga plugin `yiisoft/config` menggabungkan `src/Adapters/Yii3/config/params.php` dan `di.php` ke dalam grup `params` dan `di` milik aplikasi saat instalasi. Tidak ada langkah registrasi.
+
+1. Secara opsional, timpa nilai default di `config/common/params.php` aplikasi Anda — key yang Anda cantumkan menang atas milik paket, sedangkan yang tidak Anda cantumkan akan kembali ke default bawaan generator:
+```php
+return [
+    'erikwang2013/snowflake-php' => [
+        'worker_id' => 1,
+        'datacenter_id' => 1,
+    ],
+];
+```
+
+2. Gunakan container atau constructor injection:
+```php
+use Erikwang2013\Snowflake\Snowflake;
+
+$id = $container->get(Snowflake::class)->id();
+
+class OrderService
+{
+    public function __construct(private Snowflake $snowflake) {}
+
+    public function create(): int
+    {
+        return $this->snowflake->id();
+    }
+}
+```
+
+File `params.php` mencantumkan setiap key yang tersedia beserta nilai default-nya.
+
 ### Container PSR-11
 
 Symfony, Slim, Laminas dan container lainnya: daftarkan factory-nya. Ia tidak bergantung pada apa pun, jadi container apa pun bisa dipakai — `psr/container` tidak diperlukan:
@@ -335,7 +415,7 @@ services:
 
 ## PHP Murni (tanpa framework)
 
-Tidak ada bagian di paket ini yang membutuhkan framework — empat adapter di atas hanya menyambungkan `Snowflake` ke container untuk Anda. Tanpa container, bangun sendiri:
+Tidak ada bagian di paket ini yang membutuhkan framework — adapter di atas hanya menyambungkan `Snowflake` ke container untuk Anda. Tanpa container, bangun sendiri:
 
 ```php
 require __DIR__ . '/vendor/autoload.php';
