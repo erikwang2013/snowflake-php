@@ -2,11 +2,9 @@
 
 [English](../../../README.md) · [简体中文](../../../README.zh-CN.md) · [한국어](../ko/README.md) · [Русский](../ru/README.md) · [Deutsch](../de/README.md) · [Français](../fr/README.md) · [Español](../es/README.md) · [Português](../pt/README.md) · [हिन्दी](../hi/README.md) · [العربية](../ar/README.md) · [বাংলা](../bn/README.md) · [Bahasa Indonesia](../id/README.md) · [日本語](../ja/README.md)
 
-<p align="center">
-  <img src="../img/ja/pet.svg" width="180" alt="Snowflake PHP プロジェクトのマスコット — 笑顔の雪の結晶" />
-  <br />
-  <sub>マスコットはコードにも同梱されています — <code>echo Snowflake::MASCOT;</code> でどのターミナルでも表示できます。</sub>
-</p>
+![Snowflake PHP プロジェクトのマスコット — 笑顔の雪の結晶](../img/ja/pet.svg)
+
+*マスコットはコードにも同梱されています — `echo Snowflake::MASCOT;` でどのターミナルでも表示できます。*
 
 Twitter の Snowflake アルゴリズムをベースにした分散ユニーク ID ジェネレータで、Laravel、Yii2、Yii3、Webman、ThinkPHP、Hyperf に対応しています。
 
@@ -604,7 +602,7 @@ php scripts/benchmark.php
 
 | WeChat Pay | Alipay |
 |:---:|:---:|
-| <img src="../../weixinpay.png" width="130" height="130" alt="WeChat Pay" /> | <img src="../../alipay.png" width="130" height="130" alt="Alipay" /> |
+| ![WeChat Pay](../../weixinpay.png) | ![Alipay](../../alipay.png) |
 
 > このプロジェクトがお役に立てば、ぜひご支援いただけると嬉しいです〜
 

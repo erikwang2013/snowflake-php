@@ -2,11 +2,9 @@
 
 [English](../../../README.md) · [简体中文](../../../README.zh-CN.md) · [한국어](../ko/README.md) · [Русский](../ru/README.md) · [Deutsch](../de/README.md) · [Français](../fr/README.md) · [Español](../es/README.md) · [Português](../pt/README.md) · [हिन्दी](../hi/README.md) · [العربية](../ar/README.md) · [বাংলা](../bn/README.md) · [Bahasa Indonesia](../id/README.md) · [日本語](../ja/README.md)
 
-<p align="center">
-  <img src="../img/bn/pet.svg" width="180" alt="Snowflake PHP প্রজেক্টের মাসকট — হাসিমুখ একটি snowflake" />
-  <br />
-  <sub>মাসকটটি কোডের সাথেও আসে — <code>echo Snowflake::MASCOT;</code> যেকোনো টার্মিনালে এটি প্রিন্ট করে।</sub>
-</p>
+![Snowflake PHP প্রজেক্টের মাসকট — হাসিমুখ একটি snowflake](../img/bn/pet.svg)
+
+*মাসকটটি কোডের সাথেও আসে — `echo Snowflake::MASCOT;` যেকোনো টার্মিনালে এটি প্রিন্ট করে।*
 
 Twitter-এর Snowflake অ্যালগরিদমের উপর ভিত্তি করে তৈরি একটি ডিস্ট্রিবিউটেড ইউনিক ID জেনারেটর, যা Laravel, Yii2, Yii3, Webman, ThinkPHP ও Hyperf-এর সাথে কম্প্যাটিবল।
 
@@ -604,7 +602,7 @@ php scripts/benchmark.php
 
 | WeChat Pay | Alipay |
 |:---:|:---:|
-| <img src="../../weixinpay.png" width="130" height="130" alt="WeChat Pay" /> | <img src="../../alipay.png" width="130" height="130" alt="Alipay" /> |
+| ![WeChat Pay](../../weixinpay.png) | ![Alipay](../../alipay.png) |
 
 > এই প্রজেক্টটি আপনার কাজে লাগলে, নিঃসংকোচে সাপোর্ট জানাতে পারেন~
 

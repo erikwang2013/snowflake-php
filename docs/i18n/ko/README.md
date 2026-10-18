@@ -2,11 +2,9 @@
 
 [English](../../../README.md) · [简体中文](../../../README.zh-CN.md) · [한국어](../ko/README.md) · [Русский](../ru/README.md) · [Deutsch](../de/README.md) · [Français](../fr/README.md) · [Español](../es/README.md) · [Português](../pt/README.md) · [हिन्दी](../hi/README.md) · [العربية](../ar/README.md) · [বাংলা](../bn/README.md) · [Bahasa Indonesia](../id/README.md) · [日本語](../ja/README.md)
 
-<p align="center">
-  <img src="../img/ko/pet.svg" width="180" alt="Snowflake PHP 프로젝트 마스코트 — 웃고 있는 눈송이" />
-  <br />
-  <sub>마스코트는 코드와 함께 배포됩니다 — <code>echo Snowflake::MASCOT;</code> 를 실행하면 어떤 터미널에서든 출력됩니다.</sub>
-</p>
+![Snowflake PHP 프로젝트 마스코트 — 웃고 있는 눈송이](../img/ko/pet.svg)
+
+*마스코트는 코드와 함께 배포됩니다 — `echo Snowflake::MASCOT;` 를 실행하면 어떤 터미널에서든 출력됩니다.*
 
 트위터 Snowflake 알고리즘에 기반한 분산 고유 ID 생성기로, Laravel, Yii2, Yii3, Webman, ThinkPHP, Hyperf와 호환됩니다.
 
@@ -604,7 +602,7 @@ php scripts/benchmark.php
 
 | 위챗 페이 | 알리페이 |
 |:---:|:---:|
-| <img src="../../weixinpay.png" width="130" height="130" alt="위챗 페이" /> | <img src="../../alipay.png" width="130" height="130" alt="알리페이" /> |
+| ![위챗 페이](../../weixinpay.png) | ![알리페이](../../alipay.png) |
 
 > 이 프로젝트가 도움이 되셨다면, 따뜻한 후원 부탁드립니다~
 

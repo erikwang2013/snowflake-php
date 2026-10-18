@@ -2,11 +2,9 @@
 
 [English](../../../README.md) · [简体中文](../../../README.zh-CN.md) · [한국어](../ko/README.md) · [Русский](../ru/README.md) · [Deutsch](../de/README.md) · [Français](../fr/README.md) · [Español](../es/README.md) · [Português](../pt/README.md) · [हिन्दी](../hi/README.md) · [العربية](../ar/README.md) · [বাংলা](../bn/README.md) · [Bahasa Indonesia](../id/README.md) · [日本語](../ja/README.md)
 
-<p align="center">
-  <img src="../img/id/pet.svg" width="180" alt="Maskot proyek Snowflake PHP — kepingan salju yang tersenyum" />
-  <br />
-  <sub>Maskotnya ikut dikirim bersama kodenya — <code>echo Snowflake::MASCOT;</code> akan mencetaknya di terminal mana pun.</sub>
-</p>
+![Maskot proyek Snowflake PHP — kepingan salju yang tersenyum](../img/id/pet.svg)
+
+*Maskotnya ikut dikirim bersama kodenya — `echo Snowflake::MASCOT;` akan mencetaknya di terminal mana pun.*
 
 Generator ID unik terdistribusi berdasarkan algoritma Snowflake milik Twitter, kompatibel dengan Laravel, Yii2, Yii3, Webman, ThinkPHP, dan Hyperf.
 
@@ -604,7 +602,7 @@ Perintah itu mencetak ops/detik dan ns/op terhadap baseline `microtime()` murni,
 
 | WeChat Pay | Alipay |
 |:---:|:---:|
-| <img src="../../weixinpay.png" width="130" height="130" alt="WeChat Pay" /> | <img src="../../alipay.png" width="130" height="130" alt="Alipay" /> |
+| ![WeChat Pay](../../weixinpay.png) | ![Alipay](../../alipay.png) |
 
 > Jika proyek ini membantu Anda, silakan tunjukkan dukungan Anda~
 

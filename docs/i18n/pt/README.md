@@ -2,11 +2,9 @@
 
 [English](../../../README.md) · [简体中文](../../../README.zh-CN.md) · [한국어](../ko/README.md) · [Русский](../ru/README.md) · [Deutsch](../de/README.md) · [Français](../fr/README.md) · [Español](../es/README.md) · [Português](../pt/README.md) · [हिन्दी](../hi/README.md) · [العربية](../ar/README.md) · [বাংলা](../bn/README.md) · [Bahasa Indonesia](../id/README.md) · [日本語](../ja/README.md)
 
-<p align="center">
-  <img src="../img/pt/pet.svg" width="180" alt="Mascote do projeto Snowflake PHP — um floco de neve sorridente" />
-  <br />
-  <sub>O mascote também acompanha o código — <code>echo Snowflake::MASCOT;</code> o imprime em qualquer terminal.</sub>
-</p>
+![Mascote do projeto Snowflake PHP — um floco de neve sorridente](../img/pt/pet.svg)
+
+*O mascote também acompanha o código — `echo Snowflake::MASCOT;` o imprime em qualquer terminal.*
 
 Um gerador distribuído de IDs únicos baseado no algoritmo Snowflake do Twitter, compatível com Laravel, Yii2, Yii3, Webman, ThinkPHP e Hyperf.
 
@@ -604,7 +602,7 @@ Ele imprime ops/s e ns/op contra uma linha de base de `microtime()` puro, o melh
 
 | WeChat Pay | Alipay |
 |:---:|:---:|
-| <img src="../../weixinpay.png" width="130" height="130" alt="WeChat Pay" /> | <img src="../../alipay.png" width="130" height="130" alt="Alipay" /> |
+| ![WeChat Pay](../../weixinpay.png) | ![Alipay](../../alipay.png) |
 
 > Se este projeto te ajudou, sinta-se à vontade para demonstrar seu apoio~
 

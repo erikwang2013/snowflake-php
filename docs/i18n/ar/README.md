@@ -2,11 +2,9 @@
 
 [English](../../../README.md) · [简体中文](../../../README.zh-CN.md) · [한국어](../ko/README.md) · [Русский](../ru/README.md) · [Deutsch](../de/README.md) · [Français](../fr/README.md) · [Español](../es/README.md) · [Português](../pt/README.md) · [हिन्दी](../hi/README.md) · [العربية](../ar/README.md) · [বাংলা](../bn/README.md) · [Bahasa Indonesia](../id/README.md) · [日本語](../ja/README.md)
 
-<p align="center">
-  <img src="../img/ar/pet.svg" width="180" alt="تميمة مشروع Snowflake PHP — ندفة ثلج مبتسمة" />
-  <br />
-  <sub>التميمة تُشحن مع الكود أيضًا — <code>echo Snowflake::MASCOT;</code> يطبعها في أي طرفية.</sub>
-</p>
+![تميمة مشروع Snowflake PHP — ندفة ثلج مبتسمة](../img/ar/pet.svg)
+
+*التميمة تُشحن مع الكود أيضًا — `echo Snowflake::MASCOT;` يطبعها في أي طرفية.*
 
 مولّد معرّفات فريدة موزّعة مبني على خوارزمية Snowflake من Twitter، متوافق مع Laravel وYii2 وYii3 وWebman وThinkPHP وHyperf.
 
@@ -604,7 +602,7 @@ php scripts/benchmark.php
 
 | WeChat Pay | Alipay |
 |:---:|:---:|
-| <img src="../../weixinpay.png" width="130" height="130" alt="WeChat Pay" /> | <img src="../../alipay.png" width="130" height="130" alt="Alipay" /> |
+| ![WeChat Pay](../../weixinpay.png) | ![Alipay](../../alipay.png) |
 
 > إذا أفادك هذا المشروع، فلا تتردد في إبداء دعمك~
 

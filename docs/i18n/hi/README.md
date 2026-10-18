@@ -2,11 +2,9 @@
 
 [English](../../../README.md) · [简体中文](../../../README.zh-CN.md) · [한국어](../ko/README.md) · [Русский](../ru/README.md) · [Deutsch](../de/README.md) · [Français](../fr/README.md) · [Español](../es/README.md) · [Português](../pt/README.md) · [हिन्दी](../hi/README.md) · [العربية](../ar/README.md) · [বাংলা](../bn/README.md) · [Bahasa Indonesia](../id/README.md) · [日本語](../ja/README.md)
 
-<p align="center">
-  <img src="../img/hi/pet.svg" width="180" alt="Snowflake PHP project mascot — a smiling snowflake" />
-  <br />
-  <sub>The mascot ships with the code too — <code>echo Snowflake::MASCOT;</code> prints it in any terminal.</sub>
-</p>
+![Snowflake PHP project mascot — a smiling snowflake](../img/hi/pet.svg)
+
+*The mascot ships with the code too — `echo Snowflake::MASCOT;` prints it in any terminal.*
 
 Twitter के Snowflake algorithm पर आधारित एक distributed unique ID generator, जो Laravel, Yii2, Yii3, Webman, ThinkPHP और Hyperf के साथ compatible है।
 
@@ -604,7 +602,7 @@ php scripts/benchmark.php
 
 | WeChat Pay | Alipay |
 |:---:|:---:|
-| <img src="../../weixinpay.png" width="130" height="130" alt="WeChat Pay" /> | <img src="../../alipay.png" width="130" height="130" alt="Alipay" /> |
+| ![WeChat Pay](../../weixinpay.png) | ![Alipay](../../alipay.png) |
 
 > अगर यह प्रोजेक्ट आपके काम आता है, तो support दिखाने में संकोच न करें~
 

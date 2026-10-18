@@ -2,11 +2,9 @@
 
 [English](./README.md) · [简体中文](./README.zh-CN.md) · [한국어](docs/i18n/ko/README.md) · [Русский](docs/i18n/ru/README.md) · [Deutsch](docs/i18n/de/README.md) · [Français](docs/i18n/fr/README.md) · [Español](docs/i18n/es/README.md) · [Português](docs/i18n/pt/README.md) · [हिन्दी](docs/i18n/hi/README.md) · [العربية](docs/i18n/ar/README.md) · [বাংলা](docs/i18n/bn/README.md) · [Bahasa Indonesia](docs/i18n/id/README.md) · [日本語](docs/i18n/ja/README.md)
 
-<p align="center">
-  <img src="./docs/i18n/img/zh-CN/pet.svg" width="180" alt="Snowflake PHP 项目宠物——微笑的雪花精灵" />
-  <br />
-  <sub>宠物也已随代码发布——<code>echo Snowflake::MASCOT;</code> 即可在终端打印它。</sub>
-</p>
+![Snowflake PHP 项目宠物——微笑的雪花精灵](./docs/i18n/img/zh-CN/pet.svg)
+
+*宠物也已随代码发布——`echo Snowflake::MASCOT;` 即可在终端打印它。*
 
 基于 Twitter Snowflake 算法的分布式唯一 ID 生成器，兼容 Laravel、Yii2、Yii3、Webman、ThinkPHP、Hyperf 框架。
 
@@ -606,7 +604,7 @@ php scripts/benchmark.php
 
 | 微信 | 支付宝 |
 |:---:|:---:|
-| <img src="./docs/weixinpay.png" width="130" height="130" alt="微信" /> | <img src="./docs/alipay.png" width="130" height="130" alt="支付宝" /> |
+| ![微信](./docs/weixinpay.png) | ![支付宝](./docs/alipay.png) |
 
 > 如果这个项目对你有帮助，欢迎扫码支持一下~
 
