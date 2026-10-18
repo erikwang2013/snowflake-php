@@ -30,24 +30,24 @@ class Snowflake
     public const COPYRIGHT = 'Copyright (c) 2026 erik <erik@erik.xyz> — https://erik.xyz';
 
     /**
-     * The project mascot (see docs/i18n/img/en/pet.svg), as a terminal-friendly banner.
+     * The default project mascot (see docs/i18n/img/en/pet.svg), as a
+     * terminal-friendly banner. Equivalent to Snowflake::mascot('smile').
      *
      * Printed by the test bootstrap; available to any CLI that wants to greet
      * its users. Pure ASCII on purpose, so it lines up in every terminal.
      *
      * Set SNOWFLAKE_QUIET=1 to keep the test suite silent.
      */
-    public const MASCOT = <<<'ART'
-                      \       /
-                       \     /
-               *        \   /        *
-                  ------(^_^)------
-               *        /   \        *
-                       /     \
-                      /       \
-                    snowflake-php
-       64-bit distributed unique ID generator
-    ART;
+    public const MASCOT = Mascot::EXPRESSIONS['smile'];
+
+    /**
+     * Every mascot expression banner, keyed by form: smile, joy, cry,
+     * depressed, terrified, angry, coquettish, cute, pleasing, knocking,
+     * facepalm, tongue.
+     *
+     * @var array<string, string>
+     */
+    public const MASCOT_EXPRESSIONS = Mascot::EXPRESSIONS;
 
     public const DEFAULT_EPOCH = 1704067200000;   // 2024-01-01 00:00:00 UTC
     public const DEFAULT_WORKER_BITS = 5;
@@ -297,6 +297,16 @@ class Snowflake
             clockDriftStrategy: self::stringConfig($config['clock_drift_strategy'] ?? 'throw', 'clock_drift_strategy'),
             clockDriftWaitMs: self::intConfig($config['clock_drift_wait_ms'] ?? 1000, 'clock_drift_wait_ms', positive: true),
         );
+    }
+
+    /**
+     * Return a mascot expression banner for terminal output.
+     *
+     * @throws \InvalidArgumentException when the expression is unknown
+     */
+    public static function mascot(string $expression = 'smile'): string
+    {
+        return Mascot::get($expression);
     }
 
     /**
