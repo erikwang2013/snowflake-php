@@ -51,6 +51,8 @@ namespace Erikwang2013\Snowflake\Tests {
             'sequence_bits',
             'sequence_resolver',
             'clock_tolerance_ms',
+            'clock_drift_strategy',
+            'clock_drift_wait_ms',
         ];
 
         /**
@@ -80,6 +82,8 @@ namespace Erikwang2013\Snowflake\Tests {
                 $this->assertIsInt($config['datacenter_bits'], $name);
                 $this->assertIsInt($config['sequence_bits'], $name);
                 $this->assertIsInt($config['clock_tolerance_ms'], $name);
+                $this->assertIsString($config['clock_drift_strategy'], $name);
+                $this->assertIsInt($config['clock_drift_wait_ms'], $name);
             }
         }
 

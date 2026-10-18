@@ -30,6 +30,8 @@ class Psr11FactoryTest extends TestCase
         'SNOWFLAKE_SEQUENCE_BITS',
         'SNOWFLAKE_SEQUENCE_RESOLVER',
         'SNOWFLAKE_CLOCK_TOLERANCE_MS',
+        'SNOWFLAKE_CLOCK_DRIFT_STRATEGY',
+        'SNOWFLAKE_CLOCK_DRIFT_WAIT_MS',
     ];
 
     /** @var array<string, string|false> */
@@ -112,6 +114,26 @@ class Psr11FactoryTest extends TestCase
         $parsed = $snowflake->parseId($snowflake->id());
 
         $this->assertSame(42, $parsed['sequence']);
+    }
+
+    public function testFromEnvironmentForwardsClockDriftStrategy(): void
+    {
+        putenv('SNOWFLAKE_CLOCK_DRIFT_STRATEGY=bogus');
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Clock drift strategy');
+
+        (SnowflakeFactory::fromEnvironment())();
+    }
+
+    public function testFromEnvironmentForwardsClockDriftWaitBudget(): void
+    {
+        putenv('SNOWFLAKE_CLOCK_DRIFT_WAIT_MS=0');
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('clock_drift_wait_ms');
+
+        (SnowflakeFactory::fromEnvironment())();
     }
 
     public function testInvalidConfigSurfacesLibraryException(): void

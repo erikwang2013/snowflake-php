@@ -44,6 +44,8 @@ final class SnowflakeFactory
         'SNOWFLAKE_SEQUENCE_BITS' => 'sequence_bits',
         'SNOWFLAKE_SEQUENCE_RESOLVER' => 'sequence_resolver',
         'SNOWFLAKE_CLOCK_TOLERANCE_MS' => 'clock_tolerance_ms',
+        'SNOWFLAKE_CLOCK_DRIFT_STRATEGY' => 'clock_drift_strategy',
+        'SNOWFLAKE_CLOCK_DRIFT_WAIT_MS' => 'clock_drift_wait_ms',
     ];
 
     /** @var array<string, mixed> */
