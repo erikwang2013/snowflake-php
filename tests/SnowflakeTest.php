@@ -17,6 +17,8 @@ use Erikwang2013\Snowflake\Snowflake;
 
 class SnowflakeTest extends TestCase
 {
+    use ReflectionHelper;
+
     public function testGeneratedIdIsPositive(): void
     {
         $snowflake = new Snowflake();
@@ -243,8 +245,7 @@ class SnowflakeTest extends TestCase
 
         // Use reflection to force lastTimestamp into the future,
         // simulating a backward clock jump.
-        $ref = new \ReflectionProperty(Snowflake::class, 'lastTimestamp');
-        $ref->setAccessible(true);
+        $ref = $this->property($snowflake, 'lastTimestamp');
         $ref->setValue($snowflake, PHP_INT_MAX);
 
         $this->expectException(ClockDriftException::class);
@@ -256,8 +257,7 @@ class SnowflakeTest extends TestCase
         $snowflake = new Snowflake(clockToleranceMs: 60_000);
 
         $now = (int) (microtime(true) * 1000);
-        $ref = new \ReflectionProperty(Snowflake::class, 'lastTimestamp');
-        $ref->setAccessible(true);
+        $ref = $this->property($snowflake, 'lastTimestamp');
         $ref->setValue($snowflake, $now + 1000); // 1 second ahead
 
         // Should not throw — 1s drift is within the 60s tolerance.
@@ -317,8 +317,7 @@ class SnowflakeTest extends TestCase
             // expected
         }
 
-        $ref = new \ReflectionProperty(Snowflake::class, 'lastTimestamp');
-        $ref->setAccessible(true);
+        $ref = $this->property($snowflake, 'lastTimestamp');
         $this->assertSame(-1, $ref->getValue($snowflake));
     }
 
@@ -447,8 +446,7 @@ class SnowflakeTest extends TestCase
         $snowflake = new Snowflake(clockDriftStrategy: 'wait', clockDriftWaitMs: 500);
 
         $future = (int) (microtime(true) * 1000) + 5; // 5 ms ahead
-        $ref = new \ReflectionProperty(Snowflake::class, 'lastTimestamp');
-        $ref->setAccessible(true);
+        $ref = $this->property($snowflake, 'lastTimestamp');
         $ref->setValue($snowflake, $future);
 
         $id = $snowflake->id();
@@ -463,8 +461,7 @@ class SnowflakeTest extends TestCase
     {
         $snowflake = new Snowflake(clockDriftStrategy: 'wait', clockDriftWaitMs: 20);
 
-        $ref = new \ReflectionProperty(Snowflake::class, 'lastTimestamp');
-        $ref->setAccessible(true);
+        $ref = $this->property($snowflake, 'lastTimestamp');
         $ref->setValue($snowflake, (int) (microtime(true) * 1000) + 300); // 300 ms ahead
 
         $this->expectException(ClockDriftException::class);
@@ -494,16 +491,15 @@ class SnowflakeTest extends TestCase
             'clock_drift_wait_ms' => '500',
         ]);
 
-        $ref = new \ReflectionProperty(Snowflake::class, 'clockDriftStrategy');
-        $ref->setAccessible(true);
+        $ref = $this->property($snowflake, 'clockDriftStrategy');
         $this->assertSame('wait', $ref->getValue($snowflake));
     }
 
     public function testFromConfigDefaultsToThrowStrategy(): void
     {
-        $ref = new \ReflectionProperty(Snowflake::class, 'clockDriftStrategy');
-        $ref->setAccessible(true);
-        $this->assertSame('throw', $ref->getValue(Snowflake::fromConfig([])));
+        $snowflake = Snowflake::fromConfig([]);
+        $ref = $this->property($snowflake, 'clockDriftStrategy');
+        $this->assertSame('throw', $ref->getValue($snowflake));
     }
 
     public function testFromConfigRejectsNonStringClockDriftStrategy(): void

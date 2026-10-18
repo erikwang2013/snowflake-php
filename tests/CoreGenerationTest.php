@@ -22,6 +22,8 @@ use Erikwang2013\Snowflake\Snowflake;
  */
 class CoreGenerationTest extends TestCase
 {
+    use ReflectionHelper;
+
     public function testIdFitsInPositiveSigned64BitRange(): void
     {
         $snowflake = new Snowflake();
@@ -108,8 +110,7 @@ class CoreGenerationTest extends TestCase
     public function testClockDriftExceptionCarriesDriftProperties(): void
     {
         $snowflake = new Snowflake(clockToleranceMs: 0);
-        $ref = new \ReflectionProperty(Snowflake::class, 'lastTimestamp');
-        $ref->setAccessible(true);
+        $ref = $this->property($snowflake, 'lastTimestamp');
         $future = (int) (microtime(true) * 1000) + 100_000;
         $ref->setValue($snowflake, $future);
 
@@ -128,8 +129,7 @@ class CoreGenerationTest extends TestCase
     public function testClockDriftWithinToleranceKeepsGenerating(): void
     {
         $snowflake = new Snowflake(clockToleranceMs: 60_000);
-        $ref = new \ReflectionProperty(Snowflake::class, 'lastTimestamp');
-        $ref->setAccessible(true);
+        $ref = $this->property($snowflake, 'lastTimestamp');
         $ref->setValue($snowflake, (int) (microtime(true) * 1000) + 1000);
 
         $id = $snowflake->id();
