@@ -27,6 +27,7 @@ Snowflake PHP 无需中心协调节点即可生成 64 位、k-ordered、全局�
 snowflake-php/
 ├── src/
 │   ├── Snowflake.php                       # 核心：配置、位分配、id()、parseId()
+│   ├── Mascot.php                          # 终端 ASCII 宠物形态
 │   ├── Contracts/
 │   │   └── SequenceResolver.php            # 序列号策略契约接口
 │   ├── Resolvers/
@@ -56,7 +57,10 @@ snowflake-php/
 │   │   ├── README.md                       # 语言索引
 │   │   ├── img/<lang>/                     # 生成的 SVG（13 种语言）
 │   │   └── <lang>/README.md                # 各语言翻译文档
+│   ├── pet-expressions/                    # 12 种动态 SVG 宠物表情
 │   ├── examples/plain-php.php              # 可直接运行的原生 PHP 示例
+│   ├── social-preview.svg                  # GitHub 社交预览图源文件
+│   ├── social-preview.png                  # 1280×640 GitHub 社交预览图
 │   └── *.png                               # 赞助码
 ├── scripts/
 │   ├── generate-diagrams.py                # 生成 docs/i18n/img/<lang>/*.svg

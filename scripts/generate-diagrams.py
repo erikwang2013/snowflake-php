@@ -224,9 +224,10 @@ def defs(body):
     return "\n".join(out)
 
 
-def svg(w, h, body, title, desc, bg=True):
+def svg(w, h, body, title, desc, bg=True, display=None):
+    dw, dh = display or (w, h)
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" '
-            f'width="{w}" height="{h}" role="img" font-family="{FONT}">\n'
+            f'width="{dw}" height="{dh}" role="img" font-family="{FONT}">\n'
             f'<title>{esc(title)}</title>\n<desc>{esc(desc)}</desc>\n'
             f'{defs(body)}\n'
             + (f'<rect width="{w}" height="{h}" fill="#ffffff"/>\n' if bg else '')
@@ -286,7 +287,11 @@ def pet(L):
         text(cx, 306, "snowflake-php", 25, BLUE, "700", "middle", spacing="0.4"),
         text(cx, 328, tagline, fit(tagline, 12.5, 280, "400"), MUTED, "400", "middle"),
     ])
-    return svg(W, H, body, "snowflake-php — " + tagline, tagline, bg=False)
+    # Markdown renders an <img> at the SVG's intrinsic size, and the README
+    # shows the pet at 180px. Keep the 320x340 drawing grid, shrink the display
+    # box so the hero stays the size it had before the HTML attributes went away.
+    return svg(W, H, body, "snowflake-php — " + tagline, tagline,
+               bg=False, display=(180, 191))
 
 
 # --------------------------------------------------------------- architecture

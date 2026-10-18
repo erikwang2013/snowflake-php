@@ -68,7 +68,7 @@ jobs:
           printf '%s' "$CHANGELOG" > /tmp/CHANGELOG.md
           mascot="https://raw.githubusercontent.com/erikwang2013/snowflake-php/${version}/docs/i18n/img/en/pet.svg"
           {
-            echo "<img src=\"${mascot}\" width=\"120\" align=\"right\" alt=\"snowflake-php mascot\">"
+            echo "![snowflake-php mascot](${mascot})"
             echo
             cat /tmp/CHANGELOG.md
           } > /tmp/RELEASE.md

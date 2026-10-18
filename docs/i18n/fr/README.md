@@ -27,6 +27,7 @@ Fonctionnalités clés :
 snowflake-php/
 ├── src/
 │   ├── Snowflake.php                       # Core: config, bit layout, id(), parseId()
+│   ├── Mascot.php                          # Terminal ASCII mascot expressions
 │   ├── Contracts/
 │   │   └── SequenceResolver.php            # Sequence strategy interface
 │   ├── Resolvers/
@@ -56,7 +57,10 @@ snowflake-php/
 │   │   ├── README.md                       # Language index
 │   │   ├── img/<lang>/                     # Generated SVGs (13 languages)
 │   │   └── <lang>/README.md                # One translated README per language
+│   ├── pet-expressions/                    # 12 animated SVG mascot forms
 │   ├── examples/plain-php.php              # Runnable no-framework example
+│   ├── social-preview.svg                  # GitHub social card source
+│   ├── social-preview.png                  # 1280×640 GitHub social preview
 │   └── *.png                               # Sponsor images
 ├── scripts/
 │   ├── generate-diagrams.py                # Builds docs/i18n/img/<lang>/*.svg

@@ -27,6 +27,7 @@ Key features:
 snowflake-php/
 ├── src/
 │   ├── Snowflake.php                       # Core: config, bit layout, id(), parseId()
+│   ├── Mascot.php                          # Terminal ASCII mascot expressions
 │   ├── Contracts/
 │   │   └── SequenceResolver.php            # Sequence strategy interface
 │   ├── Resolvers/
@@ -56,7 +57,10 @@ snowflake-php/
 │   │   ├── README.md                       # Language index
 │   │   ├── img/<lang>/                     # Generated SVGs (13 languages)
 │   │   └── <lang>/README.md                # One translated README per language
+│   ├── pet-expressions/                    # 12 animated SVG mascot forms
 │   ├── examples/plain-php.php              # Runnable no-framework example
+│   ├── social-preview.svg                  # GitHub social card source
+│   ├── social-preview.png                  # 1280×640 GitHub social preview
 │   └── *.png                               # Sponsor images
 ├── scripts/
 │   ├── generate-diagrams.py                # Builds docs/i18n/img/<lang>/*.svg
@@ -634,6 +638,8 @@ MIT — Copyright (c) 2026 erik <erik@erik.xyz> — https://erik.xyz
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | ![撒娇](docs/pet-expressions/coquettish.svg) | ![卖萌](docs/pet-expressions/cute.svg) | ![讨好](docs/pet-expressions/pleasing.svg) | ![敲打](docs/pet-expressions/knocking.svg) | ![捂脸](docs/pet-expressions/facepalm.svg) | ![吐舌头](docs/pet-expressions/tongue.svg) |
 | `:emoji-coquettish:` | `:emoji-cute:` | `:emoji-pleasing:` | `:emoji-knocking:` | `:emoji-facepalm:` | `:emoji-tongue:` |
+
+The same forms ship in the code as ASCII banners: `Snowflake::mascot('joy')` prints one in any terminal, and `Snowflake::MASCOT_EXPRESSIONS` exposes all twelve.
 
 > 12 种彩色动态形态：笑 / 欢乐 / 哭 / 沮丧 / 惊恐 / 愤怒 / 撒娇 / 卖萌 / 讨好 / 敲打 / 捂脸 / 吐舌头。每个 SVG 自带表情、情绪特效与整体动效，并遵循 `prefers-reduced-motion`。
 <!-- pet-expressions:end -->
