@@ -224,12 +224,13 @@ def defs(body):
     return "\n".join(out)
 
 
-def svg(w, h, body, title, desc):
+def svg(w, h, body, title, desc, bg=True):
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" '
             f'width="{w}" height="{h}" role="img" font-family="{FONT}">\n'
             f'<title>{esc(title)}</title>\n<desc>{esc(desc)}</desc>\n'
-            f'{defs(body)}\n<rect width="{w}" height="{h}" fill="#ffffff"/>\n'
-            f'{body}\n</svg>\n')
+            f'{defs(body)}\n'
+            + (f'<rect width="{w}" height="{h}" fill="#ffffff"/>\n' if bg else '')
+            + f'{body}\n</svg>\n')
 
 
 def header(w, title, sub, badge="snowflake-php"):
@@ -276,9 +277,6 @@ def pet(L):
 
     tagline = L("pet.tagline")
     body = "\n".join([
-        '<rect width="320" height="340" rx="26" fill="#f6fbff"/>',
-        '<path d="M0,26 A26,26 0 0 1 26,0 H294 A26,26 0 0 1 320,26 V150 H0 Z" fill="#e8f4ff"/>',
-        f'<circle cx="{cx}" cy="{cy}" r="118" fill="#d8ecff" opacity="0.5"/>',
         '<g opacity="0.9">' + sparkle(56, 78, 11, 0.55) + sparkle(266, 104, 8, 0.45)
         + sparkle(66, 232, 7, 0.4) + sparkle(272, 214, 10, 0.5) + '</g>',
         '<g><animateTransform attributeName="transform" type="translate" '
@@ -288,7 +286,7 @@ def pet(L):
         text(cx, 306, "snowflake-php", 25, BLUE, "700", "middle", spacing="0.4"),
         text(cx, 328, tagline, fit(tagline, 12.5, 280, "400"), MUTED, "400", "middle"),
     ])
-    return svg(W, H, body, "snowflake-php — " + tagline, tagline)
+    return svg(W, H, body, "snowflake-php — " + tagline, tagline, bg=False)
 
 
 # --------------------------------------------------------------- architecture
