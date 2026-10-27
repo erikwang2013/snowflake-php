@@ -1,5 +1,7 @@
 # Snowflake PHP
 
+> 官网 / Website: [https://package.erik.xyz/snowflake/](https://package.erik.xyz/snowflake/)
+
 ![Snowflake PHP project mascot — a smiling snowflake](./docs/i18n/img/en/pet.svg)
 
 *The mascot ships with the code too — `echo Snowflake::MASCOT;` prints it in any terminal.*

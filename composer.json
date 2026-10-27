@@ -1,6 +1,7 @@
 {
     "name": "erikwang2013/snowflake-php",
     "description": "A distributed unique ID generator based on Twitter's Snowflake algorithm, compatible with Laravel, Yii2, Yii3, Webman, ThinkPHP, and Hyperf.",
+    "homepage": "https://package.erik.xyz/snowflake/",
     "type": "library",
     "license": "MIT",
     "keywords": [

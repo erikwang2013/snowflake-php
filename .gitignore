@@ -14,3 +14,6 @@ composer.lock
 .mcp.json
 ruvector.db
 __pycache__/
+
+# Generated static site, deployed separately
+/site/
